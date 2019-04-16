@@ -71,7 +71,7 @@ public class DemoControler {
             return "customerRegister";
         }
 
-        redirectAttributes.addFlashAttribute("flashUser", customer);
+        redirectAttributes.addFlashAttribute("customer", customer);
 
         return "redirect:/registerSuccessful";
     }

@@ -41,11 +41,11 @@ public class CustomerUserFormValidator implements Validator {
             // Invalid email.
             errors.rejectValue("email", "Pattern.appUserForm.email");
         }
-        if (!errors.hasFieldErrors("userName")) {
+        if (!errors.hasFieldErrors("email")) {
             Collection<Customer> allByEmail = customerRepository.findAllByEmail(customerUserForm.getEmail());
             if (!allByEmail.isEmpty()) {
                 // Username is not available.
-                errors.rejectValue("customerName", "Duplicate.appUserForm.userName");
+                errors.rejectValue("email", "Duplicate.appUserForm.userName");
             }
         }
     }

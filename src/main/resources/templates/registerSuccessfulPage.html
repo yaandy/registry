@@ -14,10 +14,10 @@
 
 <h2>You have successfully registered!</h2>
 
-<div th:if="${flashUser != null}">
+<div th:if="${customer != null}">
     <ul>
-        <li>User Name: <span th:utext="${flashUser.userName}">..</span></li>
-        <li>Email: <span th:utext="${flashUser.email}">..</span></li>
+        <li>User Name: <span th:utext="${customer.name}">..</span></li>
+        <li>Email: <span th:utext="${customer.email}">..</span></li>
     </ul>
 </div>
 
