@@ -1,9 +1,8 @@
 package com.lv.reg.formBean;
 
-import com.lv.reg.dao.AppUserDAO;
 import com.lv.reg.dao.CustomerRepository;
 import com.lv.reg.entities.Customer;
-import com.lv.reg.model.AppUser;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,6 +12,7 @@ import org.springframework.validation.Validator;
 
 import java.util.Collection;
 
+@Slf4j
 @Component
 public class CustomerUserFormValidator implements Validator {
 
@@ -25,7 +25,7 @@ public class CustomerUserFormValidator implements Validator {
     // The classes are supported by this validator.
     @Override
     public boolean supports(Class<?> clazz) {
-        return clazz == AppUserForm.class;
+        return clazz == CustomerUserForm.class;
     }
 
     @Override
@@ -34,18 +34,20 @@ public class CustomerUserFormValidator implements Validator {
 
         // Check the fields of AppUserForm.
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "NotEmpty.appUserForm.userName");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "NotEmpty.appUserForm.firstName");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "phone", "NotEmpty.appUserForm.lastName");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "NotEmpty.appUserForm.email");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "phone", "NotEmpty.appUserForm.phone");
 
         if (!this.emailValidator.isValid(customerUserForm.getEmail())) {
             // Invalid email.
             errors.rejectValue("email", "Pattern.appUserForm.email");
         }
         if (!errors.hasFieldErrors("email")) {
+            log.info("Checking by email" + customerUserForm.getEmail());
             Collection<Customer> allByEmail = customerRepository.findAllByEmail(customerUserForm.getEmail());
+            log.info(String.format("%d Customers with email %s found in db", allByEmail.size(), customerUserForm.getEmail()));
             if (!allByEmail.isEmpty()) {
                 // Username is not available.
-                errors.rejectValue("email", "Duplicate.appUserForm.userName");
+                errors.rejectValue("email", "Duplicate.appUserForm.email");
             }
         }
     }
