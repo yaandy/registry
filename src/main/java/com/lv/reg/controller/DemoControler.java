@@ -5,18 +5,22 @@ import com.lv.reg.dao.CustomerRepository;
 import com.lv.reg.entities.Customer;
 import com.lv.reg.formBean.AppUserForm;
 import com.lv.reg.formBean.CustomerUserForm;
+import com.lv.reg.formBean.CustomerUserFormValidator;
 import com.lv.reg.model.AppUser;
 import com.lv.reg.model.Country;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
+@Slf4j
 @Controller
 @RequestMapping(path = "/demo")
 public class DemoControler {
@@ -24,6 +28,21 @@ public class DemoControler {
     private CustomerRepository customerRepository;
     @Autowired
     private CountryDAO countryDAO;
+    @Autowired
+    private CustomerUserFormValidator customerUserFormValidator;
+
+    @InitBinder
+    protected void initBinder(WebDataBinder dataBinder) {
+        Object target = dataBinder.getTarget();
+        if (target == null) {
+            return;
+        }
+        log.debug("Target=" + target);
+
+        if (target.getClass() == CustomerUserForm.class) {
+            dataBinder.setValidator(customerUserFormValidator);
+        }
+    }
 
     @GetMapping(path = "/all")
     public String getAllCustomers(Model model){
@@ -49,7 +68,7 @@ public class DemoControler {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String saveRegister(Model model, //
-                               @ModelAttribute("appUserForm") @Validated Customer customerUserForm, //
+                               @ModelAttribute("appUserForm") @Validated CustomerUserForm customerUserForm, //
                                BindingResult result, //
                                final RedirectAttributes redirectAttributes) {
 
@@ -61,7 +80,7 @@ public class DemoControler {
         }
         Customer customer= null;
         try {
-            customer = customerRepository.save(customerUserForm);
+            customer = customerRepository.save(new Customer(customerUserForm));
         }
         // Other error!!
         catch (Exception e) {

@@ -13,8 +13,8 @@ import java.util.*;
 public class AppUserDAO {
 
     // Config in WebSecurityConfig
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+//    @Autowired
+//    private PasswordEncoder passwordEncoder;
 
     private static final Map<Long, AppUser> USERS_MAP = new HashMap<>();
 
@@ -76,7 +76,8 @@ public class AppUserDAO {
 
     public AppUser createAppUser(AppUserForm form) {
         Long userId = this.getMaxUserId() + 1;
-        String encrytedPassword = this.passwordEncoder.encode(form.getPassword());
+        //String encrytedPassword = this.passwordEncoder.encode(form.getPassword());
+        String encrytedPassword = form.getPassword();
 
         AppUser user = new AppUser(userId, form.getUserName(), //
                 form.getFirstName(), form.getLastName(), false, //

@@ -1,19 +1,12 @@
-<div xmlns:th="http://www.thymeleaf.org"
-     style="border: 1px solid #ccc;padding:5px;margin-bottom:20px;"
-     class="navbar navbar-inverse navbar-fixed-top">
 
-    <a th:href="@{/}">Home</a>
+<nav xmlns:th="http://www.thymeleaf.org">
+    <div class="nav-bg"></div>
+    <ul>
+        <li><a th:href="@{/}">Home</a></li>
+        <li><a th:href="@{/register}">Register</a></li>
+        <li><a th:href="@{/demo/all}">Customers</a></li>
+    </ul>
+</nav>
 
-    | &nbsp;
 
-    <a th:href="@{/members}">Members</a>
 
-    | &nbsp;
-
-    <a th:href="@{/register}">Register</a>
-
-    | &nbsp;
-
-    <a th:href="@{/demo/all}">Customers</a>
-
-</div>
