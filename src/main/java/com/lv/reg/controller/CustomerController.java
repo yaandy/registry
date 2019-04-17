@@ -23,7 +23,7 @@ import java.util.List;
 @Slf4j
 @Controller
 @RequestMapping(path = "/demo")
-public class DemoControler {
+public class CustomerController {
     @Autowired
     private CustomerRepository customerRepository;
     @Autowired
