@@ -3,10 +3,8 @@ package com.lv.reg.controller;
 import com.lv.reg.dao.CountryDAO;
 import com.lv.reg.dao.CustomerRepository;
 import com.lv.reg.entities.Customer;
-import com.lv.reg.formBean.AppUserForm;
 import com.lv.reg.formBean.CustomerUserForm;
 import com.lv.reg.formBean.CustomerUserFormValidator;
-import com.lv.reg.model.AppUser;
 import com.lv.reg.model.Country;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,23 +45,12 @@ public class CustomerController {
     @GetMapping(path = "/all")
     public String getAllCustomers(Model model){
         Iterable<Customer> all = customerRepository.findAll();
+        CustomerUserForm form = new CustomerUserForm();
         CustomerUserForm customerUserForm = new CustomerUserForm();
         model.addAttribute("appUserForm", customerUserForm);
         model.addAttribute("customers", all);
-        return "customersPage";
-    }
-
-    // Show Register page.
-    @RequestMapping(value = "/register", method = RequestMethod.GET)
-    public String viewRegister(Model model) {
-
-        CustomerUserForm form = new CustomerUserForm();
-        List<Country> countries = countryDAO.getCountries();
-
         model.addAttribute("appUserForm", form);
-        model.addAttribute("countries", countries);
-
-        return "customerRegister";
+        return "customersPage_____";
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
@@ -76,7 +63,7 @@ public class CustomerController {
         if (result.hasErrors()) {
             List<Country> countries = countryDAO.getCountries();
             model.addAttribute("countries", countries);
-            return "customerRegister";
+            return "customersPage_____";
         }
         Customer customer= null;
         try {
@@ -87,7 +74,7 @@ public class CustomerController {
             List<Country> countries = countryDAO.getCountries();
             model.addAttribute("countries", countries);
             model.addAttribute("errorMessage", "Error: " + e.getMessage());
-            return "customerRegister";
+            return "customersPage";
         }
 
         redirectAttributes.addFlashAttribute("customer", customer);

@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:utext="${title}"></title>
+    <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+
+    <script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.3.0/css/bootstrap.min.css}"/>
+    <script th:src="@{/webjars/bootstrap/4.3.0/js/bootstrap.min.js}"></script>
+</head>
+
+<body>
+
+
+<!-- Include _menu.html -->
+<th:block th:include="/_menu"></th:block>
+
+<div class="container">
+    <div class="row col-md-8">
+
+        <form th:action="@{/contract/}" th:object="${contract}" method="POST">
+            <div class="form-group">
+                <label for="customer">Customer</label>
+                <div class="form-control" id="customer" th:text="${contract.getCustomer().getName()}"></div>
+            </div>
+            <div class="form-group">
+                <label for="type" class="col-form-label">Type:</label>
+                <div class="form-control" id="type" th:text="${contract.orderType}"></div>
+            </div>
+            <div class="form-group">
+                <label for="status" class="col-form-label">Status:</label>
+                <select id="status">
+                    <option th:each="s : ${statusOptions}" th:value="${s.getLabel()}" th:text="${s.getLabel()}">
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="stage" class="col-form-label">Stage:</label>
+                <select id="stage">
+                    <option th:each="s : ${stagesOptions}" th:value="${s.getLabel()}" th:text="${s.getLabel()}"
+                            th:selected="${s.getLabel() == contract.getStage()}">
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+
+    </div>
+</div>
+
+</body>
+</html>

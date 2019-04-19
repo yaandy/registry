@@ -1,6 +1,8 @@
 package com.lv.reg.entities;
 
+import com.lv.reg.formBean.ContractForm;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +13,7 @@ import java.sql.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 @Table(name="contract", schema = "register")
 public class Contract implements Serializable {

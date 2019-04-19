@@ -4,36 +4,131 @@
     <title th:utext="${title}"></title>
     <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type='text/css' th:href="@{/css/style.css}">
-    <link rel="stylesheet" type='text/css' th:href="@{/css/table.css}">
 
+    <script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.3.0/css/bootstrap.min.css}"/>
+    <script th:src="@{/webjars/bootstrap/4.3.0/js/bootstrap.min.js}"></script>
 </head>
 
 <body>
 
-<!-- Include _menu.html -->
-<th:block th:include="/_menu"></th:block>
 
-<h2>Members</h2>
-<div class="content-wrapper">
-<table class="blueTable" >
-    <tr>
-        <th>Id</th>
-        <th>CustomerId</th>
-        <th>Region</th>
-        <th>District</th>
-        <th>ContractType</th>
-        <th>TotalPrice</th>
-    </tr>
-    <tr th:each ="member : ${contracts}">
-        <td th:utext="${member.getId()}">...</td>
-        <td th:utext="${member.getCustomer().getEmail()}">...</td>
-        <td th:utext="${member.getRegion()}">...</td>
-        <td th:utext="${member.getDistrict()}">...</td>
-        <td th:utext="${member.getOrderType()}">...</td>
-        <td th:utext="${member.getTotalPrice()}">...</td>
-    </tr>
-</table>
+    <!-- Include _menu.html -->
+    <th:block th:include="/_menu"></th:block>
+
+<div class="container">
+    <h1>Contracts Table</h1>
+    <div class="row col-md-10 table-responsive">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>CustomerId</th>
+                <th>Region</th>
+                <th>District</th>
+                <th>ContractType</th>
+                <th>Status</th>
+                <th>Stage</th>
+                <th>TotalPrice</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="member : ${contracts}">
+                <td th:utext="${member.getId()}">...</td>
+                <td th:utext="${member.getCustomer().getEmail()}">...</td>
+                <td th:utext="${member.getRegion()}">...</td>
+                <td th:utext="${member.getDistrict()}">...</td>
+                <td th:utext="${member.getOrderType()}">...</td>
+                <td th:utext="${member.getOrderStatus()}">...</td>
+                <td th:utext="${member.getStage()}">...</td>
+                <td th:utext="${member.getTotalPrice()}">...</td>
+                <td>
+                    <button type="button" class="btn btn-primary">
+                        <a th:href="@{/contract/{id}/update(id=${member.getId()})}"/>Edit
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <div class="row col-md-8">
+        <div class="myForm">
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#registerModal"
+                    data-whatever="@mdo">Register
+            </button>
+
+            <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Contract Registration Form</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form th:action="@{/contract/register}" th:object="${contractForm}" method="POST">
+                                <div class="form-group">
+                                    <label for="customer" class="col-form-label">Customer:</label>
+                                    <select id="customer" th:field="*{customerId}">
+                                        <option th:each="c : ${customers}" th:value="${c.getId()}"
+                                                th:text="${c.getName()}">
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="region" class="col-form-label">Region:</label>
+                                    <select id="region" th:field="*{region}">
+                                        <option th:each="r : ${regionOptions}" th:value="${r}" th:text="${r}">
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="district" class="col-form-label">District:</label>
+                                    <select id="district" th:field="*{district}">
+                                        <option th:each="d : ${districtOptions}" th:value="${d}" th:text="${d}">
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="type" class="col-form-label">Type:</label>
+                                    <select id="type" th:field="*{type}">
+                                        <option th:each="t : ${typeOptions}" th:value="${t.getLabel()}" th:text="${t.getLabel()}">
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="status" class="col-form-label">Status:</label>
+                                    <select id="status" th:field="*{status}">
+                                        <option th:each="s : ${statusOptions}" th:value="${s.getLabel()}" th:text="${s.getLabel()}">
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="stage" class="col-form-label">Type:</label>
+                                    <select id="stage" th:field="*{stage}">
+                                        <option th:each="s : ${stagesOptions}" th:value="${s.getLabel()}" th:text="${s.getLabel()}">
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="price" class="col-form-label">Price:</label>
+                                    <input type="number" class="form-control" id="price" th:field="*{totalPrice}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="comment" class="col-form-label">Comment:</label>
+                                    <textarea class="form-control" id="comment" th:field="*{comment}"></textarea>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <input class="btn btn-primary" type="submit">
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>
