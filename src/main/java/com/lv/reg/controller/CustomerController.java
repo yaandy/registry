@@ -35,8 +35,6 @@ public class CustomerController {
         if (target == null) {
             return;
         }
-        log.debug("Target=" + target);
-
         if (target.getClass() == CustomerUserForm.class) {
             dataBinder.setValidator(customerUserFormValidator);
         }
@@ -50,7 +48,7 @@ public class CustomerController {
         model.addAttribute("appUserForm", customerUserForm);
         model.addAttribute("customers", all);
         model.addAttribute("appUserForm", form);
-        return "customersPage_____";
+        return "customersPage";
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
@@ -63,7 +61,9 @@ public class CustomerController {
         if (result.hasErrors()) {
             List<Country> countries = countryDAO.getCountries();
             model.addAttribute("countries", countries);
-            return "customersPage_____";
+            model.addAttribute("errorMessage", "Error occured on form validation. Customer was not created.");
+            model.addAttribute("customers", customerRepository.findAll());
+            return "customersPage";
         }
         Customer customer= null;
         try {
@@ -79,6 +79,6 @@ public class CustomerController {
 
         redirectAttributes.addFlashAttribute("customer", customer);
 
-        return "redirect:/registerSuccessful";
+        return "redirect:/demo/all";
     }
 }

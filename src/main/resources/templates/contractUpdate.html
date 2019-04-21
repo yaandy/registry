@@ -16,13 +16,16 @@
 <!-- Include _menu.html -->
 <th:block th:include="/_menu"></th:block>
 
-<div class="container">
-    <div class="row col-md-8">
+<div class="container-fluid">
+    <h1>Update contract info</h1>
+    <div class="row col-lg-8">
 
-        <form th:action="@{/contract/}" th:object="${contract}" method="POST">
+        <form th:action="@{/contract/{id}/update(id=${contract.getId()})}" th:object="${updatedContractForm}" method="POST">
             <div class="form-group">
-                <label for="customer">Customer</label>
-                <div class="form-control" id="customer" th:text="${contract.getCustomer().getName()}"></div>
+                <label for="customerName">Customer name:</label>
+                <div class="form-control" id="customerName" th:text="${contract.getCustomer().getName()}"></div>
+                <label for="customerPhone">Customer phone:</label>
+                <div class="form-control" id="customerPhone" th:text="${contract.getCustomer().getPhone()}"></div>
             </div>
             <div class="form-group">
                 <label for="type" class="col-form-label">Type:</label>
@@ -30,16 +33,22 @@
             </div>
             <div class="form-group">
                 <label for="status" class="col-form-label">Status:</label>
-                <select id="status">
-                    <option th:each="s : ${statusOptions}" th:value="${s.getLabel()}" th:text="${s.getLabel()}">
+                <select id="status" th:name="status">
+                    <option th:each="s : ${statusOptions}" th:value="${s.getLabel()}" th:text="${s.getLabel()}"
+                            th:selected="${#strings.equals(s.getLabel(), contract.getOrderStatus())}">
                 </select>
             </div>
             <div class="form-group">
                 <label for="stage" class="col-form-label">Stage:</label>
-                <select id="stage">
+                <select id="stage" th:name="stage">
                     <option th:each="s : ${stagesOptions}" th:value="${s.getLabel()}" th:text="${s.getLabel()}"
-                            th:selected="${s.getLabel() == contract.getStage()}">
+                            th:selected="${#strings.equals(s.getLabel(), contract.getStage())}">
                 </select>
+            </div>
+
+            <div class="form-group">
+                <label for="payedAmount" class="col-form-label">Payed amount:</label>
+                <input type="number" class="form-control" id="payedAmount" th:field="*{payedAmount}">
             </div>
 
             <button type="submit" class="btn btn-primary">Submit</button>

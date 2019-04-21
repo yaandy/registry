@@ -3,8 +3,12 @@ package com.lv.reg.controller;
 import com.lv.reg.dao.*;
 import com.lv.reg.entities.Contract;
 import com.lv.reg.entities.Customer;
+import com.lv.reg.entities.User;
 import com.lv.reg.enums.RegionEnum;
 import com.lv.reg.formBean.ContractForm;
+import com.lv.reg.service.ContractService;
+import com.lv.reg.service.MyUserDetails;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,32 +17,27 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.sql.Date;
-import java.time.LocalDate;
+import java.security.Principal;
 import java.util.Arrays;
 
 @Slf4j
-@Controller
 @RequestMapping(path = "/contract")
+@AllArgsConstructor(onConstructor = @__(@Autowired))
+@Controller
 public class ContractController {
-    @Autowired
-    private ContractRepository contractRepository;
-    @Autowired
+
+    private ContractService contractService;
     private CustomerRepository customerRepository;
-    @Autowired
     private StatusRepository statusRepository;
-    @Autowired
     private StageRepository stageRepository;
-    @Autowired
     private ContractTypeRepository contractTypeRepository;
 
     @GetMapping(path = "/all")
-    public String getAllCustomers(Model model){
-        Iterable<Contract> contracts = contractRepository.findAll();
+    public String getAllCustomers(Model model, Principal principal){
+
+        Iterable<Contract> contracts = contractService.findAllAvailableForUser(principal);
         Iterable<Customer> customers = customerRepository.findAll();
         ContractForm contractForm = new ContractForm();
-
-
 
         model.addAttribute("contracts", contracts);
         model.addAttribute("customers", customers);
@@ -54,22 +53,13 @@ public class ContractController {
 
 
     @RequestMapping(path = "/register", method = RequestMethod.POST)
-    public String addNewContract(Model model, //
-                                 @ModelAttribute("contractForm") ContractForm contractForm, //
-                                 BindingResult result, //
-                                 final RedirectAttributes redirectAttributes){
-        log.info(contractForm.toString());
-        Contract contract = Contract.builder().customer(customerRepository.findById(contractForm.getCustomerId()).orElseThrow())
-                .district(contractForm.getDistrict())
-                .region(contractForm.getRegion())
-                .updated(Date.valueOf(LocalDate.now()))
-                .orderStatus(contractForm.getStatus())
-                .orderType(contractForm.getType())
-                .stage(contractForm.getStage())
-                .totalPrice(contractForm.getTotalPrice())
-                .build();
+    public String addNewContract(@ModelAttribute("contractForm") ContractForm contractForm,
+                                 BindingResult result,
+                                 final RedirectAttributes redirectAttributes, Principal principal){
 
-        contractRepository.save(contract);
+        contractService.saveContract(contractForm, principal);
+
+        redirectAttributes.addAttribute("contracts", contractService.findAll());
         return "redirect:/contract/all";
     }
 
@@ -77,11 +67,22 @@ public class ContractController {
     @RequestMapping(value = "/{id}/update", method = RequestMethod.GET)
     public String showUpdateUserForm(@PathVariable("id") long id, Model model) {
 
-        Contract contract = contractRepository.findById(id).orElseThrow();
+        Contract contract = contractService.findById(id);
         model.addAttribute("contract", contract);
+        model.addAttribute("updatedContractForm", new ContractForm());
         model.addAttribute("statusOptions", statusRepository.findAll());
         model.addAttribute("stagesOptions", stageRepository.findAll());
 
         return "contractUpdate";
     }
+
+    @RequestMapping(path = "/{id}/update", method = RequestMethod.POST)
+    public String updateContractById(@ModelAttribute("updatedContractForm") ContractForm contractForm, //
+                                     @PathVariable("id") long id, //
+                                     final RedirectAttributes redirectAttributes){
+        contractService.updateContract(contractForm, id);
+        redirectAttributes.addAttribute("contracts", contractService.findAll());
+        return "redirect:/contract/all";
+    }
 }
+

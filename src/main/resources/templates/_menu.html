@@ -1,4 +1,5 @@
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark" xmlns:th="http://www.thymeleaf.org">
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark" xmlns:th="http://www.thymeleaf.org"
+     xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <div class="container-fluid">
         <div class="navbar-header">
             <a class="navbar-brand" href="#">Contract Register</a>
@@ -12,6 +13,9 @@
             </li>
             <li class="navbar-nav">
                 <a class="nav-link" th:href="@{/contract/all}">Contracts</a>
+            </li>
+            <li class="navbar-text">
+                <span sec:authentication="name">Bob</span>
             </li>
         </ul>
     </div>

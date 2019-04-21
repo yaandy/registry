@@ -17,4 +17,5 @@ public class ContractForm {
     private double totalPrice;
     private double payedAmount;
     private String comment;
+    private boolean isFinished;
 }
