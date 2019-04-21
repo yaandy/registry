@@ -27,14 +27,16 @@
             <thead>
             <tr>
                 <th>Id</th>
-                <th>CustomerId</th>
+                <th>Customer Id</th>
                 <th>Region</th>
                 <th>District</th>
-                <th>ContractType</th>
+                <th>Contract Type</th>
                 <th>Status</th>
                 <th>Stage</th>
-                <th>TotalPrice</th>
-                <th>PayedAmount</th>
+                <th>Total Price</th>
+                <th>Payed Amount</th>
+                <th>Registered</th>
+                <th>Last Updated</th>
                 <th>Edit</th>
             </tr>
             </thead>
@@ -49,6 +51,8 @@
                 <td th:utext="${contract.getStage()}">...</td>
                 <td th:utext="${contract.getTotalPrice()}">...</td>
                 <td th:utext="${contract.getPayedAmount()}">...</td>
+                <td th:utext="${#dates.format(contract.getRegistered(), 'dd/MMM/yyyy')}">...</td>
+                <td th:utext="${#dates.format(contract.getUpdated(), 'dd/MMM/yyyy')}">...</td>
                 <td>
                     <a class="btn btn-primary" th:href="@{/contract/{id}/update(id=${contract.getId()})}">Edit</a>
                 </td>

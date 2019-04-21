@@ -84,5 +84,7 @@ public class ContractController {
         redirectAttributes.addAttribute("contracts", contractService.findAll());
         return "redirect:/contract/all";
     }
+
+    
 }
 
