@@ -25,6 +25,7 @@ public class Contract implements Serializable {
     private Customer customer;
     private String region;
     private String district;
+    private String villageCouncil;
     private String orderType;
     private String orderStatus;
     private boolean isFinished;
@@ -36,5 +37,8 @@ public class Contract implements Serializable {
     @OneToOne()
     @JoinColumn(name = "createdBy", referencedColumnName = "id")
     private User createdBy;
+    @OneToOne()
+    @JoinColumn(name = "assignedTo",    referencedColumnName = "id")
+    private User assignedTo;
 //    private int createdBy;
 }

@@ -7,6 +7,7 @@ import com.lv.reg.entities.User;
 import com.lv.reg.enums.RegionEnum;
 import com.lv.reg.formBean.ContractForm;
 import com.lv.reg.service.ContractService;
+import com.lv.reg.service.IUserService;
 import com.lv.reg.service.MyUserDetails;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,10 +28,13 @@ import java.util.Arrays;
 public class ContractController {
 
     private ContractService contractService;
+    private IUserService userService;
+
     private CustomerRepository customerRepository;
     private StatusRepository statusRepository;
     private StageRepository stageRepository;
     private ContractTypeRepository contractTypeRepository;
+
 
     @GetMapping(path = "/all")
     public String getAllCustomers(Model model, Principal principal){
@@ -72,6 +76,7 @@ public class ContractController {
         model.addAttribute("updatedContractForm", new ContractForm());
         model.addAttribute("statusOptions", statusRepository.findAll());
         model.addAttribute("stagesOptions", stageRepository.findAll());
+        model.addAttribute("employee", userService.getAllUsers());
 
         return "contractUpdate";
     }

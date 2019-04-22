@@ -33,12 +33,14 @@ public class ContractService {
                 .district(contractForm.getDistrict())
                 .region(contractForm.getRegion())
                 .registered(Date.valueOf(LocalDate.now()))
+                .villageCouncil(contractForm.getVillageCouncil())
                 .updated(Date.valueOf(LocalDate.now()))
                 .orderStatus(contractForm.getStatus())
                 .orderType(contractForm.getType())
                 .stage(contractForm.getStage())
                 .totalPrice(contractForm.getTotalPrice())
                 .createdBy(user)
+                .assignedTo(user)
                 .build();
 
         contractRepository.save(contract);

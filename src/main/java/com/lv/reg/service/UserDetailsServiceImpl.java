@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service("userDetailsService")
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService, IUserService {
     private static final Logger log = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
     @Autowired
     private UserRepository userRepository;
@@ -26,5 +26,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
         log.info("loadUserByUsername() : {}", username);
         return new MyUserDetails(user);
+    }
+
+    @Override
+    public Iterable<User> getAllUsers() {
+        return userRepository.findAll();
     }
 }

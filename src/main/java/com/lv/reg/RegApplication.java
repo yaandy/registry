@@ -12,5 +12,4 @@ public class RegApplication {
         ApiContextInitializer.init(); // telegram bot init
         SpringApplication.run(RegApplication.class, args);
     }
-
 }

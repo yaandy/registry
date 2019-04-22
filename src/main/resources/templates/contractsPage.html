@@ -33,6 +33,7 @@
                 <th class="th-sm">Customer Id</th>
                 <th class="th-sm">Region</th>
                 <th class="th-sm">District</th>
+                <th class="th-sm">Village Council</th>
                 <th class="th-sm">Contract Type</th>
                 <th class="th-sm">Status</th>
                 <th class="th-sm">Stage</th>
@@ -49,6 +50,7 @@
                 <td th:utext="${contract.getCustomer().getEmail()}">...</td>
                 <td th:utext="${contract.getRegion()}">...</td>
                 <td th:utext="${contract.getDistrict()}">...</td>
+                <td th:utext="${contract.getVillageCouncil()}">...</td>
                 <td th:utext="${contract.getOrderType()}">...</td>
                 <td th:utext="${contract.getOrderStatus()}">...</td>
                 <td th:utext="${contract.getStage()}">...</td>
@@ -99,6 +101,10 @@
                                     <select id="district" th:field="*{district}">
                                         <option th:each="d : ${districtOptions}" th:value="${d}" th:text="${d}">
                                     </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="villageCouncil" class="col-form-label">Village Council:</label>
+                                    <input type="text" id="villageCouncil" th:field="*{villageCouncil}"/>
                                 </div>
                                 <div class="form-group">
                                     <label for="type" class="col-form-label">Type:</label>

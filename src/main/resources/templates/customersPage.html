@@ -122,9 +122,15 @@
         </div>
     </div>
 </div>
-<script>$(document).ready(function () {
-    $('#customers').DataTable();
-});
+<script>
+    $(document).ready(function () {
+        $('#customers').DataTable();
+    });
+    $(function () {
+        $('#phone').usPhoneFormat({
+            format: '(xxx) xxx-xxxx'
+        });
+    });
 </script>
 </body>
 </html>

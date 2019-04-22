@@ -51,6 +51,14 @@
                 <input type="number" class="form-control" id="payedAmount" th:field="*{payedAmount}">
             </div>
 
+            <div class="form-group">
+                <label for="responsible" class="col-form-label">Responsible Employee:</label>
+                <select id="responsible" th:name="assignedTo">
+                    <option th:each="u : ${employee}" th:value="${u.getUsername()}" th:text="${u.getUsername()}"
+                            th:selected="${#strings.equals(u.getUsername(), contract.getCreatedBy().getUsername())}">
+                </select>
+            </div>
+
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
 

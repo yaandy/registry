@@ -11,6 +11,7 @@ public class ContractForm {
     private Long customerId;
     private String region;
     private String district;
+    private String villageCouncil;
     private String type;
     private String status;
     private String stage;
@@ -18,4 +19,5 @@ public class ContractForm {
     private double payedAmount;
     private String comment;
     private boolean isFinished;
+    private String assignedTo;
 }
