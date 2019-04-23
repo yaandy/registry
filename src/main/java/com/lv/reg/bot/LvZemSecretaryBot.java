@@ -8,19 +8,17 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @Component
 public class LvZemSecretaryBot extends TelegramLongPollingBot {
     @Autowired
     ContractService contractService;
+    @Autowired
+    InitialStage initialStage;
+    @Autowired
+    MessageHandler messageHandler;
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -31,17 +29,13 @@ public class LvZemSecretaryBot extends TelegramLongPollingBot {
         SendMessage sendMessage = new SendMessage();
         sendMessage.enableMarkdown(true);
         sendMessage.setChatId(chatId);
+
+        messageHandler.handle(chatId, sendMessage, text);
+
         if (text.equals("привіт"))
             sendMessage.setText(String.format("Привіт %s, я Галя, ваша нова секретарка, вмію мало але може шось походу навчусь", firstName));
-        else
-            sendMessage.setText("Ти скаже чьо тє нада може дам шо ти хоч, можу видати інфо по договору - скажи чарівне слово");
 
-        if (text.equals("договір")) {
-            sendMessage.setText(getInfo());
-            setButton(sendMessage);
-        }
-
-        log.info("onUdpate triggered + " + text);
+        log.info("onUdpate triggered + " + update.getMessage().getFrom().getId());
         try {
             execute(sendMessage);
         } catch (TelegramApiException e) {
@@ -56,30 +50,12 @@ public class LvZemSecretaryBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
-        return "749753156:***";
+        return "749753156:AAGo6KBtxJDmvLHl7crMgJunP_D7M2Teso4";
     }
 
     private String getInfo() {
         Contract byId = contractService.findById(1l);
         return String.format("Договір #1 замовник %s, район %s, %s", byId.getCustomer(), byId.getDistrict(), byId.getOrderType());
     }
-
-    private void setButton(SendMessage sendMessage) {
-        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
-        sendMessage.setReplyMarkup(replyKeyboardMarkup);
-        replyKeyboardMarkup.setSelective(true);
-        replyKeyboardMarkup.setResizeKeyboard(true);
-        replyKeyboardMarkup.setOneTimeKeyboard(false);
-
-        List<KeyboardRow> keyboardRowList = new ArrayList<>();
-
-        KeyboardRow keyboardRow = new KeyboardRow();
-        keyboardRow.add(new KeyboardButton("Шукати Договір"));
-        keyboardRow.add(new KeyboardButton("Шукати Клієнта"));
-
-        keyboardRowList.add(keyboardRow);
-        replyKeyboardMarkup.setKeyboard(keyboardRowList);
-    }
-
 
 }
