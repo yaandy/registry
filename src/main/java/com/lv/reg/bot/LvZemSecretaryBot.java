@@ -29,13 +29,15 @@ public class LvZemSecretaryBot extends TelegramLongPollingBot {
         SendMessage sendMessage = new SendMessage();
         sendMessage.enableMarkdown(true);
         sendMessage.setChatId(chatId);
+        sendMessage.setReplyToMessageId(update.getMessage().getMessageId());
 
         messageHandler.handle(chatId, sendMessage, text);
 
-        if (text.equals("привіт"))
-            sendMessage.setText(String.format("Привіт %s, я Галя, ваша нова секретарка, вмію мало але може шось походу навчусь", firstName));
+        if (text.equalsIgnoreCase("привіт"))
+            sendMessage.setText(String.format("Привіт %s, я Галя, ваша нова секретарка, вмію мало але здібна", firstName));
 
         log.info("onUdpate triggered + " + update.getMessage().getFrom().getId());
+        log.info("msg <-" + update.getMessage().getText());
         try {
             execute(sendMessage);
         } catch (TelegramApiException e) {

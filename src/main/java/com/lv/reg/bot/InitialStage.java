@@ -1,5 +1,6 @@
 package com.lv.reg.bot;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -11,6 +12,8 @@ import java.util.List;
 
 @Component
 public class InitialStage implements ActionOptions {
+    @Autowired
+    SecondStage secondStage;
 
     @Override
     public void setActionButtons(SendMessage sendMessage) {
@@ -37,12 +40,14 @@ public class InitialStage implements ActionOptions {
             sendMessage.setText("Нехай проблеми та незгоди не роблять вам в житті погоди хай вам щастить");
             return this;
         }else if (response.equals("Анекдот")){
-            sendMessage.setText("Тоьща целка");
+            sendMessage.setText("Зеленський президент їбі його мать");
             return this;
         }else if (response.equals("Попрацюєм")){
             sendMessage.setText("Ну давай");
-            return new SecondStage();
-        }else
+            return secondStage;
+        }else {
+            sendMessage.setText("Всі кажуть " + response + " а ти купи слона");
             return this;
+        }
     }
 }
