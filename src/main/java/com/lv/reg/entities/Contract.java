@@ -41,5 +41,5 @@ public class Contract implements Serializable {
     private User assignedTo;
     @OneToMany(mappedBy = "contract")
     private Collection<ContractLog> log;
-
+    private transient int passedDaysAfterLastUpdated;
 }

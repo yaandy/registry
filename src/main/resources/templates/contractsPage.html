@@ -12,8 +12,9 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8"
             src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <!-- mdb dependencies -->
     <link th:href="@{/css/mdb.css}" rel="stylesheet">
-    <!-- Your custom styles (optional) -->
+    <script type="text/javascript" charset="utf8" th:src="@{/js/mdb.js}"></script>
     <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
 
@@ -41,6 +42,7 @@
                 <th class="th-sm">Payed Amount</th>
                 <th class="th-sm">Registered</th>
                 <th class="th-sm">Last Updated</th>
+                <th class="th-sm">Days passed after Last Upd.</th>
                 <th class="th-sm">Edit</th>
             </tr>
             </thead>
@@ -58,6 +60,7 @@
                 <td th:utext="${contract.getPayedAmount()}">...</td>
                 <td th:utext="${#dates.format(contract.getRegistered(), 'dd/MMM/yyyy')}">...</td>
                 <td th:utext="${#dates.format(contract.getUpdated(), 'dd/MMM/yyyy')}">...</td>
+                <td th:utext="${contract.getPassedDaysAfterLastUpdated()}">...</td>
                 <td>
                     <a class="btn btn-primary" th:href="@{/contract/{id}/update(id=${contract.getId()})}">Edit</a>
                 </td>
