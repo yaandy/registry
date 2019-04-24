@@ -18,14 +18,18 @@
 
 <div class="container-fluid">
     <h1>Update contract info</h1>
-    <div class="row col-lg-8">
-
+    <div class="row">
+    <div class="col-lg-6">
         <form th:action="@{/contract/{id}/update(id=${contract.getId()})}" th:object="${updatedContractForm}" method="POST">
             <div class="form-group">
                 <label for="customerName">Customer name:</label>
-                <div class="form-control" id="customerName" th:text="${contract.getCustomer().getName()}"></div>
+                <input class="form-control" id="customerName" th:value="${contract.getCustomer().getName()}" disabled/>
+
+                <label for="village">Village Council</label>
+                <input class="form-control" id="village" th:value="${contract.getVillageCouncil()}" disabled/>
+
                 <label for="customerPhone">Customer phone:</label>
-                <div class="form-control" id="customerPhone" th:text="${contract.getCustomer().getPhone()}"></div>
+                <input class="form-control" id="customerPhone" th:value="${contract.getCustomer().getPhone()}" disabled/>
             </div>
             <div class="form-group">
                 <label for="type" class="col-form-label">Type:</label>
@@ -61,9 +65,16 @@
 
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
-
-
     </div>
+    <div class="col-lg-1"></div>
+    <div class="col-lg-4">
+        <button data-toggle="collapse" data-target="#log" class="btn btn-info btn-block">Show Log</button>
+        <div class="list-group collapse" id="log" th:each="log: ${contract.getLog()}">
+            <span class="list-group-item list-group-item-info disabled" th:utext="${log.getMessage()}">Message</span>
+        </div>
+    </div>
+    </div>
+
 </div>
 
 </body>

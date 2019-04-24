@@ -61,8 +61,9 @@
                 <td th:utext="${#dates.format(contract.getRegistered(), 'dd/MMM/yyyy')}">...</td>
                 <td th:utext="${#dates.format(contract.getUpdated(), 'dd/MMM/yyyy')}">...</td>
                 <td>
-                    <span th:if="${contract.getPassedDaysAfterLastUpdated()}*-1 < 5" class="badge badge-primary" th:utext="${contract.getPassedDaysAfterLastUpdated()}">...</span>
-                    <span th:if="${contract.getPassedDaysAfterLastUpdated()}*-1 > 7" class="badge badge-danger" th:utext="${contract.getPassedDaysAfterLastUpdated()}">...</span>
+                    <span th:if="${contract.getPassedDaysAfterLastUpdated()}*-1 < 5" class="badge badge-success" th:utext="... + ${contract.getPassedDaysAfterLastUpdated()} + ...">...</span>
+                    <span th:if="${contract.getPassedDaysAfterLastUpdated()}*-1 > 10" class="badge badge-danger" th:utext="... + ${contract.getPassedDaysAfterLastUpdated()} + ...">...</span>
+                    <span th:if="${contract.getPassedDaysAfterLastUpdated()*-1 < 10} and ${contract.getPassedDaysAfterLastUpdated()*-1 > 5}" class="badge badge-warning" th:utext="... + ${contract.getPassedDaysAfterLastUpdated()} + ...">...</span>
                 </td>
                 <td>
                     <a class="btn btn-primary"  th:href="@{/contract/{id}/update(id=${contract.getId()})}">Edit</a>

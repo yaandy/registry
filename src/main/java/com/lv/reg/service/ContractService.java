@@ -20,6 +20,7 @@ import java.security.Principal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -135,7 +136,8 @@ public class ContractService {
     private Consumer<Contract> calculatePeriodAndSet() {
         return c -> {
             Date updatedDate = Optional.ofNullable(c.getUpdated()).orElse(c.getRegistered());
-            c.setPassedDaysAfterLastUpdated(Period.between(LocalDate.now(), updatedDate.toLocalDate()).getDays());
+            Period period = Period.between(LocalDate.now(), updatedDate.toLocalDate());
+            c.setPassedDaysAfterLastUpdated(Math.toIntExact(period.getDays() + period.getMonths() * 30 )); // aroximate month calc
         };
     }
 
