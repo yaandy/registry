@@ -26,9 +26,9 @@
 
 <div class="container-fluid">
     <h1>Contracts Table</h1>
-    <div class="row col-lg-10 table-responsive">
+    <div class="row col-lg-12 table-responsive">
         <table id="contracts" class="table table-striped table-responsive-lg" cellspacing="0" width="100%">
-            <thead>
+            <thead class="table-dark">
             <tr>
                 <th class="th-sm">Id</th>
                 <th class="th-sm">Customer Id</th>
@@ -48,7 +48,7 @@
             </thead>
             <tbody>
             <tr th:each="contract : ${contracts}">
-                <td th:utext="${contract.getId()}">...</td>
+                <td class="th-sm" th:utext="${contract.getId()}">...</td>
                 <td th:utext="${contract.getCustomer().getEmail()}"></td>
                 <td th:utext="${contract.getRegion()}">...</td>
                 <td th:utext="${contract.getDistrict()}">...</td>
@@ -60,9 +60,12 @@
                 <td th:utext="${contract.getPayedAmount()}">...</td>
                 <td th:utext="${#dates.format(contract.getRegistered(), 'dd/MMM/yyyy')}">...</td>
                 <td th:utext="${#dates.format(contract.getUpdated(), 'dd/MMM/yyyy')}">...</td>
-                <td th:utext="${contract.getPassedDaysAfterLastUpdated()}">...</td>
                 <td>
-                    <a class="btn btn-primary" th:href="@{/contract/{id}/update(id=${contract.getId()})}">Edit</a>
+                    <span th:if="${contract.getPassedDaysAfterLastUpdated()}*-1 < 5" class="badge badge-primary" th:utext="${contract.getPassedDaysAfterLastUpdated()}">...</span>
+                    <span th:if="${contract.getPassedDaysAfterLastUpdated()}*-1 > 7" class="badge badge-danger" th:utext="${contract.getPassedDaysAfterLastUpdated()}">...</span>
+                </td>
+                <td>
+                    <a class="btn btn-primary"  th:href="@{/contract/{id}/update(id=${contract.getId()})}">Edit</a>
                 </td>
             </tr>
             </tbody>
