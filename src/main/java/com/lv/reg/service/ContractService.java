@@ -20,7 +20,6 @@ import java.security.Principal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.Period;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -84,6 +83,12 @@ public class ContractService {
         contractRepository.save(toBeUpdated);
     }
 
+    public void closeContract(long id){
+        Contract toBeUpdated = contractRepository.findById(id).orElseThrow();
+        toBeUpdated.setFinished(true);
+        contractRepository.save(toBeUpdated);
+    }
+
     public Iterable<Contract> findAll() {
         return contractRepository.findAll();
     }
@@ -113,13 +118,16 @@ public class ContractService {
     }
 
     private String getChangeLog(ContractForm form, Contract contract) {
-        StringBuilder stringBuilder = new StringBuilder("Updated: ");
-        if (!form.getStatus().equals(contract.getOrderStatus()))
+        StringBuilder stringBuilder = new StringBuilder(LocalDate.now().toString() +  " Updated: ");
+        if (!form.getStatus().equals(contract.getOrderStatus())) {
             stringBuilder.append("status updated to ").append(form.getStatus());
-        if (!form.getStage().equals(contract.getStage()))
+        }
+        if (!form.getStage().equals(contract.getStage())) {
             stringBuilder.append(", stage updated to ").append(form.getStage());
-        if (!(form.getPayedAmount() > 0))
+        }
+        if (form.getPayedAmount() > 1) {
             stringBuilder.append(", payed amount set to ").append(form.getPayedAmount());
+        }
         if (!form.getAssignedTo().equalsIgnoreCase(contract.getAssignedTo().getUsername())) {
             stringBuilder.append(" , assigned to changed from ")
                     .append(contract.getAssignedTo().getUsername())
@@ -137,7 +145,7 @@ public class ContractService {
         return c -> {
             Date updatedDate = Optional.ofNullable(c.getUpdated()).orElse(c.getRegistered());
             Period period = Period.between(LocalDate.now(), updatedDate.toLocalDate());
-            c.setPassedDaysAfterLastUpdated(Math.toIntExact(period.getDays() + period.getMonths() * 30 )); // aroximate month calc
+            c.setPassedDaysAfterLastUpdated(Math.toIntExact(period.getDays() + period.getMonths() * 30)); // aroximate month calc
         };
     }
 
