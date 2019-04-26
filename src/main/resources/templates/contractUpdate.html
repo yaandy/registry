@@ -7,6 +7,7 @@
 
     <script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.3.0/css/bootstrap.min.css}"/>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script th:src="@{/webjars/bootstrap/4.3.0/js/bootstrap.min.js}"></script>
 </head>
 
@@ -19,60 +20,72 @@
 <div class="container-fluid">
     <h1>Update contract info</h1>
     <div class="row">
-    <div class="col-lg-6">
-        <form th:action="@{/contract/{id}/update(id=${contract.getId()})}" th:object="${updatedContractForm}" method="POST">
-            <div class="form-group">
-                <label for="customerName">Customer name:</label>
-                <input class="form-control" id="customerName" th:value="${contract.getCustomer().getName()}" disabled/>
+        <div class="col-lg-6">
+            <form th:action="@{/contract/{id}/update(id=${contract.getId()})}" th:object="${updatedContractForm}"
+                  method="POST">
+                <div class="form-group">
+                    <label for="customerName">Customer name:</label>
+                    <input class="form-control" id="customerName" th:value="${contract.getCustomer().getName()}"
+                           disabled/>
 
-                <label for="village">Village Council</label>
-                <input class="form-control" id="village" th:value="${contract.getVillageCouncil()}" disabled/>
+                    <label for="village">Village Council</label>
+                    <input class="form-control" id="village" th:value="${contract.getVillageCouncil()}" disabled/>
 
-                <label for="customerPhone">Customer phone:</label>
-                <input class="form-control" id="customerPhone" th:value="${contract.getCustomer().getPhone()}" disabled/>
-            </div>
-            <div class="form-group">
-                <label for="type" class="col-form-label">Type:</label>
-                <div class="form-control" id="type" th:text="${contract.orderType}"></div>
-            </div>
-            <div class="form-group">
-                <label for="status" class="col-form-label">Status:</label>
-                <select id="status" th:name="status">
-                    <option th:each="s : ${statusOptions}" th:value="${s.getLabel()}" th:text="${s.getLabel()}"
-                            th:selected="${#strings.equals(s.getLabel(), contract.getOrderStatus())}">
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="stage" class="col-form-label">Stage:</label>
-                <select id="stage" th:name="stage">
-                    <option th:each="s : ${stagesOptions}" th:value="${s.getLabel()}" th:text="${s.getLabel()}"
-                            th:selected="${#strings.equals(s.getLabel(), contract.getStage())}">
-                </select>
-            </div>
+                    <label for="customerPhone">Customer phone:</label>
+                    <input class="form-control" id="customerPhone" th:value="${contract.getCustomer().getPhone()}"
+                           disabled/>
+                </div>
+                <div class="form-group">
+                    <label for="type" class="col-form-label">Type:</label>
+                    <div class="form-control" id="type" th:text="${contract.orderType}"></div>
+                </div>
+                <div class="form-group">
+                    <label for="status" class="col-form-label">Status:</label>
+                    <select id="status" th:name="status">
+                        <option th:each="s : ${statusOptions}" th:value="${s.getLabel()}" th:text="${s.getLabel()}"
+                                th:selected="${#strings.equals(s.getLabel(), contract.getOrderStatus())}">
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="stage" class="col-form-label">Stage:</label>
+                    <select id="stage" th:name="stage">
+                        <option th:each="s : ${stagesOptions}" th:value="${s.getLabel()}" th:text="${s.getLabel()}"
+                                th:selected="${#strings.equals(s.getLabel(), contract.getStage())}">
+                    </select>
+                </div>
 
-            <div class="form-group">
-                <label for="payedAmount" class="col-form-label">Payed amount:</label>
-                <input type="number" class="form-control" id="payedAmount" th:field="*{payedAmount}">
-            </div>
+                <div class="form-group">
+                    <label for="payedAmount" class="col-form-label">Payed amount:</label>
+                    <input type="number" class="form-control" id="payedAmount" th:field="*{payedAmount}">
+                </div>
 
-            <div class="form-group">
-                <label for="responsible" class="col-form-label">Responsible Employee:</label>
-                <select id="responsible" th:name="assignedTo">
-                    <option th:each="u : ${employee}" th:value="${u.getUsername()}" th:text="${u.getUsername()}"
-                            th:selected="${#strings.equals(u.getUsername(), contract.getCreatedBy().getUsername())}">
-                </select>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-    </div>
-    <div class="col-lg-1"></div>
-    <div class="col-lg-4">
-        <button data-toggle="collapse" data-target="#log" class="btn btn-info btn-block">Show Log</button>
-        <div class="list-group collapse" id="log" th:each="log: ${contract.getLog()}">
-            <span class="list-group-item list-group-item-info disabled" th:utext="${log.getMessage()}">Message</span>
+                <div class="form-group">
+                    <label for="responsible" class="col-form-label">Responsible Employee:</label>
+                    <select id="responsible" th:name="assignedTo">
+                        <option th:each="u : ${employee}" th:value="${u.getUsername()}" th:text="${u.getUsername()}"
+                                th:selected="${#strings.equals(u.getUsername(), contract.getCreatedBy().getUsername())}">
+                    </select>
+                </div>
+                <div class="row">
+                    <div class="col-md4">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                    <div class="col-md-3"></div>
+                    <div class="col-md4">
+                        <a th:href="@{/contract/{id}/update(id=${contract.getId()})}" class="btn btn-danger">Mark done
+                            and archive</a>
+                    </div>
+                </div>
+            </form>
         </div>
-    </div>
+        <div class="row col-lg-1"></div>
+        <div class="col-lg-4">
+            <button data-toggle="collapse" data-target="#log" class="btn btn-info btn-block">Show Log</button>
+            <div class="list-group collapse" id="log" th:each="log: ${contract.getLog()}">
+                <span class="list-group-item list-group-item-info disabled"
+                      th:utext="${log.getMessage()}">Message</span>
+            </div>
+        </div>
     </div>
 
 </div>
