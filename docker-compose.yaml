@@ -26,5 +26,5 @@ services:
     volumes:
       - /data/spring-boot-app
     ports:
-      - 8083:8088
+      - "8083:8083"
 
