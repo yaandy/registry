@@ -1,19 +1,19 @@
 version: '3'
 services:
 
-  mysql:
-    container_name: site-mysql
-    image: mysql/mysql-server:5.7
-
-    environment:
-      MYSQL_DATABASE: register
-      MYSQL_ROOT_PASSWORD: zemsite2019
-      MYSQL_ROOT_HOST: '%'
-    expose:
-      - "3306"
-    volumes:
-      - /data/mysql
-    restart: always
+#  mysql:
+#    container_name: site-mysql
+#    image: mysql/mysql-server:5.7
+#
+#    environment:
+#      MYSQL_DATABASE: register
+#      MYSQL_ROOT_PASSWORD: zemsite2019
+#      MYSQL_ROOT_HOST: '%'
+#    expose:
+#      - "3306"
+#    volumes:
+#      - /data/mysql
+#    restart: always
 
   app:
     restart: always
@@ -26,4 +26,5 @@ services:
       - /data/spring-boot-app
     ports:
       - "8083:8083"
+      - "3306:3306"
 
