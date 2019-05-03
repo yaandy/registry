@@ -27,5 +27,5 @@ services:
       - /data/spring-boot-app
     ports:
       - "8083:8083"
-      - "3306:3306"
+
 
