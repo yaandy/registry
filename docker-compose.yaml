@@ -20,8 +20,8 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    depends_on:
-        - mysql
+#    depends_on:
+#        - mysql
     volumes:
       - /data/spring-boot-app
     ports:
