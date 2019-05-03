@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 services:
 
   mysql:
@@ -9,8 +9,6 @@ services:
       MYSQL_DATABASE: register
       MYSQL_ROOT_PASSWORD: zemsite2019
       MYSQL_ROOT_HOST: '%'
-    healthcheck:
-      test: mysql --protocol=socket -hlocalhost -uroot -p$$MYSQL_ROOT_PASSWORD -e 'SELECT 1'
     expose:
       - "3306"
     volumes:
@@ -23,8 +21,7 @@ services:
       context: ./
       dockerfile: Dockerfile
     depends_on:
-        mysql:
-          condition: service_healthy
+        - mysql
     volumes:
       - /data/spring-boot-app
     ports:
