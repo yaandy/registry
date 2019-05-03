@@ -16,6 +16,7 @@ services:
 #    restart: always
 
   app:
+    network_mode: bridge
     restart: always
     build:
       context: ./
