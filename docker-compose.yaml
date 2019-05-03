@@ -8,10 +8,8 @@ services:
       MYSQL_DATABASE: register
       MYSQL_ROOT_PASSWORD: zemsite2019
       MYSQL_ROOT_HOST: '%'
-    ports:
-      - "3306:3306"
     expose:
-      - 3306
+      - "3306"
     volumes:
       - /data/mysql
     restart: always
