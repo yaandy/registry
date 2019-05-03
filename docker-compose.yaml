@@ -1,0 +1,28 @@
+version: '3'
+services:
+
+  mysql:
+    container_name: site-mysql
+    image: mysql/mysql-server:5.7
+    environment:
+      MYSQL_DATABASE: register
+      MYSQL_ROOT_PASSWORD: zemsite2019
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - "3306:3306"
+    volumes:
+      - /data/mysql
+    restart: always
+
+  app:
+    restart: always
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    depends_on:
+        - mysql
+    volumes:
+      - /data/spring-boot-app
+    ports:
+      - 8083:8088
+
