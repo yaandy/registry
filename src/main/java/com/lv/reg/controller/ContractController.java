@@ -90,6 +90,13 @@ public class ContractController {
         return "redirect:/contract/all";
     }
 
+    @RequestMapping(path = "/{id}/close", method = RequestMethod.POST)
+    public String closeContract(@PathVariable("id") long id, final RedirectAttributes redirectAttributes){
+        contractService.closeContract(id);
+        redirectAttributes.addAttribute("contracts", contractService.findAll());
+        return "redirect:/contract/all";
+    }
+
     
 }
 

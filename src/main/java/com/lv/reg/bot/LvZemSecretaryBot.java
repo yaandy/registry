@@ -52,7 +52,7 @@ public class LvZemSecretaryBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
-        return "749753156:xxxx";
+        return "749753156:AAGxxWHPPqXw3NPZfjnE53b4qgaCccJKCA4";
     }
 
     private String getInfo() {

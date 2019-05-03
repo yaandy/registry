@@ -1,16 +1,15 @@
 package com.lv.reg.entities;
 
 import com.lv.reg.formBean.ContractForm;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.Collection;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -40,5 +39,7 @@ public class Contract implements Serializable {
     @OneToOne()
     @JoinColumn(name = "assignedTo",    referencedColumnName = "id")
     private User assignedTo;
-//    private int createdBy;
+    @OneToMany(mappedBy = "contract")
+    private Collection<ContractLog> log;
+    private transient int passedDaysAfterLastUpdated;
 }
