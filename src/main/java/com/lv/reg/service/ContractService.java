@@ -47,7 +47,7 @@ public class ContractService {
     public void saveContract(ContractForm contractForm, Principal principal) {
         User user = ((MyUserDetails) userDetailsService.loadUserByUsername(principal.getName())).getUser();
 
-        Contract contract = Contract.builder().customer(customerRepository.findById(contractForm.getCustomerId()).orElseThrow())
+        Contract contract = Contract.builder().customer(customerRepository.findById(contractForm.getCustomerId()).orElseThrow(() -> new EntityNotFoundException()))
                 .district(contractForm.getDistrict())
                 .region(contractForm.getRegion())
                 .registered(Date.valueOf(LocalDate.now()))
@@ -69,7 +69,7 @@ public class ContractService {
     }
 
     public void updateContract(ContractForm contractForm, long id) {
-        Contract toBeUpdated = contractRepository.findById(id).orElseThrow();
+        Contract toBeUpdated = contractRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
 
         ContractLog contractLog = ContractLog.builder().contract(toBeUpdated)
                 .message(getChangeLog(contractForm, toBeUpdated)).build();
@@ -85,7 +85,7 @@ public class ContractService {
     }
 
     public void closeContract(long id){
-        Contract toBeUpdated = contractRepository.findById(id).orElseThrow();
+        Contract toBeUpdated = contractRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
         toBeUpdated.setFinished(true);
         contractRepository.save(toBeUpdated);
     }
@@ -113,7 +113,7 @@ public class ContractService {
     }
 
     public Contract findById(long id) {
-        Contract contract = contractRepository.findById(id).orElseThrow();
+        Contract contract = contractRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
         calculatePeriodAndSet().accept(contract);
         return contract;
     }
