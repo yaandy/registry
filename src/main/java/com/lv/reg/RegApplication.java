@@ -9,7 +9,7 @@ import org.telegram.telegrambots.ApiContextInitializer;
 public class RegApplication {
 
     public static void main(String[] args) {
-        ApiContextInitializer.init(); // telegram bot init
+        //ApiContextInitializer.init(); // telegram bot init
         SpringApplication.run(RegApplication.class, args);
     }
 }
