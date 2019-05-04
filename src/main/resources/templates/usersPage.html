@@ -56,12 +56,13 @@
         </div>
     </div>
     <div class="row col-lg-6">
-        <div th:if="${customer != null}" class="alert alert-success" role="alert">
-            <ul class="col-2">
-                <span>Customer successfully registered: </span>
-                <li>Name: <span th:utext="${customer.getOrgName()}">..</span></li>
-                <li>Phone: <span th:utext="${customer.getPhone()}">..</span></li>
-            </ul>
+        <div th:if="${user != null}" class="alert alert-success" role="alert">
+<!--            <ul class="col-10">-->
+<!--                <span>User successfully registered: </span>-->
+<!--                <li>Name: <span th:utext="${user.getUsername()}">..</span></li>-->
+<!--                <li>Role: <span th:utext="${user.getAuthorities()}">..</span></li>-->
+<!--            </ul>-->
+            <div th:utext="${'User successfully registered : name: ' + user.getUsername() + ', role: '+ user.getAuthorities()}"/>
             <button type="button" class="close col-2" data-dismiss="alert">x</button>
         </div>
     </div>
@@ -87,43 +88,50 @@
                                 <div class="form-group">
                                     <label for="orgName" class="col-form-label">User Name:</label>
                                     <input id="orgName" type="text" th:field="*{userName}" placeholder="ivanov@lv.lv"/>
-                                    <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{userName}"
-                                          class="ui-state-error-text">..</span>
+                                    <span th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"
+                                          class="text-danger">..</span>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="fName" class="col-form-label">First Name:</label>
                                     <input id="fName" type="text" th:field="*{firstName}" placeholder="Петро"/>
                                     <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"
-                                          class="ui-state-error-text">..</span>
+                                          class="text-danger">..</span>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="lName" class="col-form-label">Last Name:</label>
                                     <input id="lName" type="text" th:field="*{lastName}" placeholder="Іванов"/>
                                     <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"
-                                          class="ui-state-error-text">..</span>
+                                          class="text-danger">..</span>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="phone">Phone</label>
                                     <input id="phone" type="text" th:field="*{phoneNumber}" placeholder="0981234567"/>
                                     <span th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"
-                                          class="ui-state-error-text">..</span>
+                                          class="text-danger">..</span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="role">Role</label>
+                                    <select id="role" th:name="authority">
+                                        <option th:each="a : ${roles}" th:value="${a}" th:text="${a}">
+                                    </select>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="password">Password</label>
                                     <input type="password" id="password" th:field="*{password}" />
                                     <span th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{password}"
-                                          class="ui-state-error-text">..</span>
+                                          class="text-danger">..</span>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="confirmPassword">Confirm Password</label>
                                     <input type="password" id="confirmPassword" th:field="*{confirmPassword}" />
-                                    <span th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{password}"
-                                          class="ui-state-error-text">..</span>
+                                    <span th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"
+                                          class="text-danger">..</span>
                                 </div>
 
                                 <div class="modal-footer">

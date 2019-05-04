@@ -1,11 +1,10 @@
 package com.lv.reg.formBean;
 
-import com.lv.reg.dao.AppUserDAO;
-import com.lv.reg.model.AppUser;
+import com.lv.reg.entities.User;
+import com.lv.reg.service.IUserService;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
@@ -17,7 +16,7 @@ public class UserValidator implements Validator {
     private EmailValidator emailValidator = EmailValidator.getInstance();
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private IUserService userDetailsService;
 
     // The classes are supported by this validator.
     @Override
@@ -35,18 +34,19 @@ public class UserValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName", "NotEmpty.appUserForm.lastName");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty.appUserForm.password");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "confirmPassword", "NotEmpty.appUserForm.confirmPassword");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "phoneNumber", "NotEmpty.appUserForm.phone");
 
         if (!this.emailValidator.isValid(userForm.getUserName())) {
             // Invalid email.
-            errors.rejectValue("email", "Pattern.appUserForm.email");
-        } else if (userForm.getId() == null) {
-            UserDetails dbUser = userDetailsService.loadUserByUsername(userForm.getUserName());
+            errors.rejectValue("userName", "Pattern.appUserForm.email");
+        }
+        if (userForm.getId() == null) {
+            User dbUser = userDetailsService.findUserByUserName(userForm.getUserName());
             if (dbUser != null) {
                 // Email has been used by another account.
-                errors.rejectValue("email", "Duplicate.appUserForm.email");
+                errors.rejectValue("userName", "Duplicate.appUserForm.email");
             }
         }
-
         if (!errors.hasErrors()) {
             if (!userForm.getConfirmPassword().equals(userForm.getPassword())) {
                 errors.rejectValue("confirmPassword", "Match.appUserForm.confirmPassword");

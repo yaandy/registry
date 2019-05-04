@@ -32,4 +32,13 @@ public class UserDetailsServiceImpl implements UserDetailsService, IUserService 
     public Iterable<User> getAllUsers() {
         return userRepository.findAll();
     }
+
+    public User saveUser(User user){
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User findUserByUserName(String userName) {
+        return userRepository.findUserByUsername(userName);
+    }
 }
