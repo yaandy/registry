@@ -46,9 +46,9 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `register`;
-INSERT INTO `register`.`contract` (`id`, `customer_id`, `region`, `district`, `village_council`, `order_type`, `order_status`, `is_finished`, `stage`, `total_price`, `payed_amount`, `registered`, `updated`, `created_by`, `assigned_to`) VALUES (1, 1, 'Львів', 'Самбір', 'Задністрянська', 'план', 'прийнято', false, 'Прийнято', 2500, 1000, '2019-01-01', NULL, 1, NULL);
-INSERT INTO `register`.`contract` (`id`, `customer_id`, `region`, `district`, `village_council`, `order_type`, `order_status`, `is_finished`, `stage`, `total_price`, `payed_amount`, `registered`, `updated`, `created_by`, `assigned_to`) VALUES (2, 2, 'Городок', 'Свиняни', 'Цюрипинська', 'город', 'прийнято', true, 'На Погоджені', 3000, 1500, '2019-02-02', NULL, 1, NULL);
-INSERT INTO `register`.`contract` (`id`, `customer_id`, `region`, `district`, `village_council`, `order_type`, `order_status`, `is_finished`, `stage`, `total_price`, `payed_amount`, `registered`, `updated`, `created_by`, `assigned_to`) VALUES (3, 1, 'Городок', 'Ставчани', 'Задупинська', 'подвіря', 'прийнято', false, 'На Погоджені', 3000, 1500, '2019-03-03', NULL, 3, NULL);
+INSERT INTO `register`.`contract` (`id`, `customer_id`, `region`, `district`, `village_council`, `order_type`, `order_status`, `is_finished`, `stage`, `total_price`, `payed_amount`, `registered`, `updated`, `created_by`, `assigned_to`) VALUES (1, 1, 'Львів', 'Самбір', 'Задністрянська', 'план', 'прийнято', false, 'Прийнято', 2500, 1000, '2019-01-01', '2019-02-02', 1, 1);
+INSERT INTO `register`.`contract` (`id`, `customer_id`, `region`, `district`, `village_council`, `order_type`, `order_status`, `is_finished`, `stage`, `total_price`, `payed_amount`, `registered`, `updated`, `created_by`, `assigned_to`) VALUES (2, 2, 'Городок', 'Свиняни', 'Цюрипинська', 'город', 'прийнято', true, 'На Погоджені', 3000, 1500, '2019-02-02', '2019-03-03', 1, 1);
+INSERT INTO `register`.`contract` (`id`, `customer_id`, `region`, `district`, `village_council`, `order_type`, `order_status`, `is_finished`, `stage`, `total_price`, `payed_amount`, `registered`, `updated`, `created_by`, `assigned_to`) VALUES (3, 1, 'Городок', 'Ставчани', 'Задупинська', 'подвіря', 'прийнято', false, 'На Погоджені', 3000, 1500, '2019-03-03', '2019-04-04', 3, 3);
 
 COMMIT;
 
