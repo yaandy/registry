@@ -75,7 +75,7 @@
                     <label for="responsible" class="col-form-label">Responsible Employee:</label>
                     <select id="responsible" th:name="assignedTo">
                         <option th:each="u : ${employee}" th:value="${u.getUsername()}" th:text="${u.getUsername()}"
-                                th:selected="${#strings.equals(u.getUsername(), contract.getCreatedBy().getUsername())}">
+                                th:selected="${#strings.equals(u.getUsername(), contract.getAssignedTo().getUsername())}">
                     </select>
                 </div>
 

@@ -17,17 +17,28 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String name;
+    private String orgName;
+    private String firstName;
+    private String lastName;
     private String email;
     private String phone;
     private String region;
     private String adress;
 
-    public Customer(CustomerUserForm customerUserForm){
-        this.name = customerUserForm.getName();
+    public Customer(CustomerUserForm customerUserForm) {
+        this.orgName = resolveOrgName(customerUserForm);
+        this.firstName = customerUserForm.getFirstName();
+        this.lastName = customerUserForm.getLastName();
         this.email = customerUserForm.getEmail();
-        this.adress  = customerUserForm.getAdress();
+        this.adress = customerUserForm.getAdress();
         this.region = customerUserForm.getRegion();
         this.phone = customerUserForm.getPhone();
+    }
+
+    private String resolveOrgName(CustomerUserForm customerUserForm) {
+        if (customerUserForm.getOrgName() == null || customerUserForm.getOrgName().isEmpty())
+            return customerUserForm.getLastName() + "_" + customerUserForm.getFirstName();
+        else
+            return customerUserForm.getOrgName();
     }
 }

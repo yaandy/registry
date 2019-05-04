@@ -41,7 +41,7 @@ public class CustomerController {
     }
 
     @GetMapping(path = "/all")
-    public String getAllCustomers(Model model){
+    public String getAllCustomers(Model model) {
         Iterable<Customer> all = customerRepository.findAll();
         CustomerUserForm form = new CustomerUserForm();
         CustomerUserForm customerUserForm = new CustomerUserForm();
@@ -65,12 +65,11 @@ public class CustomerController {
             model.addAttribute("customers", customerRepository.findAll());
             return "customersPage";
         }
-        Customer customer= null;
+        Customer customer = null;
+
         try {
             customer = customerRepository.save(new Customer(customerUserForm));
-        }
-        // Other error!!
-        catch (Exception e) {
+        } catch (Exception e) {
             List<Country> countries = countryDAO.getCountries();
             model.addAttribute("countries", countries);
             model.addAttribute("errorMessage", "Error: " + e.getMessage());

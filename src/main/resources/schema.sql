@@ -54,11 +54,13 @@ DROP TABLE IF EXISTS `register`.`customer` ;
 
 CREATE TABLE IF NOT EXISTS `register`.`customer` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NULL,
+  `org_name` VARCHAR(45) NULL,
   `email` VARCHAR(30) NULL,
   `phone` VARCHAR(10) NULL,
   `region` VARCHAR(15) NULL,
   `adress` VARCHAR(45) NULL,
+  `first_name` VARCHAR(20) NULL,
+  `last_name` VARCHAR(20) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -151,8 +153,3 @@ CREATE TABLE IF NOT EXISTS `register`.`contract_log` (
   `message` VARCHAR(200) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
-
-
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

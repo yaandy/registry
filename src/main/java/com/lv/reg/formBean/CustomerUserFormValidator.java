@@ -33,8 +33,8 @@ public class CustomerUserFormValidator implements Validator {
         CustomerUserForm customerUserForm = (CustomerUserForm) target;
 
         // Check the fields of AppUserForm.
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "NotEmpty.appUserForm.userName");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "NotEmpty.appUserForm.email");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName", "NotEmpty.appUserForm.userName");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName", "NotEmpty.appUserForm.userName");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "phone", "NotEmpty.appUserForm.phone");
 
         if (!this.emailValidator.isValid(customerUserForm.getEmail())) {
@@ -42,12 +42,12 @@ public class CustomerUserFormValidator implements Validator {
             errors.rejectValue("email", "Pattern.appUserForm.email");
         }
         if (!errors.hasFieldErrors("email")) {
-            log.info("Checking by email" + customerUserForm.getEmail());
-            Collection<Customer> allByEmail = customerRepository.findAllByEmail(customerUserForm.getEmail());
-            log.info(String.format("%d Customers with email %s found in db", allByEmail.size(), customerUserForm.getEmail()));
-            if (!allByEmail.isEmpty()) {
+            log.info("Checking by orgName" + customerUserForm.getOrgName());
+            Collection<Customer> allByOrgName = customerRepository.findAllByOrgName(customerUserForm.getOrgName());
+            log.info(String.format("%d Customers with orgName %s found in db", allByOrgName.size(), customerUserForm.getOrgName()));
+            if (!allByOrgName.isEmpty()) {
                 // Username is not available.
-                errors.rejectValue("email", "Duplicate.appUserForm.email");
+                errors.rejectValue("orgName", "Duplicate.appUserForm.email");
             }
         }
     }

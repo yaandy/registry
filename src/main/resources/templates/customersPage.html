@@ -31,7 +31,9 @@
             <thead>
             <tr>
                 <th class="th-sm">Id</th>
-                <th class="th-sm">Name</th>
+                <th class="th-sm">OrgName</th>
+                <th class="th-sm">FirstName</th>
+                <th class="th-sm">LastName</th>
                 <th class="th-sm">Email</th>
                 <th class="th-sm">Phone</th>
                 <th class="th-sm">Region</th>
@@ -41,7 +43,9 @@
             <tbody>
             <tr th:each="member : ${customers}">
                 <td th:utext="${member.getId()}">...</td>
-                <td th:utext="${member.getName()}">...</td>
+                <td th:utext="${member.getOrgName()}">...</td>
+                <td th:utext="${member.getFirstName()}">...</td>
+                <td th:utext="${member.getLastName()}">...</td>
                 <td th:utext="${member.getEmail()}">...</td>
                 <td th:utext="${member.getPhone()}">...</td>
                 <td th:utext="${member.getRegion()}">...</td>
@@ -59,7 +63,7 @@
         <div th:if="${customer != null}" class="alert alert-success" role="alert">
             <ul class="col-2">
                 <span>Customer successfully registered: </span>
-                <li>Name: <span th:utext="${customer.name}">..</span></li>
+                <li>Name: <span th:utext="${customer.getOrgName()}">..</span></li>
                 <li>Phone: <span th:utext="${customer.getPhone()}">..</span></li>
             </ul>
             <button type="button" class="close col-2" data-dismiss="alert">x</button>
@@ -85,21 +89,36 @@
                             <form th:action="@{/demo/register}" th:object="${appUserForm}" method="POST">
 
                                 <div class="form-group">
-                                    <label for="userName" class="col-form-label">Customer Name:</label>
-                                    <input id="userName" type="text" th:field="*{name}"/>
-                                    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+                                    <label for="orgName" class="col-form-label">Org Name:</label>
+                                    <input id="orgName" type="text" th:field="*{orgName}"/>
+                                    <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{orgName}"
                                           class="ui-state-error-text">..</span>
                                 </div>
 
                                 <div class="form-group">
+                                    <label for="fName" class="col-form-label">First Name:</label>
+                                    <input id="fName" type="text" th:field="*{firstName}"/>
+                                    <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{orgName}"
+                                          class="ui-state-error-text">..</span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="lName" class="col-form-label">Last Name:</label>
+                                    <input id="lName" type="text" th:field="*{lastName}"/>
+                                    <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{orgName}"
+                                          class="ui-state-error-text">..</span>
+                                </div>
+
+
+                                <div class="form-group">
                                     <label for="email" class="col-form-label">Email</label>
-                                    <input id="email" type="text" th:field="*{email}"/>
+                                    <input id="email" type="text" th:field="*{email}" placeholder="blabla@email.com"/>
                                     <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
                                           class="ui-state-error-text">..</span>
                                 </div>
                                 <div class="form-group">
                                     <label for="phone">Phone</label>
-                                    <input id="phone" type="text" th:field="*{phone}"/>
+                                    <input id="phone" type="text" th:field="*{phone}" placeholder="0981234567"/>
                                     <span th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"
                                           class="ui-state-error-text">..</span>
                                 </div>

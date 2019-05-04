@@ -1,9 +1,3 @@
--- MySQL Workbench Forward Engineering
-
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
-
 
 -- -----------------------------------------------------
 -- Data for table `register`.`user`
@@ -35,8 +29,8 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `register`;
-INSERT INTO `register`.`customer` (`id`, `name`, `email`, `phone`, `region`, `adress`) VALUES (1, 'Гройсман', 'gr@mail.com', '0987777777', 'Lviv', 'qwerty');
-INSERT INTO `register`.`customer` (`id`, `name`, `email`, `phone`, `region`, `adress`) VALUES (2, 'Тимошенко', 'timo@asd.com', '0981234565', 'Kyiv', 'zxcvbn');
+INSERT INTO `register`.`customer` (`id`, `org_name`, `email`, `phone`, `region`, `adress`, `first_name`, `last_name`) VALUES (1, 'ФОП Гройсман', 'gr@mail.com', '0987777777', 'Lviv', 'qwerty', 'Іван', 'Гройсман');
+INSERT INTO `register`.`customer` (`id`, `org_name`, `email`, `phone`, `region`, `adress`, `first_name`, `last_name`) VALUES (2, 'ПДА Тимошенко', 'timo@asd.com', '0981234565', 'Kyiv', 'zxcvbn', 'Галя', 'Тимошенко');
 
 COMMIT;
 

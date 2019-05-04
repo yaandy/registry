@@ -80,6 +80,7 @@ public class ContractService {
         toBeUpdated.setStage(contractForm.getStage());
         toBeUpdated.setPayedAmount(toBeUpdated.getPayedAmount() + contractForm.getPayedAmount());
         toBeUpdated.setUpdated(Date.valueOf(LocalDate.now()));
+        toBeUpdated.setAssignedTo(((MyUserDetails)userDetailsService.loadUserByUsername(contractForm.getAssignedTo())).getUser());
 
         contractRepository.save(toBeUpdated);
     }

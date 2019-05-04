@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CustomerUserForm {
-    private String name;
+    private String orgName;
+    private String firstName;
+    private String lastName;
     private String email;
     private String phone;
     private String region;

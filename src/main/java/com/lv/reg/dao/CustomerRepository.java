@@ -7,4 +7,5 @@ import java.util.Collection;
 
 public interface CustomerRepository extends CrudRepository<Customer, Long> {
     Collection<Customer> findAllByEmail(String email);
+    Collection<Customer> findAllByOrgName(String orgName);
 }

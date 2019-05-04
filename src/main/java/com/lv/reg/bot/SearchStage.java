@@ -66,7 +66,7 @@ public class SearchStage implements ActionOptions {
         }else if(search != null){
             Iterable<Contract> contracts = search.performSearch(response);
             String msg = StreamSupport.stream(contracts.spliterator(), false)
-                    .map(c -> String.format("Замовник %s сільрада %s статус %s", c.getCustomer().getName(), c.getVillageCouncil(), c.getOrderStatus()))
+                    .map(c -> String.format("Замовник %s сільрада %s статус %s", c.getCustomer().getOrgName(), c.getVillageCouncil(), c.getOrderStatus()))
                     .collect(Collectors.joining("\n \n"));
             sendMessage.setText(msg);
             search = null;
