@@ -10,6 +10,7 @@ import com.lv.reg.model.Country;
 import com.lv.reg.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,7 +26,7 @@ import java.util.List;
 @RequestMapping(path = "/user")
 public class UserController {
     @Autowired
-    IUserService userService;
+    private IUserService userService;
 
     @GetMapping(path = "/all")
     public String getAllCustomers(Model model) {
