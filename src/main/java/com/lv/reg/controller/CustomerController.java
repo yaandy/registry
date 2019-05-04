@@ -20,7 +20,7 @@ import java.util.List;
 
 @Slf4j
 @Controller
-@RequestMapping(path = "/demo")
+@RequestMapping(path = "/customer")
 public class CustomerController {
     @Autowired
     private CustomerRepository customerRepository;
@@ -78,6 +78,6 @@ public class CustomerController {
 
         redirectAttributes.addFlashAttribute("customer", customer);
 
-        return "redirect:/demo/all";
+        return "redirect:/customer/all";
     }
 }

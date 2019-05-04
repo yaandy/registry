@@ -23,6 +23,9 @@ public class User implements Serializable {
     private String username;
     @NotEmpty
     private String password;
+    private String firstName;
+    private String lastName;
+    private String phone;
     private Date dateCreated;
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "user_authority",
