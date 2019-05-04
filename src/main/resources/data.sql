@@ -4,10 +4,10 @@
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `register`;
-INSERT INTO `register`.`user` (`id`, `first_name`, `last_name`, `username`, `phone`, `password`, `telegram_id`, `date_created`) VALUES (1, 'Хуйналанін', 'Володимир', 'us1@us.com', '0981791789', '$2a$10$UcMBkIzCgV9wV8n4WMF/EuQxbaYMG3XqnQowuYwpnhMHDj3hsSY5i', NULL, NULL);
-INSERT INTO `register`.`user` (`id`, `first_name`, `last_name`, `username`, `phone`, `password`, `telegram_id`, `date_created`) VALUES (2, 'Порошенко', 'Петро', 'ad@ad.com', '0966666666', '$2a$10$UcMBkIzCgV9wV8n4WMF/EuQxbaYMG3XqnQowuYwpnhMHDj3hsSY5i', NULL, NULL);
-INSERT INTO `register`.`user` (`id`, `first_name`, `last_name`, `username`, `phone`, `password`, `telegram_id`, `date_created`) VALUES (3, 'Зел', 'Петро', 'us2@us.com', '0677777985', '$2a$10$UcMBkIzCgV9wV8n4WMF/EuQxbaYMG3XqnQowuYwpnhMHDj3hsSY5i', NULL, NULL);
-INSERT INTO `register`.`user` (`id`, `first_name`, `last_name`, `username`, `phone`, `password`, `telegram_id`, `date_created`) VALUES (4, 'Петро', 'Геодезист', 'geo@geo.com', '0932233226', '$2a$10$UcMBkIzCgV9wV8n4WMF/EuQxbaYMG3XqnQowuYwpnhMHDj3hsSY5i', NULL, NULL);
+INSERT INTO `register`.`user` (`id`, `first_name`, `last_name`, `username`, `phone`, `password`, `telegram_id`, `date_created`) VALUES (1, 'Володимир', 'Хуйналанін', 'us1@us.com', '0981791789', '$2a$10$UcMBkIzCgV9wV8n4WMF/EuQxbaYMG3XqnQowuYwpnhMHDj3hsSY5i', NULL, NULL);
+INSERT INTO `register`.`user` (`id`, `first_name`, `last_name`, `username`, `phone`, `password`, `telegram_id`, `date_created`) VALUES (2, 'Петр', 'Поршонко', 'ad@ad.com', '0966666666', '$2a$10$UcMBkIzCgV9wV8n4WMF/EuQxbaYMG3XqnQowuYwpnhMHDj3hsSY5i', NULL, NULL);
+INSERT INTO `register`.`user` (`id`, `first_name`, `last_name`, `username`, `phone`, `password`, `telegram_id`, `date_created`) VALUES (3, 'Ваван', 'Здублян', 'us2@us.com', '0677777985', '$2a$10$UcMBkIzCgV9wV8n4WMF/EuQxbaYMG3XqnQowuYwpnhMHDj3hsSY5i', NULL, NULL);
+INSERT INTO `register`.`user` (`id`, `first_name`, `last_name`, `username`, `phone`, `password`, `telegram_id`, `date_created`) VALUES (4, 'Іван', 'Геодезист', 'geo@geo.com', '0932233226', '$2a$10$UcMBkIzCgV9wV8n4WMF/EuQxbaYMG3XqnQowuYwpnhMHDj3hsSY5i', NULL, NULL);
 
 COMMIT;
 

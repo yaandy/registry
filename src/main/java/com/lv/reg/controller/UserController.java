@@ -6,6 +6,7 @@ import com.lv.reg.entities.Customer;
 import com.lv.reg.entities.User;
 import com.lv.reg.formBean.CustomerUserForm;
 import com.lv.reg.formBean.CustomerUserFormValidator;
+import com.lv.reg.formBean.UserForm;
 import com.lv.reg.model.Country;
 import com.lv.reg.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -31,9 +32,13 @@ public class UserController {
     @GetMapping(path = "/all")
     public String getAllCustomers(Model model) {
         Iterable<User> allUsers = userService.getAllUsers();
+        UserForm userForm = new UserForm();
         model.addAttribute("users", allUsers);
+        model.addAttribute("userForm", userForm);
 
         return "usersPage";
     }
+
+
 
 }
