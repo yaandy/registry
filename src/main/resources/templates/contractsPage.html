@@ -27,7 +27,7 @@
 <div class="container-fluid">
     <h1>Contracts Table</h1>
     <div class="row col-lg-12 table-responsive">
-        <table id="contracts" class="table table-striped table-responsive-lg" cellspacing="0" width="100%">
+        <table id="contracts" class="table table-striped table-responsive-lg w-auto" cellspacing="0" width="100%">
             <thead class="table-dark">
             <tr>
                 <th class="th-sm">Id</th>
@@ -105,11 +105,11 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form th:action="@{/contract/register}" th:object="${contractForm}" method="POST">
+                            <form class="needs-validation" th:action="@{/contract/register}" th:object="${contractForm}" method="POST">
                                 <div class="form-row">
                                     <div class="form-group col-md-4">
                                         <label for="customer" class="col-form-label">Customer:</label>
-                                        <select id="customer" th:field="*{customerId}">
+                                        <select class="form-control" id="customer" th:field="*{customerId}">
                                             <option value="">NA</option>
                                             <option th:each="c : ${customers}" th:value="${c.getId()}"
                                                     th:text="${c.getOrgName()}">
@@ -137,38 +137,41 @@
                                 <div class="form-row">
                                     <div class="form-group form-group-lg col-md-4">
                                         <label for="region" class="col-form-label">Region:</label>
-                                        <select id="region" th:field="*{region}">
+                                        <select class="form-control" id="region" th:field="*{region}">
                                             <option th:each="r : ${regionOptions}" th:value="${r}" th:text="${r}">
                                         </select>
                                     </div>
                                     <div class="form-group form-group-lg col-md-4">
                                         <label for="district" class="col-form-label">District:</label>
-                                        <select id="district" th:field="*{district}">
+                                        <select class="form-control" id="district" th:field="*{district}">
                                             <option th:each="d : ${districtOptions}" th:value="${d}" th:text="${d}">
                                         </select>
                                     </div>
                                     <div class="form-group form-group-lg col-md-4">
                                         <label for="villageCouncil" class="col-form-label">Village:</label>
-                                        <input type="text" id="villageCouncil" th:field="*{villageCouncil}"/>
+                                        <input class="form-control" type="text" id="villageCouncil" th:field="*{villageCouncil}" required/>
+                                        <div class="valid-feedback">
+                                            Looks good!
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="type" class="col-form-label">Type:</label>
-                                    <select id="type" th:field="*{type}">
+                                    <select class="form-control" id="type" th:field="*{type}">
                                         <option th:each="t : ${typeOptions}" th:value="${t.getLabel()}"
                                                 th:text="${t.getLabel()}">
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="status" class="col-form-label">Status:</label>
-                                    <select id="status" th:field="*{status}">
+                                    <select class="form-control" id="status" th:field="*{status}">
                                         <option th:each="s : ${statusOptions}" th:value="${s.getLabel()}"
                                                 th:text="${s.getLabel()}">
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="stage" class="col-form-label">Stage:</label>
-                                    <select id="stage" th:field="*{stage}">
+                                    <select class="form-control" id="stage" th:field="*{stage}">
                                         <option th:each="s : ${stagesOptions}" th:value="${s.getLabel()}"
                                                 th:text="${s.getLabel()}">
                                     </select>
@@ -176,7 +179,10 @@
 
                                 <div class="form-group">
                                     <label for="price" class="col-form-label">Price:</label>
-                                    <input type="number" class="form-control" id="price" th:field="*{totalPrice}">
+                                    <input type="number" class="form-control" id="price" th:field="*{totalPrice}" required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="comment" class="col-form-label">Comment:</label>
@@ -199,6 +205,25 @@
     $(document).ready(function () {
         $('#contracts').DataTable();
     });
+</script>
+<script>
+    (function runJS() {(function() {
+        'use strict';
+        window.addEventListener('load', function() {
+// Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+// Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();})();
 </script>
 </body>
 </html>
