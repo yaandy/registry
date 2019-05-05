@@ -49,7 +49,7 @@
             <tbody>
             <tr th:each="contract : ${contracts}">
                 <td class="th-sm" th:utext="${contract.getId()}">...</td>
-                <td th:utext="${contract.getCustomer().getEmail()}"></td>
+                <td th:utext="${contract.getCustomer().getOrgName()}"></td>
                 <td th:utext="${contract.getRegion()}">...</td>
                 <td th:utext="${contract.getDistrict()}">...</td>
                 <td th:utext="${contract.getVillageCouncil()}">...</td>
@@ -61,18 +61,34 @@
                 <td th:utext="${#dates.format(contract.getRegistered(), 'dd/MMM/yyyy')}">...</td>
                 <td th:utext="${#dates.format(contract.getUpdated(), 'dd/MMM/yyyy')}">...</td>
                 <td>
-                    <span th:if="${contract.getPassedDaysAfterLastUpdated()}*-1 < 5" class="badge badge-success" th:utext="... + ${contract.getPassedDaysAfterLastUpdated()} + ...">...</span>
-                    <span th:if="${contract.getPassedDaysAfterLastUpdated()}*-1 > 10" class="badge badge-danger" th:utext="... + ${contract.getPassedDaysAfterLastUpdated()} + ...">...</span>
-                    <span th:if="${contract.getPassedDaysAfterLastUpdated()*-1 < 10} and ${contract.getPassedDaysAfterLastUpdated()*-1 > 5}" class="badge badge-warning" th:utext="... + ${contract.getPassedDaysAfterLastUpdated()} + ...">...</span>
+                    <span th:if="${contract.getPassedDaysAfterLastUpdated()}*-1 < 5" class="badge badge-success"
+                          th:utext="... + ${contract.getPassedDaysAfterLastUpdated()} + ...">...</span>
+                    <span th:if="${contract.getPassedDaysAfterLastUpdated()}*-1 > 10" class="badge badge-danger"
+                          th:utext="... + ${contract.getPassedDaysAfterLastUpdated()} + ...">...</span>
+                    <span th:if="${contract.getPassedDaysAfterLastUpdated()*-1 < 10} and ${contract.getPassedDaysAfterLastUpdated()*-1 > 5}"
+                          class="badge badge-warning"
+                          th:utext="... + ${contract.getPassedDaysAfterLastUpdated()} + ...">...</span>
                 </td>
                 <td>
-                    <a class="btn btn-primary"  th:href="@{/contract/{id}/update(id=${contract.getId()})}">Edit</a>
+                    <a class="btn btn-primary" th:href="@{/contract/{id}/update(id=${contract.getId()})}">Edit</a>
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
-    <div class="row col-md-8">
+    <div class="row col-lg-6">
+        <div th:if="${customerError != null}"
+             th:utext="${customerError}" class="alert alert-danger" role="alert">...
+        </div>
+    </div>
+    <div class="row col-lg-6">
+        <div th:if="${newContract != null}" class="alert alert-success" role="alert">
+            <div th:utext="${'Contract successfully registered: ' + newContract.getId()}"></div>
+            <button type="button" class="close col-2" data-dismiss="alert">x</button>
+        </div>
+    </div>
+
+    <div class="row col-md-10">
         <div class="myForm">
             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#registerModal"
                     data-whatever="@mdo">Register
@@ -80,7 +96,7 @@
 
             <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel"
                  aria-hidden="true">
-                <div class="modal-dialog" role="document">
+                <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Contract Registration Form</h5>
@@ -90,28 +106,51 @@
                         </div>
                         <div class="modal-body">
                             <form th:action="@{/contract/register}" th:object="${contractForm}" method="POST">
-                                <div class="form-group">
-                                    <label for="customer" class="col-form-label">Customer:</label>
-                                    <select id="customer" th:field="*{customerId}">
-                                        <option th:each="c : ${customers}" th:value="${c.getId()}"
-                                                th:text="${c.getOrgName()}">
-                                    </select>
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label for="customer" class="col-form-label">Customer:</label>
+                                        <select id="customer" th:field="*{customerId}">
+                                            <option value="">NA</option>
+                                            <option th:each="c : ${customers}" th:value="${c.getId()}"
+                                                    th:text="${c.getOrgName()}">
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group col-md-8">
+                                        <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse"
+                                                data-target="#newCustomer" aria-expanded="false"
+                                                aria-controls="newCustomer">Quick Register
+                                        </button>
+                                        <div class="collapse" id="newCustomer">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">First and last name</span>
+                                                </div>
+                                                <input th:field="*{customerFirstName}" type="text" class="form-control" placeholder="Іван">
+                                                <input th:field="*{customerLastName}" type="text" class="form-control" placeholder="Уважний">
+                                                <input th:field="*{customerPhone}" type="tel" class="form-control" placeholder="0981234567">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="region" class="col-form-label">Region:</label>
-                                    <select id="region" th:field="*{region}">
-                                        <option th:each="r : ${regionOptions}" th:value="${r}" th:text="${r}">
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="district" class="col-form-label">District:</label>
-                                    <select id="district" th:field="*{district}">
-                                        <option th:each="d : ${districtOptions}" th:value="${d}" th:text="${d}">
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="villageCouncil" class="col-form-label">Village Council:</label>
-                                    <input type="text" id="villageCouncil" th:field="*{villageCouncil}"/>
+
+                                <div class="form-row">
+                                    <div class="form-group form-group-lg col-md-4">
+                                        <label for="region" class="col-form-label">Region:</label>
+                                        <select id="region" th:field="*{region}">
+                                            <option th:each="r : ${regionOptions}" th:value="${r}" th:text="${r}">
+                                        </select>
+                                    </div>
+                                    <div class="form-group form-group-lg col-md-4">
+                                        <label for="district" class="col-form-label">District:</label>
+                                        <select id="district" th:field="*{district}">
+                                            <option th:each="d : ${districtOptions}" th:value="${d}" th:text="${d}">
+                                        </select>
+                                    </div>
+                                    <div class="form-group form-group-lg col-md-4">
+                                        <label for="villageCouncil" class="col-form-label">Village:</label>
+                                        <input type="text" id="villageCouncil" th:field="*{villageCouncil}"/>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="type" class="col-form-label">Type:</label>
@@ -128,7 +167,7 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="stage" class="col-form-label">Type:</label>
+                                    <label for="stage" class="col-form-label">Stage:</label>
                                     <select id="stage" th:field="*{stage}">
                                         <option th:each="s : ${stagesOptions}" th:value="${s.getLabel()}"
                                                 th:text="${s.getLabel()}">

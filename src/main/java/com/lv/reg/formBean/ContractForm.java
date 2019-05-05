@@ -20,4 +20,9 @@ public class ContractForm {
     private String comment;
     private boolean isFinished;
     private String assignedTo;
+
+    //quick register customer
+    private String customerFirstName;
+    private String customerLastName;
+    private String customerPhone;
 }

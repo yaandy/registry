@@ -3,12 +3,11 @@ package com.lv.reg.controller;
 import com.lv.reg.dao.*;
 import com.lv.reg.entities.Contract;
 import com.lv.reg.entities.Customer;
-import com.lv.reg.entities.User;
 import com.lv.reg.enums.RegionEnum;
 import com.lv.reg.formBean.ContractForm;
 import com.lv.reg.service.ContractService;
+import com.lv.reg.service.CustomerService;
 import com.lv.reg.service.IUserService;
-import com.lv.reg.service.MyUserDetails;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +20,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.security.Principal;
 import java.util.Arrays;
 
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+
 @Slf4j
 @RequestMapping(path = "/contract")
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -29,6 +30,7 @@ public class ContractController {
 
     private ContractService contractService;
     private IUserService userService;
+    private CustomerService customerService;
 
     private CustomerRepository customerRepository;
     private StatusRepository statusRepository;
@@ -61,9 +63,13 @@ public class ContractController {
                                  BindingResult result,
                                  final RedirectAttributes redirectAttributes, Principal principal){
 
-        contractService.saveContract(contractForm, principal);
+        Contract contract = null;
+        if(isCustomerInfoValid(contractForm, redirectAttributes))
+            contract = contractService.saveContract(contractForm, principal);
 
-        redirectAttributes.addAttribute("contracts", contractService.findAll());
+        redirectAttributes.addFlashAttribute("contracts", contractService.findAll());
+        redirectAttributes.addFlashAttribute("newContract", contract);
+
         return "redirect:/contract/all";
     }
 
@@ -97,6 +103,27 @@ public class ContractController {
         return "redirect:/contract/all";
     }
 
+    private boolean isCustomerInfoValid(ContractForm contractForm, RedirectAttributes redirectAttributes){
+        if(contractForm.getCustomerId() == null){
+            if(! isNewCustomerAttributesPresent(contractForm)){
+                redirectAttributes.addFlashAttribute("customerError", "Customer was not selected and some fields required for new customer creation are empty, please try again");
+                return false;
+            }else {
+                Customer newCustomer = customerService.quickCustomerCreation(contractForm.getCustomerFirstName(), contractForm.getCustomerLastName(), contractForm.getCustomerPhone());
+                contractForm.setCustomerId(newCustomer.getId());
+                return true;
+            }
+        }else
+            return true;
+    }
+
+    private boolean isNewCustomerAttributesPresent(ContractForm contractForm){
+        if(isEmpty(contractForm.getCustomerFirstName()) || isEmpty(contractForm.getCustomerLastName()) || isEmpty(contractForm.getCustomerPhone())){
+            return false;
+        }else {
+            return true;
+        }
+    }
     
 }
 

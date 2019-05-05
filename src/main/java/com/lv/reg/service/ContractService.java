@@ -44,7 +44,7 @@ public class ContractService {
     @Qualifier("userDetailsService")
     private UserDetailsService userDetailsService;
 
-    public void saveContract(ContractForm contractForm, Principal principal) {
+    public Contract saveContract(ContractForm contractForm, Principal principal) {
         User user = ((MyUserDetails) userDetailsService.loadUserByUsername(principal.getName())).getUser();
 
         Contract contract = Contract.builder().customer(customerRepository.findById(contractForm.getCustomerId()).orElseThrow(() -> new EntityNotFoundException()))
@@ -66,6 +66,7 @@ public class ContractService {
                 .message(String.format("Contract created by %s on %s", user.getUsername(), LocalDate.now().toString()))
                 .build();
         contractLogRepository.save(contractLog);
+        return saved;
     }
 
     public void updateContract(ContractForm contractForm, long id) {
