@@ -104,7 +104,7 @@ public class ContractController {
     }
 
     private boolean isCustomerInfoValid(ContractForm contractForm, RedirectAttributes redirectAttributes){
-        if(contractForm.getCustomerId() == null){
+        if(contractForm.getCustomerId() == null || contractForm.getCustomerId() < 0){
             if(! isNewCustomerAttributesPresent(contractForm)){
                 redirectAttributes.addFlashAttribute("customerError", "Customer was not selected and some fields required for new customer creation are empty, please try again");
                 return false;

@@ -83,34 +83,34 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form th:action="@{/user/register}" th:object="${userForm}" method="POST">
+                            <form th:class="needs-validation" th:action="@{/user/register}" th:object="${userForm}" method="POST" novalidate>
 
                                 <div class="form-group">
-                                    <label for="orgName" class="col-form-label">User Name:</label>
-                                    <input class="form-control" id="orgName" type="text" th:field="*{userName}" placeholder="ivanov@lv.lv"/>
+                                    <label for="userName" class="col-form-label">User Name:</label>
+                                    <input class="form-control" id="userName" type="text" th:field="*{userName}" placeholder="ivanov@lv.lv" required/>
                                     <span th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"
                                           class="text-danger">..</span>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="fName" class="col-form-label">First Name:</label>
-                                    <input class="form-control" id="fName" type="text" th:field="*{firstName}" placeholder="Петро"/>
+                                    <input class="form-control" id="fName" type="text" th:field="*{firstName}" placeholder="Петро" required/>
                                     <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"
                                           class="text-danger">..</span>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="lName" class="col-form-label">Last Name:</label>
-                                    <input class="form-control" id="lName" type="text" th:field="*{lastName}" placeholder="Іванов"/>
+                                    <input class="form-control" id="lName" type="text" th:field="*{lastName}" placeholder="Іванов" required/>
                                     <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"
-                                          class="text-danger">..</span>
+                                          class="invalid-feedback">..</span>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="phone">Phone</label>
-                                    <input class="form-control" id="phone" type="text" th:field="*{phoneNumber}" placeholder="0981234567" maxlength="10"/>
+                                    <input class="form-control" id="phone" type="text" th:field="*{phoneNumber}" placeholder="0981234567" maxlength="10" required/>
                                     <span th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"
-                                          class="text-danger">..</span>
+                                          class="invalid-feedback">..</span>
                                 </div>
 
                                 <div class="form-group">
@@ -122,16 +122,16 @@
 
                                 <div class="form-group">
                                     <label for="password">Password</label>
-                                    <input class="form-control" type="password" id="password" th:field="*{password}" />
+                                    <input class="form-control" type="password" id="password" th:field="*{password}" required/>
                                     <span th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{password}"
-                                          class="text-danger">..</span>
+                                          th:class="invalid-feedback">..</span>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="confirmPassword">Confirm Password</label>
-                                    <input class="form-control" type="password" id="confirmPassword" th:field="*{confirmPassword}" />
+                                    <input class="form-control" type="password" id="confirmPassword" th:field="*{confirmPassword}" required/>
                                     <span th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"
-                                          class="text-danger">..</span>
+                                          th:class="invalid-feedback">..</span>
                                 </div>
 
                                 <div class="modal-footer">
@@ -155,6 +155,25 @@
             format: '(xxx) xxx-xxxx'
         });
     });
+</script>
+<script>
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+// Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+// Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
 </script>
 </body>
 </html>
