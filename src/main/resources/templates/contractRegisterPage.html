@@ -1,0 +1,206 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:utext="${title}"></title>
+    <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+
+    <script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.3.0/css/bootstrap.min.css}"/>
+    <script th:src="@{/webjars/bootstrap/4.3.0/js/bootstrap.min.js}"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8"
+            src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
+    <script type="text/javascript" charset="utf8"
+            src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css"></script>
+    <!-- mdb dependencies -->
+    <link th:href="@{/css/mdb.css}" rel="stylesheet">
+    <script type="text/javascript" charset="utf8" th:src="@{/js/mdb.js}"></script>
+    <script type="text/javascript" charset="utf8" th:src="@{/js/modules/mdb-autocomplete.js}"></script>
+    <script type="text/javascript" charset="utf8" th:src="@{/js/modules/material-select.js}"></script>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+
+<body>
+
+
+<!-- Include menu.html -->
+<th:block th:include="menu"></th:block>
+
+<div class="container-fluid">
+        <div class="row"></div>
+        <div class="row col-md-12">
+            <div class="col-md-2"></div>
+            <div class="myForm col-md-8">
+                <div class="card" role="document" style="width: 90%">
+                    <h1 class="card-title">Contract Registration Form</h1>
+                    <div class="card-body">
+                        <form class="needs-validation" th:action="@{/contract/register}"
+                              th:object="${contractForm}"
+                              method="POST" novalidate>
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label for="customer" class="col-form-label">Customer:</label>
+                                    <select class="form-control" id="customer" th:field="*{customerId}"
+                                            required>
+                                        <option value="" selected>Select Customer</option>
+                                        <option value="-1">Create New Customer</option>
+                                        <option th:each="c : ${customers}" th:value="${c.getId()}"
+                                                th:text="${c.getOrgName()}">
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Choose one of registered customer or choose 'Select Customer' option and
+                                        fill Quick Register block
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-8">
+                                    <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse"
+                                            data-target="#newCustomer" aria-expanded="false"
+                                            aria-controls="newCustomer">Quick Register
+                                    </button>
+                                    <div class="collapse" id="newCustomer">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">First and last name</span>
+                                            </div>
+                                            <input th:field="*{customerFirstName}" type="text"
+                                                   class="form-control"
+                                                   placeholder="Іван">
+                                            <input th:field="*{customerLastName}" type="text"
+                                                   class="form-control"
+                                                   placeholder="Уважний">
+                                            <input th:field="*{customerPhone}" type="tel" class="form-control"
+                                                   placeholder="0981234567">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group form-group-lg col-md-4">
+                                    <label for="region" class="col-form-label">Region:</label>
+                                    <input id="region" th:field="*{region}" class="form-control mdb-autocomplete" type="search" required/>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                </div>
+                                <div class="form-group form-group-lg col-md-4">
+                                    <label for="district" class="col-form-label">District:</label>
+                                    <input id="district" th:field="*{district}" class="form-control mdb-autocomplete" type="search" required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                </div>
+                                <div class="form-group form-group-lg col-md-4">
+                                    <label for="villageCouncil" class="col-form-label">Village:</label>
+                                    <input id="villageCouncil" th:field="*{villageCouncil}" class="form-control mdb-autocomplete" type="search" required/>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="type" class="col-form-label">Type:</label>
+                                <select class="form-control" id="type" th:field="*{type}">
+                                    <option th:each="t : ${typeOptions}" th:value="${t.getLabel()}"
+                                            th:text="${t.getLabel()}">
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="status" class="col-form-label">Status:</label>
+                                <select class="form-control" id="status" th:field="*{status}">
+                                    <option th:each="s : ${statusOptions}" th:value="${s.getLabel()}"
+                                            th:text="${s.getLabel()}">
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="stage" class="col-form-label">Stage:</label>
+                                <select class="form-control" id="stage" th:field="*{stage}">
+                                    <option th:each="s : ${stagesOptions}" th:value="${s.getLabel()}"
+                                            th:text="${s.getLabel()}">
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="price" class="col-form-label">Price:</label>
+                                <input type="number" class="form-control" id="price" th:field="*{totalPrice}"
+                                       min="100" max="50000" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Expecting price greater than 100!
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+                                <label for="comment" class="col-form-label">Comment:</label>
+                                <textarea class="form-control" id="comment" th:field="*{comment}"></textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                </button>
+                                <input class="btn btn-primary" type="submit">
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+// Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+// Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
+<script ></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var region = /*[[${ac_region}]]*/ '[Львів,Київ]';
+    var district = /*[[${ac_region}]]*/ '[Мостиський,Оброшинський]';
+    var village = /*[[${ac_village}]]*/ '[Задупинськ,Вощанці]'
+    /*]]>*/
+
+    $('#region').mdb_autocomplete({
+        data: region
+    });
+
+    $('#villageCouncil').mdb_autocomplete({
+        data: village
+    });
+
+    $('#district').mdb_autocomplete({
+        data: district
+    });
+
+</script>
+<script>
+    $(document).ready(function() {
+        $('.mdb-select').materialSelect();
+    });
+</script>
+</body>
+</html>

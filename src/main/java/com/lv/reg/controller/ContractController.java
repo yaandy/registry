@@ -7,6 +7,7 @@ import com.lv.reg.enums.RegionEnum;
 import com.lv.reg.formBean.ContractForm;
 import com.lv.reg.service.ContractService;
 import com.lv.reg.service.CustomerService;
+import com.lv.reg.service.DictionaryService;
 import com.lv.reg.service.IUserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,10 +33,14 @@ public class ContractController {
     private IUserService userService;
     private CustomerService customerService;
 
+    private DictionaryService dictionaryService;
+
     private CustomerRepository customerRepository;
     private StatusRepository statusRepository;
     private StageRepository stageRepository;
     private ContractTypeRepository contractTypeRepository;
+
+
 
 
     @GetMapping(path = "/all")
@@ -57,6 +62,19 @@ public class ContractController {
         return "contractsPage";
     }
 
+    @RequestMapping(path = "/register", method = RequestMethod.GET)
+    public String openRegistrationForm(Model model){
+
+        model.addAttribute("customers", customerRepository.findAll());
+        model.addAttribute("contractForm", new ContractForm());
+        model.addAttribute("ac_region", dictionaryService.regions());
+        model.addAttribute("ac_district",dictionaryService.districts());
+        model.addAttribute("ac_village",dictionaryService.villages());
+        model.addAttribute("typeOptions", contractTypeRepository.findAll());
+        model.addAttribute("statusOptions", statusRepository.findAll());
+        model.addAttribute("stagesOptions", stageRepository.findAll());
+        return "contractRegisterPage";
+    }
 
     @RequestMapping(path = "/register", method = RequestMethod.POST)
     public String addNewContract(@ModelAttribute("contractForm") ContractForm contractForm,

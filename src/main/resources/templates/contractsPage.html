@@ -12,10 +12,14 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8"
             src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8"
+            src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
+    <script type="text/javascript" charset="utf8"
+            src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css"></script>
     <!-- mdb dependencies -->
     <link th:href="@{/css/mdb.css}" rel="stylesheet">
     <script type="text/javascript" charset="utf8" th:src="@{/js/mdb.js}"></script>
-    <link th:href="@{/css/awesomecomplete.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
 
 <body>
@@ -93,6 +97,8 @@
             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#registerModal"
                     data-whatever="@mdo">Register
             </button>
+            <a type="button" class="btn btn-success" th:href="@{/contract/register}">Register
+            </a>
 
             <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel"
                  aria-hidden="true">
@@ -145,12 +151,11 @@
 
                                 <div class="form-row">
                                     <div class="form-group form-group-lg col-md-4">
-                                        <label for="region_id" class="col-form-label">Region:</label>
-                                        <!--                                        <select class="form-control" id="region" th:field="*{region}">-->
-                                        <!--                                            <option th:each="r : ${regionOptions}" th:value="${r}" th:text="${r}">-->
-                                        <!--                                        </select>-->
-                                        <input type="text" id="region_id" name="region[id]"
-                                               class="region-demo form-control">
+                                        <label for="region" class="col-form-label">Region:</label>
+<!--                                        <select class="form-control" id="region" th:field="*{region}">-->
+<!--                                            <option th:each="r : ${regionOptions}" th:value="${r}" th:text="${r}">-->
+<!--                                        </select>-->
+                                        <input id="region" class="form-control ui-autocomplete-input" type="text">
                                     </div>
                                     <div class="form-group form-group-lg col-md-4">
                                         <label for="district" class="col-form-label">District:</label>
@@ -242,46 +247,10 @@
         }, false);
     })();
 </script>
-<script th:src="@{/js/jquery.awesomecomplete.js}"></script>
 <script>
-    $(function () {
-        var myData = [{
-            "id": 1,
-            "name": 'Львівська',
-        }, {
-            "id": 2,
-            "name": 'Волинська',
-        }, {
-            "id": 3,
-            "name": 'Закарпатська',
-        }, {
-            "id": 3,
-            "name": 'Тернопільська',
-        }, {
-            "id": 3,
-            "name": 'Хмельницька',
-        }
-        ];
-
-
-        $('#region_id').awesomecomplete({
-            staticData: myData,
-            nameField: 'name',
-            onComplete: function(dataItem) {
-                console.log(dataItem);
-            },
-
-            beforeKeyAction: function (activeItem, e) {
-                console.log(activeItem);
-            },
-
-            afterKeyAction: function (activeItem, e) {
-                console.log(e.target);
-            }
-        });
+    $("#region").autocomplete({
+        source: [ "c++", "java", "php", "coldfusion", "javascript", "asp", "ruby" ]
     });
-
-
 </script>
 </body>
 </html>
