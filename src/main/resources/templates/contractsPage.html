@@ -15,7 +15,7 @@
     <!-- mdb dependencies -->
     <link th:href="@{/css/mdb.css}" rel="stylesheet">
     <script type="text/javascript" charset="utf8" th:src="@{/js/mdb.js}"></script>
-    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <link th:href="@{/css/awesomecomplete.css}" rel="stylesheet">
 </head>
 
 <body>
@@ -105,18 +105,20 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form class="needs-validation" th:action="@{/contract/register}" th:object="${contractForm}" method="POST" novalidate>
+                            <form class="needs-validation" th:action="@{/contract/register}" th:object="${contractForm}"
+                                  method="POST" novalidate>
                                 <div class="form-row">
                                     <div class="form-group col-md-4">
                                         <label for="customer" class="col-form-label">Customer:</label>
                                         <select class="form-control" id="customer" th:field="*{customerId}" required>
                                             <option value="" selected>Select Customer</option>
-                                            <option value="-1" >Create New Customer</option>
+                                            <option value="-1">Create New Customer</option>
                                             <option th:each="c : ${customers}" th:value="${c.getId()}"
                                                     th:text="${c.getOrgName()}">
                                         </select>
                                         <div class="invalid-feedback">
-                                            Choose one of registered customer or choose 'Select Customer' option and fill Quick Register block
+                                            Choose one of registered customer or choose 'Select Customer' option and
+                                            fill Quick Register block
                                         </div>
                                     </div>
 
@@ -130,9 +132,12 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text">First and last name</span>
                                                 </div>
-                                                <input th:field="*{customerFirstName}" type="text" class="form-control" placeholder="Іван">
-                                                <input th:field="*{customerLastName}" type="text" class="form-control" placeholder="Уважний">
-                                                <input th:field="*{customerPhone}" type="tel" class="form-control" placeholder="0981234567">
+                                                <input th:field="*{customerFirstName}" type="text" class="form-control"
+                                                       placeholder="Іван">
+                                                <input th:field="*{customerLastName}" type="text" class="form-control"
+                                                       placeholder="Уважний">
+                                                <input th:field="*{customerPhone}" type="tel" class="form-control"
+                                                       placeholder="0981234567">
                                             </div>
                                         </div>
                                     </div>
@@ -140,10 +145,12 @@
 
                                 <div class="form-row">
                                     <div class="form-group form-group-lg col-md-4">
-                                        <label for="region" class="col-form-label">Region:</label>
-                                        <select class="form-control" id="region" th:field="*{region}">
-                                            <option th:each="r : ${regionOptions}" th:value="${r}" th:text="${r}">
-                                        </select>
+                                        <label for="region_id" class="col-form-label">Region:</label>
+                                        <!--                                        <select class="form-control" id="region" th:field="*{region}">-->
+                                        <!--                                            <option th:each="r : ${regionOptions}" th:value="${r}" th:text="${r}">-->
+                                        <!--                                        </select>-->
+                                        <input type="text" id="region_id" name="region[id]"
+                                               class="region-demo form-control">
                                     </div>
                                     <div class="form-group form-group-lg col-md-4">
                                         <label for="district" class="col-form-label">District:</label>
@@ -153,7 +160,8 @@
                                     </div>
                                     <div class="form-group form-group-lg col-md-4">
                                         <label for="villageCouncil" class="col-form-label">Village:</label>
-                                        <input class="form-control" type="text" id="villageCouncil" th:field="*{villageCouncil}" required/>
+                                        <input class="form-control" type="text" id="villageCouncil"
+                                               th:field="*{villageCouncil}" required/>
                                         <div class="valid-feedback">
                                             Looks good!
                                         </div>
@@ -183,7 +191,8 @@
 
                                 <div class="form-group">
                                     <label for="price" class="col-form-label">Price:</label>
-                                    <input type="number" class="form-control" id="price" th:field="*{totalPrice}" min="100" max="50000" required>
+                                    <input type="number" class="form-control" id="price" th:field="*{totalPrice}"
+                                           min="100" max="50000" required>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
@@ -215,14 +224,14 @@
     });
 </script>
 <script>
-    (function() {
+    (function () {
         'use strict';
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
 // Fetch all the forms we want to apply custom Bootstrap validation styles to
             var forms = document.getElementsByClassName('needs-validation');
 // Loop over them and prevent submission
-            var validation = Array.prototype.filter.call(forms, function(form) {
-                form.addEventListener('submit', function(event) {
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
                     if (form.checkValidity() === false) {
                         event.preventDefault();
                         event.stopPropagation();
@@ -232,6 +241,47 @@
             });
         }, false);
     })();
+</script>
+<script th:src="@{/js/jquery.awesomecomplete.js}"></script>
+<script>
+    $(function () {
+        var myData = [{
+            "id": 1,
+            "name": 'Львівська',
+        }, {
+            "id": 2,
+            "name": 'Волинська',
+        }, {
+            "id": 3,
+            "name": 'Закарпатська',
+        }, {
+            "id": 3,
+            "name": 'Тернопільська',
+        }, {
+            "id": 3,
+            "name": 'Хмельницька',
+        }
+        ];
+
+
+        $('#region_id').awesomecomplete({
+            staticData: myData,
+            nameField: 'name',
+            onComplete: function(dataItem) {
+                console.log(dataItem);
+            },
+
+            beforeKeyAction: function (activeItem, e) {
+                console.log(activeItem);
+            },
+
+            afterKeyAction: function (activeItem, e) {
+                console.log(e.target);
+            }
+        });
+    });
+
+
 </script>
 </body>
 </html>
