@@ -11,5 +11,6 @@ import java.util.Collection;
 @Repository
 public interface ContractRepository extends CrudRepository<Contract, Long> {
     Collection<Contract> findContractByCreatedBy(User user);
+    Collection<Contract> findContractByAssignedTo(User user);
     Collection<Contract> findContractsByStage(String stage);
 }

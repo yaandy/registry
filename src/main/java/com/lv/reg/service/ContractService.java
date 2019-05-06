@@ -73,20 +73,24 @@ public class ContractService {
         Contract toBeUpdated = contractRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
 
         ContractLog contractLog = ContractLog.builder().contract(toBeUpdated)
-                .message(getChangeLog(contractForm, toBeUpdated)).build();
+                .message(generateChangeLog(contractForm, toBeUpdated)).build();
         contractLogRepository.save(contractLog);
+
+        if (!contractForm.getStage().equals(toBeUpdated.getStage()) ||
+                !contractForm.getStatus().equals(toBeUpdated.getOrderStatus())) {
+            toBeUpdated.setUpdated(Date.valueOf(LocalDate.now()));
+        }
 
         toBeUpdated.setFinished(contractForm.isFinished());
         toBeUpdated.setOrderStatus(contractForm.getStatus());
         toBeUpdated.setStage(contractForm.getStage());
         toBeUpdated.setPayedAmount(toBeUpdated.getPayedAmount() + contractForm.getPayedAmount());
-        toBeUpdated.setUpdated(Date.valueOf(LocalDate.now()));
-        toBeUpdated.setAssignedTo(((MyUserDetails)userDetailsService.loadUserByUsername(contractForm.getAssignedTo())).getUser());
+        toBeUpdated.setAssignedTo(((MyUserDetails) userDetailsService.loadUserByUsername(contractForm.getAssignedTo())).getUser());
 
         contractRepository.save(toBeUpdated);
     }
 
-    public void closeContract(long id){
+    public void closeContract(long id) {
         Contract toBeUpdated = contractRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
         toBeUpdated.setFinished(true);
         contractRepository.save(toBeUpdated);
@@ -110,7 +114,7 @@ public class ContractService {
                     .findAny().orElse(new Stage(111, "xxx", "xxx"));
             return setAfterLastUpdatedPeriod(contractRepository.findContractsByStage(geodezAvailableStage.getLabel()));
         } else {
-            return setAfterLastUpdatedPeriod(contractRepository.findContractByCreatedBy(((MyUserDetails) userDetails).getUser()));
+            return setAfterLastUpdatedPeriod(contractRepository.findContractByAssignedTo(((MyUserDetails) userDetails).getUser()));
         }
     }
 
@@ -120,8 +124,8 @@ public class ContractService {
         return contract;
     }
 
-    private String getChangeLog(ContractForm form, Contract contract) {
-        StringBuilder stringBuilder = new StringBuilder(LocalDate.now().toString() +  " Updated: ");
+    private String generateChangeLog(ContractForm form, Contract contract) {
+        StringBuilder stringBuilder = new StringBuilder(LocalDate.now().toString() + " Updated: ");
         if (!form.getStatus().equals(contract.getOrderStatus())) {
             stringBuilder.append("status updated to ").append(form.getStatus());
         }
