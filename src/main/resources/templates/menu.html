@@ -6,19 +6,22 @@
         </div>
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/}">Home</a>
+                <a class="nav-link" th:href="@{/}">Головна</a>
             </li>
             <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
-                <a class="nav-link" th:href="@{/user/all}">Users</a>
+                <a class="nav-link" th:href="@{/user/all}">Користувачі</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/customer/all}">Customers</a>
+                <a class="nav-link" th:href="@{/customer/all}">Замовники</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/contract/all}">Contracts</a>
+                <a class="nav-link" th:href="@{/contract/all}">Договори</a>
             </li>
             <li class="navbar-text">
                 <span sec:authentication="name">Bob</span>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/logout}">Вийти-></a>
             </li>
         </ul>
     </div>

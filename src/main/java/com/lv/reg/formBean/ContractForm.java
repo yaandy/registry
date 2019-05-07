@@ -12,6 +12,7 @@ public class ContractForm {
     private String region;
     private String district;
     private String villageCouncil;
+    private double square;
     private String type;
     private String status;
     private String stage;

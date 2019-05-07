@@ -73,7 +73,7 @@ public class ContractController {
         model.addAttribute("typeOptions", contractTypeRepository.findAll());
         model.addAttribute("statusOptions", statusRepository.findAll());
         model.addAttribute("stagesOptions", stageRepository.findAll());
-        return "contractRegisterPage";
+        return "test";
     }
 
     @RequestMapping(path = "/register", method = RequestMethod.POST)
