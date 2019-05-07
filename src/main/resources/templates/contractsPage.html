@@ -12,6 +12,10 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8"
             src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8"
+            src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
+    <script type="text/javascript" charset="utf8"
+            src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css"></script>
     <!-- mdb dependencies -->
     <link th:href="@{/css/mdb.css}" rel="stylesheet">
     <script type="text/javascript" charset="utf8" th:src="@{/js/mdb.js}"></script>
@@ -25,9 +29,9 @@
 <th:block th:include="menu"></th:block>
 
 <div class="container-fluid">
-    <h1>Contracts Table</h1>
-    <div class="row col-lg-12 table-responsive">
-        <table id="contracts" class="table table-striped table-responsive-lg w-auto" cellspacing="0" width="100%">
+    <h1>Таблиця Договорів</h1>
+    <div class="row col-lg-11 table-responsive">
+        <table id="contracts" class="table table-striped table-responsive w-auto" cellspacing="0">
             <thead class="table-dark">
             <tr>
                 <th class="th-sm">Id</th>
@@ -93,6 +97,8 @@
             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#registerModal"
                     data-whatever="@mdo">Register
             </button>
+            <a type="button" class="btn btn-success" th:href="@{/contract/register}">Register
+            </a>
 
             <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel"
                  aria-hidden="true">
@@ -105,18 +111,20 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form class="needs-validation" th:action="@{/contract/register}" th:object="${contractForm}" method="POST" novalidate>
+                            <form class="needs-validation" th:action="@{/contract/register}" th:object="${contractForm}"
+                                  method="POST" novalidate>
                                 <div class="form-row">
                                     <div class="form-group col-md-4">
                                         <label for="customer" class="col-form-label">Customer:</label>
                                         <select class="form-control" id="customer" th:field="*{customerId}" required>
                                             <option value="" selected>Select Customer</option>
-                                            <option value="-1" >Create New Customer</option>
+                                            <option value="-1">Create New Customer</option>
                                             <option th:each="c : ${customers}" th:value="${c.getId()}"
                                                     th:text="${c.getOrgName()}">
                                         </select>
                                         <div class="invalid-feedback">
-                                            Choose one of registered customer or choose 'Select Customer' option and fill Quick Register block
+                                            Choose one of registered customer or choose 'Select Customer' option and
+                                            fill Quick Register block
                                         </div>
                                     </div>
 
@@ -130,9 +138,12 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text">First and last name</span>
                                                 </div>
-                                                <input th:field="*{customerFirstName}" type="text" class="form-control" placeholder="Іван">
-                                                <input th:field="*{customerLastName}" type="text" class="form-control" placeholder="Уважний">
-                                                <input th:field="*{customerPhone}" type="tel" class="form-control" placeholder="0981234567">
+                                                <input th:field="*{customerFirstName}" type="text" class="form-control"
+                                                       placeholder="Іван">
+                                                <input th:field="*{customerLastName}" type="text" class="form-control"
+                                                       placeholder="Уважний">
+                                                <input th:field="*{customerPhone}" type="tel" class="form-control"
+                                                       placeholder="0981234567">
                                             </div>
                                         </div>
                                     </div>
@@ -141,9 +152,10 @@
                                 <div class="form-row">
                                     <div class="form-group form-group-lg col-md-4">
                                         <label for="region" class="col-form-label">Region:</label>
-                                        <select class="form-control" id="region" th:field="*{region}">
-                                            <option th:each="r : ${regionOptions}" th:value="${r}" th:text="${r}">
-                                        </select>
+<!--                                        <select class="form-control" id="region" th:field="*{region}">-->
+<!--                                            <option th:each="r : ${regionOptions}" th:value="${r}" th:text="${r}">-->
+<!--                                        </select>-->
+                                        <input id="region" class="form-control ui-autocomplete-input" type="text">
                                     </div>
                                     <div class="form-group form-group-lg col-md-4">
                                         <label for="district" class="col-form-label">District:</label>
@@ -153,7 +165,8 @@
                                     </div>
                                     <div class="form-group form-group-lg col-md-4">
                                         <label for="villageCouncil" class="col-form-label">Village:</label>
-                                        <input class="form-control" type="text" id="villageCouncil" th:field="*{villageCouncil}" required/>
+                                        <input class="form-control" type="text" id="villageCouncil"
+                                               th:field="*{villageCouncil}" required/>
                                         <div class="valid-feedback">
                                             Looks good!
                                         </div>
@@ -183,7 +196,8 @@
 
                                 <div class="form-group">
                                     <label for="price" class="col-form-label">Price:</label>
-                                    <input type="number" class="form-control" id="price" th:field="*{totalPrice}" min="100" max="50000" required>
+                                    <input type="number" class="form-control" id="price" th:field="*{totalPrice}"
+                                           min="100" max="50000" required>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
@@ -215,14 +229,14 @@
     });
 </script>
 <script>
-    (function() {
+    (function () {
         'use strict';
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
 // Fetch all the forms we want to apply custom Bootstrap validation styles to
             var forms = document.getElementsByClassName('needs-validation');
 // Loop over them and prevent submission
-            var validation = Array.prototype.filter.call(forms, function(form) {
-                form.addEventListener('submit', function(event) {
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
                     if (form.checkValidity() === false) {
                         event.preventDefault();
                         event.stopPropagation();
@@ -232,6 +246,11 @@
             });
         }, false);
     })();
+</script>
+<script>
+    $("#region").autocomplete({
+        source: [ "c++", "java", "php", "coldfusion", "javascript", "asp", "ruby" ]
+    });
 </script>
 </body>
 </html>

@@ -9,6 +9,12 @@
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.3.0/css/bootstrap.min.css}"/>
     <script th:src="@{/webjars/bootstrap/4.3.0/js/bootstrap.min.js}"></script>
     <link rel="stylesheet" th:href="@{/css/mdb.css}">
+
+    <script type="text/javascript" charset="utf8" th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script type="text/javascript" charset="utf8" th:src="@{/js/popper.min.js}"></script>
+    <script type="text/javascript" charset="utf8" th:src="@{/js/bootstrap.js}"></script>
+
+
 </head>
 
 <body>
@@ -25,51 +31,69 @@
 
             <!--Card-->
             <div class="card">
-
                 <!-- Card header -->
-                <div class="card-header">Google map</div>
+                <div class="card-header">Статистика</div>
 
                 <!--Card content-->
                 <div class="card-body">
-                    <!--Google map-->
-                    <div id="map-container-google-2" class="z-depth-1-half map-container" style="height: 500px">
-                        <iframe src="https://maps.google.com/maps?q=chicago&t=&z=13&ie=UTF8&iwloc=&output=embed"
-                                frameborder="0"
-                                style="border:0" allowfullscreen></iframe>
-                    </div>
-
-                    <!--Google Maps-->
-
+                    <canvas id="myChart" style="max-width: 500px;"></canvas>
                 </div>
-
             </div>
             <!--/.Card-->
 
         </div>
+        <div class="col-md-3">
+            <span class="min-chart" id="chart-sales" data-percent="56"><span class="percent"></span></span>
+            <h5><span class="label green badge">Sales <i class="fas fa-arrow-circle-up"></i></span></h5>
+        </div>
     </div>
 </div>
 
-<!--Google Maps-->
-<script src="https://maps.google.com/maps/api/js"></script>
+<script type="text/javascript" charset="utf8" th:src="@{/js/mdb.js}"></script>
 <script>
-    // Regular map
-    function regular_map() {
-        var var_location = new google.maps.LatLng(40.725118, -73.997699);
+    var ctx = document.getElementById("myChart").getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ["Гостинський", "Занчук", "Ганжа"],
+            datasets: [{
+                label: 'Кількість Договорів',
+                data: [12, 19, 3],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
 
-        var var_mapoptions = {
-            center: var_location,
-            zoom: 14
-        };
+</script>
 
-        var var_map = new google.maps.Map(document.getElementById("map-container"),
-            var_mapoptions);
-
-        var var_marker = new google.maps.Marker({
-            position: var_location,
-            map: var_map,
-            title: "New York"
+<script>
+    $(function () {
+        $('.min-chart#chart-sales').easyPieChart({
+            barColor: "#4caf50",
+            onStep: function (from, to, percent) {
+                $(this.el).find('.percent').text(Math.round(percent));
+            }
         });
-    }
+    });
 
 </script>
 

@@ -1,0 +1,316 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:utext="${title}"></title>
+    <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+
+    <!--    <script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>-->
+    <!--    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.3.0/css/bootstrap.min.css}"/>-->
+    <!--    <script th:src="@{/webjars/bootstrap/4.3.0/js/bootstrap.min.js}"></script>-->
+
+
+    <!--    <script type="text/javascript" charset="utf8"-->
+    <!--            src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>-->
+    <!--    <script type="text/javascript" charset="utf8"-->
+    <!--            src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css"></script>-->
+    <!-- mdb dependencies -->
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet">
+    <link th:href="@{/css/mdb.css}" rel="stylesheet">
+
+    <script type="text/javascript" charset="utf8" th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script type="text/javascript" charset="utf8" th:src="@{/js/popper.min.js}"></script>
+    <script type="text/javascript" charset="utf8" th:src="@{/js/bootstrap.js}"></script>
+
+</head>
+
+<body>
+
+
+<!-- Include menu.html -->
+<th:block th:include="menu"></th:block>
+
+<div class="container-fluid">
+
+    <div class="container-fluid">
+        <div class="row"></div>
+        <div class="row col-md-12">
+            <div class="col-md-2"></div>
+            <div class="myForm col-md-8">
+                <div class="card" role="document" style="width: 90%">
+                    <h1 class="card-title">Реєстрація договору</h1>
+                    <div class="card-body">
+
+                        <form class="needs-validation md-form form-lg" th:action="@{/contract/register}"
+                              th:object="${contractForm}"
+                              method="POST" novalidate>
+                            <div class="mt-2 border-top border-primary">
+                                <h2 class="mt-1 mb-1">Замовник</h2>
+                                <div class="form-row">
+                                    <div class="md-form input-group col-md-6">
+                                        <div class="input-group-prepend">
+                                        <span class="input-group-text md-addon"
+                                              id="basic-addon3">Замовник</span>
+                                        </div>
+                                        <select class="mdb-select" id="customer" th:field="*{customerId}"
+                                                searchable="Пошук.." required>
+                                            <option value="" selected>Виберіть із списку</option>
+                                            <option value="-1">Створити нового</option>
+                                            <option th:each="c : ${customers}" th:value="${c.getId()}"
+                                                    th:text="${c.getOrgName()}">
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Виберіть замовника із списку або зареєструйте нового.
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2"></div>
+                                    <div class="md-form col-md-3">
+                                        <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse"
+                                                data-target="#newCustomer" aria-expanded="false"
+                                                aria-controls="newCustomer">Швидка Реєстрація
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-8">
+
+                                        <div class="collapse" id="newCustomer">
+                                            <div class="md-form input-group mb-4">
+                                                <div class="md-form mr-5">
+                                                    <input id="customerFirstName" th:field="*{customerFirstName}"
+                                                           type="text"
+                                                           class="form-control" placeholder="Іван">
+                                                    <label for="customerFirstName">Ім'я</label>
+                                                </div>
+                                                <div class="md-form mr-5">
+                                                    <input id="customerLastName" th:field="*{customerLastName}"
+                                                           type="text"
+                                                           class="form-control" placeholder="Здублян">
+                                                    <label for="customerLastName">Ім'я</label>
+                                                </div>
+                                                <div class="md-form mr-5">
+                                                    <input id="customerPhone" th:field="*{customerPhone}" type="tel"
+                                                           class="form-control" placeholder="тел(10 цифр): 0981234523">
+                                                    <label for="customerPhone">Телефон</label>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-2 border-top border-primary">
+                                <h3 class="mt-1">Геодані</h3>
+                                <div class="form-row mt-3">
+                                    <div class="md-form mr-5">
+                                        <input id="region" th:field="*{region}" class="form-control mdb-autocomplete"
+                                               type="search" placeholder="Введіть область" required/>
+                                        <label for="region" class="col-form-label">Область:</label>
+                                        <div class="valid-feedback">
+                                            Looks good!
+                                        </div>
+                                    </div>
+                                    <div class="md-form mr-5">
+                                        <label for="district" class="col-form-label">Район:</label>
+                                        <input id="district" th:field="*{district}"
+                                               class="form-control mdb-autocomplete"
+                                               type="search" placeholder="Введіть район" required>
+                                        <div class="valid-feedback">
+                                            Люкс!
+                                        </div>
+                                    </div>
+                                    <div class="md-form mr-5">
+                                        <label for="villageCouncil" class="col-form-label">Село:</label>
+                                        <input id="villageCouncil" th:field="*{villageCouncil}"
+                                               class="form-control mdb-autocomplete" type="search"
+                                               placeholder="Введіть село" required/>
+                                        <div class="valid-feedback">
+                                            Файно!
+                                        </div>
+                                    </div>
+                                    <div class="md-form mr-5">
+                                        <label for="square" class="col-form-label">Площа ділянки:</label>
+                                        <input id="square" th:field="*{square}"
+                                               class="form-control" type="number"
+                                               placeholder="Площа ділянки(ГА)" required min="0,05" max="100"/>
+                                        <div class="valid-feedback">
+                                            ОК!
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            Дозволений діапазон площі від 0,05 до 100 ГА
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-2 border-top border-primary">
+                                <h3 class="mt-1">Вид Робіт</h3>
+                                <div class="form-row mt-3">
+                                    <div class="md-form input-group ">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text md-addon mr-2">Тип договору: </span>
+                                        </div>
+                                        <div class="md-form ">
+                                            <select class="mdb-select" id="type" th:field="*{type}"
+                                                    searchable="Пошук...">
+                                                <option value="">Тип</option>
+                                                <option th:each="t : ${typeOptions}" th:value="${t.getLabel()}"
+                                                        th:text="${t.getLabel()}">
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="md-form input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text md-addon mr-2">Статус: </span>
+                                        </div>
+                                        <div class="select-outline">
+                                            <select class="mdb-select"
+                                                    id="status" th:field="*{status}" searchable="Пошук..">
+                                                <option th:each="s : ${statusOptions}" th:value="${s.getLabel()}"
+                                                        th:text="${s.getLabel()}">
+                                            </select>
+                                            <label>Status:</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="md-form input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text md-addon mr-2">Фаза виконання: </span>
+                                        </div>
+                                        <select class="mdb-select" id="stage" th:field="*{stage}" searchable="Пошук..">
+                                            <option th:each="s : ${stagesOptions}" th:value="${s.getLabel()}"
+                                                    th:text="${s.getLabel()}">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="md-form input-group col-md-4">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text md-addon">Ціна $</span>
+                                        </div>
+                                        <input type="number" class="form-control" id="price" th:field="*{totalPrice}"
+                                               min="100" max="50000" required>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text md-addon">.00</span>
+                                        </div>
+                                        <div class="valid-feedback">
+                                            ОК!
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            Очікується ціна більша ніж 100!
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-2 border-top border-primary">
+                                <h3 class="mt-1">Додаткова Інформація</h3>
+                                <div class="form-row">
+                                    <div class="md-form mt-3 col-md-10">
+                                        <!-- Material textarea message -->
+                                        <div class="md-form form-sm">
+                                            <i class="fa fa-pencil-alt prefix"></i>
+                                            <textarea th:field="*{comment}" type="text" id="comment"
+                                                      class="md-textarea form-control"></textarea>
+                                            <label for="comment">Коментар</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row mt-3">
+                                    <div class="file-field col-md-6">
+                                        <div class="btn btn-primary btn-sm float-left">
+                                            <span>Виберіть файли</span>
+                                            <input type="file" multiple>
+                                        </div>
+                                        <div class="file-path-wrapper">
+                                            <input class="file-path validate" type="text"
+                                                   placeholder="Дані про ділянку">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="file-field">
+                                            <div class="btn btn-primary btn-sm float-left">
+                                                <span>Виберіть файл</span>
+                                                <input type="file">
+                                            </div>
+                                            <div class="file-path-wrapper">
+                                                <input class="file-path validate" type="text"
+                                                       placeholder="Дані про замовника">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <input class="btn btn-secondary" type="reset">
+                                <input class="btn btn-primary" type="submit">
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
+
+</div>
+
+
+<script type="text/javascript" charset="utf8" th:src="@{/js/mdb.js}"></script>
+<script type="text/javascript" charset="utf8" th:src="@{/js/modules/mdb-autocomplete.js}"></script>
+<script type="text/javascript" charset="utf8" th:src="@{/js/modules/material-select.js}"></script>
+<script>
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+// Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+// Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
+<script></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var region = /*[[${ac_region}]]*/ '[Львів,Київ]';
+    var district = /*[[${ac_region}]]*/ '[Мостиський,Оброшинський]';
+    var village = /*[[${ac_village}]]*/ '[Задупинськ,Вощанці]'
+    /*]]>*/
+
+    $('#region').mdb_autocomplete({
+        data: region
+    });
+
+    $('#villageCouncil').mdb_autocomplete({
+        data: village
+    });
+
+    $('#district').mdb_autocomplete({
+        data: district
+    });
+
+</script>
+<script>
+    new WOW().init();
+</script>
+<script>
+    $(document).ready(function () {
+        $('.mdb-select').materialSelect();
+    });
+</script>
+</body>
+</html>
