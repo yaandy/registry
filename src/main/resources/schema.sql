@@ -73,10 +73,12 @@ DROP TABLE IF EXISTS `register`.`contract` ;
 
 CREATE TABLE IF NOT EXISTS `register`.`contract` (
   `id` INT NOT NULL AUTO_INCREMENT,
+  `contract_identifier` VARCHAR(45) NULL,
   `customer_id` INT NULL,
   `region` VARCHAR(45) NULL,
   `district` VARCHAR(45) NULL,
   `village_council` VARCHAR(45) NULL,
+  `square` DOUBLE NULL,
   `order_type` VARCHAR(45) NULL,
   `order_status` VARCHAR(45) NULL,
   `is_finished` TINYINT NULL,
@@ -87,8 +89,7 @@ CREATE TABLE IF NOT EXISTS `register`.`contract` (
   `updated` DATE NULL,
   `created_by` INT NULL,
   `assigned_to` INT NULL,
-  `contract_identifier` VARCHAR(45) NULL,
-  `square` DOUBLE NULL,
+  `comment` VARCHAR(300) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
