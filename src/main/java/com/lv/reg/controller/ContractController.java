@@ -5,21 +5,23 @@ import com.lv.reg.entities.Contract;
 import com.lv.reg.entities.Customer;
 import com.lv.reg.enums.RegionEnum;
 import com.lv.reg.formBean.ContractForm;
-import com.lv.reg.service.ContractService;
-import com.lv.reg.service.CustomerService;
-import com.lv.reg.service.DictionaryService;
-import com.lv.reg.service.IUserService;
+import com.lv.reg.service.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.core.io.Resource;
 
 import java.security.Principal;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -32,61 +34,47 @@ public class ContractController {
     private ContractService contractService;
     private IUserService userService;
     private CustomerService customerService;
+    private FilesStoringService filesStoringService;
 
     private DictionaryService dictionaryService;
 
-    private CustomerRepository customerRepository;
+    //    private CustomerRepository customerRepository;
     private StatusRepository statusRepository;
     private StageRepository stageRepository;
     private ContractTypeRepository contractTypeRepository;
 
-
-
-
     @GetMapping(path = "/all")
-    public String getAllCustomers(Model model, Principal principal){
+    public String getAllCustomers(Model model, Principal principal) {
 
         Iterable<Contract> contracts = contractService.findAllAvailableForUser(principal);
-        Iterable<Customer> customers = customerRepository.findAll();
-        ContractForm contractForm = new ContractForm();
-
         model.addAttribute("contracts", contracts);
-        model.addAttribute("customers", customers);
-        model.addAttribute("contractForm", contractForm);
-        model.addAttribute("regionOptions", Arrays.asList(RegionEnum.CHMELNYTSKIY, RegionEnum.LVIV, RegionEnum.VOLYN, RegionEnum.TERNOPIL));
-        model.addAttribute("districtOptions", Arrays.asList("Самбірський", "СтароСамбірський", "Бузький", "Дрогобицький"));
-        model.addAttribute("typeOptions", contractTypeRepository.findAll());
-        model.addAttribute("statusOptions", statusRepository.findAll());
-        model.addAttribute("stagesOptions", stageRepository.findAll());
 
         return "contractsPage";
     }
 
     @RequestMapping(path = "/register", method = RequestMethod.GET)
-    public String openRegistrationForm(Model model){
+    public String openRegistrationForm(Model model) {
 
-        model.addAttribute("customers", customerRepository.findAll());
-        model.addAttribute("contractForm", new ContractForm());
-        model.addAttribute("ac_region", dictionaryService.regions());
-        model.addAttribute("ac_district",dictionaryService.districts());
-        model.addAttribute("ac_village",dictionaryService.villages());
-        model.addAttribute("typeOptions", contractTypeRepository.findAll());
-        model.addAttribute("statusOptions", statusRepository.findAll());
-        model.addAttribute("stagesOptions", stageRepository.findAll());
+        populateCreateContarctModelWithDefaultParams(model);
         return "test";
     }
 
     @RequestMapping(path = "/register", method = RequestMethod.POST)
     public String addNewContract(@ModelAttribute("contractForm") ContractForm contractForm,
                                  BindingResult result,
-                                 final RedirectAttributes redirectAttributes, Principal principal){
+                                 final RedirectAttributes redirectAttributes, Principal principal, Model model) {
 
         Contract contract = null;
-        if(isCustomerInfoValid(contractForm, redirectAttributes))
+        if (isCustomerInfoValid(contractForm, model)) {
             contract = contractService.saveContract(contractForm, principal);
+            filesStoringService.saveFiles(contractForm, contract);
 
-        redirectAttributes.addFlashAttribute("contracts", contractService.findAll());
-        redirectAttributes.addFlashAttribute("newContract", contract);
+            redirectAttributes.addFlashAttribute("contracts", contractService.findAll());
+            redirectAttributes.addFlashAttribute("newContract", contract);
+        } else {
+            populateCreateContarctModelWithDefaultParams(model);
+            return "test";
+        }
 
         return "redirect:/contract/all";
     }
@@ -102,46 +90,71 @@ public class ContractController {
         model.addAttribute("stagesOptions", stageRepository.findAll());
         model.addAttribute("employee", userService.getAllUsers());
 
+        model.addAttribute("files", filesStoringService.loadAll(contract).map(
+                path -> MvcUriComponentsBuilder.fromMethodName(ContractController.class,
+                        "serveFile", contract.getId(), path.getFileName().toString()).build().toString())
+                .collect(Collectors.toList()));
+
         return "contractUpdate";
+    }
+
+    @GetMapping("{id}/files/{filename:.+}")
+    @ResponseBody
+    public ResponseEntity<Resource> serveFile(@PathVariable long id, @PathVariable String filename) {
+
+        Resource file = filesStoringService.loadAsResource(contractService.findById(id), filename);
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
     @RequestMapping(path = "/{id}/update", method = RequestMethod.POST)
     public String updateContractById(@ModelAttribute("updatedContractForm") ContractForm contractForm, //
                                      @PathVariable("id") long id, //
-                                     final RedirectAttributes redirectAttributes){
+                                     final RedirectAttributes redirectAttributes) {
         contractService.updateContract(contractForm, id);
         redirectAttributes.addAttribute("contracts", contractService.findAll());
         return "redirect:/contract/all";
     }
 
-    @RequestMapping(path = "/{id}/close", method = RequestMethod.POST)
-    public String closeContract(@PathVariable("id") long id, final RedirectAttributes redirectAttributes){
+    @RequestMapping(path = "/{id}/close", method = RequestMethod.GET)
+    public String closeContract(@PathVariable("id") long id, final RedirectAttributes redirectAttributes) {
         contractService.closeContract(id);
         redirectAttributes.addAttribute("contracts", contractService.findAll());
         return "redirect:/contract/all";
     }
 
-    private boolean isCustomerInfoValid(ContractForm contractForm, RedirectAttributes redirectAttributes){
-        if(contractForm.getCustomerId() == null || contractForm.getCustomerId() < 0){
-            if(! isNewCustomerAttributesPresent(contractForm)){
-                redirectAttributes.addFlashAttribute("customerError", "Customer was not selected and some fields required for new customer creation are empty, please try again");
+    private boolean isCustomerInfoValid(ContractForm contractForm, Model model) {
+        if (contractForm.getCustomerId() == null || contractForm.getCustomerId() < 0) {
+            if (!isNewCustomerAttributesPresent(contractForm)) {
+                model.addAttribute("customerError", "Customer was not selected and some fields required for new customer creation are empty, please try again");
                 return false;
-            }else {
+            } else {
                 Customer newCustomer = customerService.quickCustomerCreation(contractForm.getCustomerFirstName(), contractForm.getCustomerLastName(), contractForm.getCustomerPhone());
                 contractForm.setCustomerId(newCustomer.getId());
                 return true;
             }
-        }else
+        } else
             return true;
     }
 
-    private boolean isNewCustomerAttributesPresent(ContractForm contractForm){
-        if(isEmpty(contractForm.getCustomerFirstName()) || isEmpty(contractForm.getCustomerLastName()) || isEmpty(contractForm.getCustomerPhone())){
+    private boolean isNewCustomerAttributesPresent(ContractForm contractForm) {
+        if (isEmpty(contractForm.getCustomerFirstName()) || isEmpty(contractForm.getCustomerLastName()) || isEmpty(contractForm.getCustomerPhone())) {
             return false;
-        }else {
+        } else {
             return true;
         }
     }
-    
+
+    private void populateCreateContarctModelWithDefaultParams(Model model) {
+        model.addAttribute("contractForm", new ContractForm());
+        model.addAttribute("ac_region", dictionaryService.regions());
+        model.addAttribute("ac_district", dictionaryService.districts());
+        model.addAttribute("ac_village", dictionaryService.villages());
+        model.addAttribute("typeOptions", contractTypeRepository.findAll());
+        model.addAttribute("statusOptions", statusRepository.findAll());
+        model.addAttribute("stagesOptions", stageRepository.findAll());
+        model.addAttribute("customers", customerService.findAll());
+    }
+
 }
 

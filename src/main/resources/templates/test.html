@@ -38,11 +38,16 @@
     <div class="myForm col-md-10">
       <div class="card mt-3" style="width: 90%">
         <h1 class="card-title stylish-color text-white">Реєстрація договору</h1>
+        <div class="row col-lg-6">
+          <div th:if="${customerError != null}"
+               th:utext="${customerError}" class="alert alert-danger card-header" role="alert">...
+          </div>
+        </div>
         <div class="card-body">
 
           <form class="needs-validation md-form form-lg" th:action="@{/contract/register}"
                 th:object="${contractForm}"
-                method="POST" novalidate>
+                method="POST" enctype="multipart/form-data" novalidate>
             <div class="mt-2 border-top border-primary">
               <h2 class="mt-1 mb-1">Замовник</h2>
               <div class="form-row">
@@ -78,13 +83,13 @@
                       <div class="md-form mr-5">
                         <input id="customerFirstName" th:field="*{customerFirstName}"
                                type="text"
-                               class="form-control" placeholder="Іван">
+                               class="form-control" placeholder="Іван" maxlength="20">
                         <label for="customerFirstName">Ім'я</label>
                       </div>
                       <div class="md-form mr-5">
                         <input id="customerLastName" th:field="*{customerLastName}"
                                type="text"
-                               class="form-control" placeholder="Здублян">
+                               class="form-control" placeholder="Здублян" maxlength="20">
                         <label for="customerLastName">Ім'я</label>
                       </div>
                       <div class="md-form mr-5">
@@ -105,7 +110,7 @@
               <div class="form-row mt-3">
                 <div class="md-form mr-5">
                   <input id="region" th:field="*{region}" class="form-control mdb-autocomplete"
-                         type="search" placeholder="Введіть область" required/>
+                         type="search" placeholder="Введіть область" maxlength="45" required/>
                   <label for="region" class="col-form-label">Область:</label>
                   <div class="valid-feedback">
                     Good!
@@ -114,7 +119,7 @@
                 <div class="md-form mr-5">
                   <label for="district" class="col-form-label">Район:</label>
                   <input id="district" th:field="*{district}" class="form-control mdb-autocomplete"
-                         type="search" placeholder="Введіть район" required>
+                         type="search" placeholder="Введіть район" maxlength="45" required>
                   <div class="valid-feedback">
                     Люкс!
                   </div>
@@ -123,7 +128,7 @@
                   <label for="villageCouncil" class="col-form-label">Село:</label>
                   <input id="villageCouncil" th:field="*{villageCouncil}"
                          class="form-control mdb-autocomplete" type="search"
-                         placeholder="Введіть село" required/>
+                         placeholder="Введіть село" maxlength="45" required/>
                   <div class="valid-feedback">
                     Файно!
                   </div>
@@ -132,7 +137,7 @@
                   <label for="square" class="col-form-label">Площа ділянки:</label>
                   <input id="square" th:field="*{square}"
                          class="form-control" type="number"
-                         placeholder="Площа ділянки(ГА)" required min="0,05" max="100"/>
+                         placeholder="Площа ділянки(ГА)" required min="0,0002" max="100" step="0,01"/>
                   <div class="valid-feedback">
                     ОК!
                   </div>
@@ -212,7 +217,7 @@
                   <div class="md-form form-sm">
                     <i class="fa fa-pencil-alt prefix"></i>
                     <textarea th:field="*{comment}" type="text" id="comment"
-                              class="md-textarea form-control"></textarea>
+                              class="md-textarea form-control" maxlength="300"></textarea>
                     <label for="comment">Коментар</label>
                   </div>
                 </div>
@@ -221,7 +226,7 @@
                 <div class="file-field col-md-6">
                   <div class="btn btn-primary btn-sm float-left">
                     <span>Виберіть файли</span>
-                    <input type="file" multiple>
+                    <input type="file" th:field="*{customerDocument}">
                   </div>
                   <div class="file-path-wrapper">
                     <input class="file-path validate" type="text"
@@ -246,7 +251,7 @@
                   <input class="form-check-input" type="checkbox" value="" id="invalidCheck"
                          required>
                   <label class="form-check-label" for="invalidCheck">Перевірено ?</label>
-                  <div class="invalid-feedback">Перевірте правильність введених даних</div>
+                  <div class="invalid-feedback mt-1">Перевірте правильність введених даних</div>
                 </div>
               </div>
             </div>

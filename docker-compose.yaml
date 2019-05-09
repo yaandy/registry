@@ -24,7 +24,7 @@ services:
 #    depends_on:
 #        - mysql
     volumes:
-      - /data/spring-boot-app
+      - ~/storage:/data/spring-boot-app
     ports:
       - "8083:8083"
 
