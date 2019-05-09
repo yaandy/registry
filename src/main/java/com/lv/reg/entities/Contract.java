@@ -19,12 +19,14 @@ public class Contract implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    private String contractIdentifier;
     @OneToOne()
     @JoinColumn(name = "customerId", referencedColumnName = "id")
     private Customer customer;
     private String region;
     private String district;
     private String villageCouncil;
+    private Double square;
     private String orderType;
     private String orderStatus;
     private boolean isFinished;
@@ -42,4 +44,6 @@ public class Contract implements Serializable {
     @OneToMany(mappedBy = "contract")
     private Collection<ContractLog> log;
     private transient int passedDaysAfterLastUpdated;
+
+
 }

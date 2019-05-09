@@ -9,6 +9,7 @@ import com.lv.reg.entities.ContractLog;
 import com.lv.reg.entities.Stage;
 import com.lv.reg.entities.User;
 import com.lv.reg.formBean.ContractForm;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,6 +21,7 @@ import javax.persistence.EntityNotFoundException;
 import java.security.Principal;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.Period;
 import java.util.List;
 import java.util.Optional;
@@ -52,6 +54,7 @@ public class ContractService {
                 .region(contractForm.getRegion())
                 .registered(Date.valueOf(LocalDate.now()))
                 .villageCouncil(contractForm.getVillageCouncil())
+                .square(contractForm.getSquare())
                 .updated(Date.valueOf(LocalDate.now()))
                 .orderStatus(contractForm.getStatus())
                 .orderType(contractForm.getType())
@@ -62,11 +65,13 @@ public class ContractService {
                 .build();
 
         Contract saved = contractRepository.save(contract);
+        saved.setContractIdentifier(generateContractIdentifier(saved));
+        Contract withIdentifier = contractRepository.save(saved);
         ContractLog contractLog = ContractLog.builder().contract(saved)
                 .message(String.format("Contract created by %s on %s", user.getUsername(), LocalDate.now().toString()))
                 .build();
         contractLogRepository.save(contractLog);
-        return saved;
+        return withIdentifier;
     }
 
     public void updateContract(ContractForm contractForm, long id) {
@@ -140,6 +145,9 @@ public class ContractService {
                     .append(contract.getAssignedTo().getUsername())
                     .append(" to ").append(form.getAssignedTo());
         }
+        if(form.isFinished()){
+            stringBuilder.append(", Finished !");
+        }
         return stringBuilder.toString();
     }
 
@@ -154,6 +162,17 @@ public class ContractService {
             Period period = Period.between(LocalDate.now(), updatedDate.toLocalDate());
             c.setPassedDaysAfterLastUpdated(Math.toIntExact(period.getDays() + period.getMonths() * 30)); // aroximate month calc
         };
+    }
+
+    private String generateContractIdentifier(Contract contract){
+        //FL_PHONE2DIGITS_NUMBER_MOTH_DATE
+        String registeredBy = StringUtils.left(contract.getCreatedBy().getUsername(), 4).toUpperCase();
+        Long id = contract.getId();
+        LocalDate registered = contract.getRegistered().toLocalDate();
+        int month = registered.getMonth().getValue();
+        int day = registered.getDayOfMonth();
+        return String.format(String.format("@%s_#%d_m%d_d%d", registeredBy, id.intValue(), month, day));
+
     }
 
 

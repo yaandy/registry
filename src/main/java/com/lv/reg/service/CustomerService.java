@@ -23,4 +23,8 @@ public class CustomerService {
                 .build();
         return customerRepository.save(customer);
     }
+
+    public Iterable<Customer> findAll(){
+        return customerRepository.findAll();
+    }
 }

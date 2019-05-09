@@ -87,6 +87,8 @@ CREATE TABLE IF NOT EXISTS `register`.`contract` (
   `updated` DATE NULL,
   `created_by` INT NULL,
   `assigned_to` INT NULL,
+  `contract_identifier` VARCHAR(45) NULL,
+  `square` DOUBLE NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -153,4 +155,17 @@ CREATE TABLE IF NOT EXISTS `register`.`contract_log` (
   `contract_id` INT NULL,
   `message` VARCHAR(200) NULL,
   PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `register`.`contract_attachments`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `register`.`contract_attachments` ;
+
+CREATE TABLE IF NOT EXISTS `register`.`contract_attachments` (
+  `contract_id` INT NOT NULL,
+  `file_path` VARCHAR(100) NULL,
+  `file_category` VARCHAR(20) NULL,
+  PRIMARY KEY (`contract_id`))
 ENGINE = InnoDB;
