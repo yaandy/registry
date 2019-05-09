@@ -21,7 +21,6 @@ import javax.persistence.EntityNotFoundException;
 import java.security.Principal;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.time.Month;
 import java.time.Period;
 import java.util.List;
 import java.util.Optional;
@@ -74,7 +73,7 @@ public class ContractService {
         return withIdentifier;
     }
 
-    public void updateContract(ContractForm contractForm, long id) {
+    public Contract updateContract(ContractForm contractForm, long id) {
         Contract toBeUpdated = contractRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
 
         ContractLog contractLog = ContractLog.builder().contract(toBeUpdated)
@@ -92,7 +91,7 @@ public class ContractService {
         toBeUpdated.setPayedAmount(toBeUpdated.getPayedAmount() + contractForm.getPayedAmount());
         toBeUpdated.setAssignedTo(((MyUserDetails) userDetailsService.loadUserByUsername(contractForm.getAssignedTo())).getUser());
 
-        contractRepository.save(toBeUpdated);
+        return contractRepository.save(toBeUpdated);
     }
 
     public void closeContract(long id) {

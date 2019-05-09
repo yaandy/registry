@@ -91,11 +91,21 @@ public class ContractController {
         model.addAttribute("employee", userService.getAllUsers());
 
         model.addAttribute("files", filesStoringService.loadAll(contract).map(
-                path -> MvcUriComponentsBuilder.fromMethodName(ContractController.class,
+                path ->  MvcUriComponentsBuilder.fromMethodName(ContractController.class,
                         "serveFile", contract.getId(), path.getFileName().toString()).build().toString())
                 .collect(Collectors.toList()));
 
         return "contractUpdate";
+    }
+
+    @RequestMapping(path = "/{id}/update", method = RequestMethod.POST)
+    public String updateContractById(@ModelAttribute("updatedContractForm") ContractForm contractForm, //
+                                     @PathVariable("id") long id, //
+                                     final RedirectAttributes redirectAttributes) {
+        Contract updatedContract = contractService.updateContract(contractForm, id);
+        filesStoringService.saveFiles(contractForm, updatedContract);
+        redirectAttributes.addAttribute("contracts", contractService.findAll());
+        return "redirect:/contract/all";
     }
 
     @GetMapping("{id}/files/{filename:.+}")
@@ -107,14 +117,6 @@ public class ContractController {
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
-    @RequestMapping(path = "/{id}/update", method = RequestMethod.POST)
-    public String updateContractById(@ModelAttribute("updatedContractForm") ContractForm contractForm, //
-                                     @PathVariable("id") long id, //
-                                     final RedirectAttributes redirectAttributes) {
-        contractService.updateContract(contractForm, id);
-        redirectAttributes.addAttribute("contracts", contractService.findAll());
-        return "redirect:/contract/all";
-    }
 
     @RequestMapping(path = "/{id}/close", method = RequestMethod.GET)
     public String closeContract(@PathVariable("id") long id, final RedirectAttributes redirectAttributes) {
