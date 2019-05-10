@@ -6,8 +6,10 @@ import com.lv.reg.entities.Customer;
 import com.lv.reg.enums.RegionEnum;
 import com.lv.reg.formBean.ContractForm;
 import com.lv.reg.service.*;
+
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -61,8 +63,8 @@ public class ContractController {
 
     @RequestMapping(path = "/register", method = RequestMethod.POST)
     public String addNewContract(@ModelAttribute("contractForm") ContractForm contractForm,
-                                 BindingResult result,
-                                 final RedirectAttributes redirectAttributes, Principal principal, Model model) {
+        BindingResult result,
+        final RedirectAttributes redirectAttributes, Principal principal, Model model) {
 
         Contract contract = null;
         if (isCustomerInfoValid(contractForm, model)) {
@@ -90,18 +92,19 @@ public class ContractController {
         model.addAttribute("stagesOptions", stageRepository.findAll());
         model.addAttribute("employee", userService.getAllUsers());
 
-        model.addAttribute("files", filesStoringService.loadAll(contract).map(
-                path ->  MvcUriComponentsBuilder.fromMethodName(ContractController.class,
-                        "serveFile", contract.getId(), path.getFileName().toString()).build().toString())
-                .collect(Collectors.toList()));
+        model.addAttribute("files", filesStoringService.loadAll(contract).collect(Collectors.toMap(
+            path -> MvcUriComponentsBuilder
+                .fromMethodName(ContractController.class, "serveFile", contract.getId(), path.getFileName().toString())
+                .build().toString(),
+            path -> path.getFileName().toString())));
 
         return "contractUpdate";
     }
 
     @RequestMapping(path = "/{id}/update", method = RequestMethod.POST)
     public String updateContractById(@ModelAttribute("updatedContractForm") ContractForm contractForm, //
-                                     @PathVariable("id") long id, //
-                                     final RedirectAttributes redirectAttributes) {
+        @PathVariable("id") long id, //
+        final RedirectAttributes redirectAttributes) {
         Contract updatedContract = contractService.updateContract(contractForm, id);
         filesStoringService.saveFiles(contractForm, updatedContract);
         redirectAttributes.addAttribute("contracts", contractService.findAll());
@@ -114,7 +117,7 @@ public class ContractController {
 
         Resource file = filesStoringService.loadAsResource(contractService.findById(id), filename);
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+            "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
 
@@ -128,19 +131,24 @@ public class ContractController {
     private boolean isCustomerInfoValid(ContractForm contractForm, Model model) {
         if (contractForm.getCustomerId() == null || contractForm.getCustomerId() < 0) {
             if (!isNewCustomerAttributesPresent(contractForm)) {
-                model.addAttribute("customerError", "Customer was not selected and some fields required for new customer creation are empty, please try again");
+                model.addAttribute("customerError",
+                    "Customer was not selected and some fields required for new customer creation are empty, please try again");
                 return false;
             } else {
-                Customer newCustomer = customerService.quickCustomerCreation(contractForm.getCustomerFirstName(), contractForm.getCustomerLastName(), contractForm.getCustomerPhone());
+                Customer newCustomer = customerService
+                    .quickCustomerCreation(contractForm.getCustomerFirstName(), contractForm.getCustomerLastName(),
+                        contractForm.getCustomerPhone());
                 contractForm.setCustomerId(newCustomer.getId());
                 return true;
             }
-        } else
+        } else {
             return true;
+        }
     }
 
     private boolean isNewCustomerAttributesPresent(ContractForm contractForm) {
-        if (isEmpty(contractForm.getCustomerFirstName()) || isEmpty(contractForm.getCustomerLastName()) || isEmpty(contractForm.getCustomerPhone())) {
+        if (isEmpty(contractForm.getCustomerFirstName()) || isEmpty(contractForm.getCustomerLastName()) || isEmpty(
+            contractForm.getCustomerPhone())) {
             return false;
         } else {
             return true;
