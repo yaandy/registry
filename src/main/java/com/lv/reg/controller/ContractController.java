@@ -88,9 +88,8 @@ public class ContractController {
         Contract contract = contractService.findById(id);
         model.addAttribute("contract", contract);
         model.addAttribute("updatedContractForm", new ContractForm());
-        model.addAttribute("statusOptions", statusRepository.findAll());
-        model.addAttribute("stagesOptions", stageRepository.findAll());
         model.addAttribute("employee", userService.getAllUsers());
+        populateCreateContarctModelWithDefaultParams(model);
 
         model.addAttribute("files", filesStoringService.loadAll(contract).collect(Collectors.toMap(
             path -> MvcUriComponentsBuilder
