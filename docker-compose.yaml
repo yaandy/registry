@@ -28,7 +28,7 @@ services:
     ports:
       - "8083:8083"
 volumes:
-  /home/gis/storage
+  /home/gis/storage:
 
 
 
