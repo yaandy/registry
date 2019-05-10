@@ -27,8 +27,6 @@ services:
       - /home/gis/storage:/data/spring-boot-app
     ports:
       - "8083:8083"
-volumes:
-  - /home/gis/storage:
 
 
 
