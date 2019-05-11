@@ -5,9 +5,10 @@
     <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 
-    <script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.3.0/css/bootstrap.min.css}"/>
-    <script th:src="@{/webjars/bootstrap/4.3.0/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+    <script type="text/javascript" charset="utf8" th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script type="text/javascript" charset="utf8" th:src="@{/js/popper.min.js}"></script>
+    <script type="text/javascript" charset="utf8" th:src="@{/js/bootstrap.min.js}"></script>
 
 
     <link th:href="@{/css/mdb.min.css}" rel="stylesheet">
@@ -16,7 +17,7 @@
 
 </head>
 
-<body>
+<body class="blue-gradient">
 
 <!-- Include menu.html -->
 <th:block th:include="menu"></th:block>
@@ -63,7 +64,7 @@
                                   class="invalid-feedback">..</span>
                         </div>
 
-                        <div class="md-form">
+                        <div class="md-form mt-3">
                             <label for="phone">Phone</label>
                             <input class="form-control" id="phone" type="text" th:field="*{phoneNumber}"
                                    placeholder="0981234567" maxlength="10" required/>
@@ -71,7 +72,7 @@
                                   class="invalid-feedback">..</span>
                         </div>
 
-                        <div class="md-form input-group">
+                        <div class="md-form input-group mt-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text md-addon mr-2">Роль: </span>
                             </div>
@@ -80,7 +81,7 @@
                             </select>
                         </div>
 
-                        <div class="md-form">
+                        <div class="md-form mt-3">
                             <label for="password">Пароль</label>
                             <input class="form-control" type="password" id="password" th:field="*{password}"
                                    required minlength="5"/>
@@ -89,7 +90,7 @@
                                   th:class="invalid-feedback">..</span>
                         </div>
 
-                        <div class="md-form">
+                        <div class="md-form mt-3">
                             <label for="confirmPassword">Підтвердіть пароль</label>
                             <input class="form-control" type="password" id="confirmPassword"
                                    th:field="*{confirmPassword}" required minlength="5"/>

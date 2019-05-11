@@ -91,7 +91,7 @@ public class UserController {
         model.addAttribute("user", actualUser);
         model.addAttribute("currentRole", actualUser.getAuthorities().stream().findFirst().get().getName());
         model.addAttribute("roles", AuthorityType.values());
-        return "usersUpdate";
+        return "userUpdate";
     }
 
     @RequestMapping(path = "/{id}/update", method = RequestMethod.POST)
