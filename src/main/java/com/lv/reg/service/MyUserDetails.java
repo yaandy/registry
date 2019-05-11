@@ -19,7 +19,7 @@ public class MyUserDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return user.getAuthorities().stream().map(authority -> new SimpleGrantedAuthority(authority.getName().toString())).collect(Collectors.toList());
     }
-    public int getId() {
+    public long getId() {
         return user.getId();
     }
     @Override

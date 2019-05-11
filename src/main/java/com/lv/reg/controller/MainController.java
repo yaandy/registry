@@ -1,12 +1,17 @@
 package com.lv.reg.controller;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.lv.reg.dao.AppUserDAO;
 import com.lv.reg.dao.CountryDAO;
+import com.lv.reg.entities.User;
 import com.lv.reg.formBean.AppUserForm;
 import com.lv.reg.formBean.AppUserValidator;
 import com.lv.reg.model.AppUser;
 import com.lv.reg.model.Country;
+import com.lv.reg.service.info.ContractByUser;
+import com.lv.reg.service.info.InfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 // import org.springframework.transaction.annotation.Transactional;
@@ -25,12 +30,12 @@ public class MainController {
 
     @Autowired
     private AppUserDAO appUserDAO;
-
     @Autowired
     private CountryDAO countryDAO;
-
     @Autowired
     private AppUserValidator appUserValidator;
+    @Autowired
+    private InfoService infoService;
 
     // Set a form validator
     @InitBinder
@@ -50,6 +55,12 @@ public class MainController {
 
     @RequestMapping("/")
     public String viewHome(Model model) {
+        Map<User, ContractByUser> userContractStat = infoService.getUserContractStat();
+        model.addAttribute("users", userContractStat.keySet().stream()
+                .map(el -> el.getUsername()).collect(Collectors.toList()));
+        model.addAttribute("contractsCount", userContractStat.values().stream()
+                .map(el -> el.getNumberOfContractsAssigned()).collect(Collectors.toList()));
+        model.addAttribute("userContractStatMap", userContractStat);
 
         return "welcomePage";
     }

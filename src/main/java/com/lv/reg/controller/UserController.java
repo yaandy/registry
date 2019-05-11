@@ -81,6 +81,15 @@ public class UserController {
         return "redirect:/user/all";
     }
 
+    @RequestMapping(value = "/{id}/update", method = RequestMethod.GET)
+    public String updateUser(@PathVariable("id") long id, Model model){
+        User actualUser = userService.findUserById(id);
+        model.addAttribute("userForm", new UserForm());
+        model.addAttribute("user", actualUser);
+        model.addAttribute("roles", AuthorityType.values());
+        return "usersUpdate";
+    }
+
     private String generateErrorMsg(List<FieldError> errorList){
         return  "Form validation errors occured, please check and fix -> " + errorList.stream().map(el -> "Field error: " + el.getObjectName() +": "+ el.getField()).collect(Collectors.joining(","));
     }

@@ -6,4 +6,6 @@ public interface IUserService {
     Iterable<User> getAllUsers();
     User saveUser(User user);
     User findUserByUserName(String userName);
+    User findUserById(long id);
+
 }

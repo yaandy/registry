@@ -41,4 +41,9 @@ public class UserDetailsServiceImpl implements UserDetailsService, IUserService 
     public User findUserByUserName(String userName) {
         return userRepository.findUserByUsername(userName);
     }
+
+    @Override
+    public User findUserById(long id) {
+        return userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("User not found in db"));
+    }
 }

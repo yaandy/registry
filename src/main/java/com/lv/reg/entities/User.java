@@ -20,7 +20,7 @@ import java.util.Set;
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private long id;
     @NotEmpty
     @Column(nullable = false, unique = true)
     private String username;
