@@ -3,7 +3,6 @@ package com.lv.reg.controller;
 import com.lv.reg.dao.*;
 import com.lv.reg.entities.Contract;
 import com.lv.reg.entities.Customer;
-import com.lv.reg.enums.RegionEnum;
 import com.lv.reg.formBean.ContractForm;
 import com.lv.reg.service.*;
 
@@ -22,7 +21,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.core.io.Resource;
 
 import java.security.Principal;
-import java.util.Arrays;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -58,7 +56,7 @@ public class ContractController {
     public String openRegistrationForm(Model model) {
 
         populateCreateContarctModelWithDefaultParams(model);
-        return "test";
+        return "contractCreate";
     }
 
     @RequestMapping(path = "/register", method = RequestMethod.POST)
@@ -75,7 +73,7 @@ public class ContractController {
             redirectAttributes.addFlashAttribute("newContract", contract);
         } else {
             populateCreateContarctModelWithDefaultParams(model);
-            return "test";
+            return "contractCreate";
         }
 
         return "redirect:/contract/all";

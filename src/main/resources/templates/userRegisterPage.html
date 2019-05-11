@@ -32,16 +32,16 @@
         <div class="myForm">
             <div class="card">
                 <div class="card-header">
-                    <h1>Обновити існуючого користувача</h1>
+                    <h1>Реєстрація нового користувача</h1>
                 </div>
                 <div class="card-body">
-                    <form class="needs-validation md-form" th:action="@{/user/{id}/update(id=${user.getId()})}" th:object="${userForm}"
+                    <form class="needs-validation md-form" th:action="@{/user/register}" th:object="${userForm}"
                           method="POST" novalidate>
 
                         <div class="md-form mt-3">
                             <label for="userName" class="col-form-label">Імя Користувача:</label>
-                            <input class="form-control" id="userName" type="text" th:value="${user.username}"
-                                   placeholder="ivanov@lv.lv" disabled/>
+                            <input class="form-control" id="userName" type="text" th:field="*{userName}"
+                                   placeholder="ivanov@lv.lv" required/>
                             <span th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"
                                   class="text-danger">..</span>
 
@@ -49,23 +49,23 @@
 
                         <div class="md-form mt-3">
                             <label for="fName" class="col-form-label">Ім'я:</label>
-                            <input class="form-control" id="fName" type="text" th:value="${user.getFirstName()}"
-                                   placeholder="Петро" disabled/>
+                            <input class="form-control" id="fName" type="text" th:field="*{firstName}"
+                                   placeholder="Петро" required maxlength="20"/>
                             <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"
                                   class="text-danger">..</span>
                         </div>
 
                         <div class="md-form mt-3">
                             <label for="lName" class="col-form-label">Прізвище:</label>
-                            <input class="form-control" id="lName" type="text" th:value="${user.getLastName()}"
-                                   placeholder="Іванов" disabled/>
+                            <input class="form-control" id="lName" type="text" th:field="*{lastName}"
+                                   placeholder="Іванов" required maxlength="20"/>
                             <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"
                                   class="invalid-feedback">..</span>
                         </div>
 
                         <div class="md-form">
                             <label for="phone">Phone</label>
-                            <input class="form-control" id="phone" type="text" th:name="phoneNumber" th:value="${user.getPhone()}"
+                            <input class="form-control" id="phone" type="text" th:field="*{phoneNumber}"
                                    placeholder="0981234567" maxlength="10" required/>
                             <span th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"
                                   class="invalid-feedback">..</span>
@@ -76,14 +76,14 @@
                                 <span class="input-group-text md-addon mr-2">Роль: </span>
                             </div>
                             <select class="mdb-select" id="role" th:name="authority">
-                                <option th:each="a : ${roles}" th:value="${a}" th:text="${a}" th:selected="${#strings.equals(currentRole, a)}">
+                                <option th:each="a : ${roles}" th:value="${a}" th:text="${a}">
                             </select>
                         </div>
 
                         <div class="md-form">
                             <label for="password">Пароль</label>
-                            <input class="form-control" type="password" id="password"
-                                   th:name="password" minlength="5"/>
+                            <input class="form-control" type="password" id="password" th:field="*{password}"
+                                   required minlength="5"/>
                             <span class="invalid-feedback">Мінімальна довжина 5 символів</span>
                             <span th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{password}"
                                   th:class="invalid-feedback">..</span>
@@ -92,7 +92,7 @@
                         <div class="md-form">
                             <label for="confirmPassword">Підтвердіть пароль</label>
                             <input class="form-control" type="password" id="confirmPassword"
-                                   th:name="confirmPassword" minlength="5"/>
+                                   th:field="*{confirmPassword}" required minlength="5"/>
                             <span th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"
                                   th:class="invalid-feedback">..</span>
                         </div>
