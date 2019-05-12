@@ -148,7 +148,7 @@ public class ContractService {
         if(form.getTotalCosts() > 0.5){
             stringBuilder.append(", costs added to total costs ").append(form.getTotalCosts());
         }
-        if(!form.getCustomerDocument().isEmpty()){
+        if(form.getCustomerDocument().stream().filter(el -> !el.isEmpty()).count() > 0){
             stringBuilder.append(", some attachments added");
         }
         if(form.isFinished()){
