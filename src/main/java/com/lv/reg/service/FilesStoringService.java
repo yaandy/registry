@@ -14,6 +14,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.stream.Stream;
 
 @Service
@@ -27,12 +28,14 @@ public class FilesStoringService {
     }
 
     public void saveFiles(ContractForm contractForm, Contract contract) {
-        MultipartFile customerDocument = contractForm.getCustomerDocument();
+        List<MultipartFile> customerDocuments = contractForm.getCustomerDocument();
+
+        for(MultipartFile file: customerDocuments)
         try {
-            if (!customerDocument.isEmpty()) {
-                String originalFilename = customerDocument.getOriginalFilename();
+            if (!file.isEmpty()) {
+                String originalFilename = file.getOriginalFilename();
                 Path filePath = defineParentDirectory(contract).resolve(originalFilename);
-                Files.write(filePath, customerDocument.getBytes());
+                Files.write(filePath, file.getBytes());
             }
         } catch (IOException e) {
             e.printStackTrace();

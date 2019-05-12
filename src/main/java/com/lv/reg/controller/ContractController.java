@@ -48,7 +48,7 @@ public class ContractController {
 
         Iterable<Contract> contracts = contractService.findAllAvailableForUser(principal);
         model.addAttribute("contracts", contracts);
-
+        model.addAttribute("stagesOptions", stageRepository.findAll());
         return "contractsPage";
     }
 

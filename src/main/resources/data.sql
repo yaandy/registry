@@ -33,8 +33,8 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `register`;
-INSERT INTO `register`.`customer` (`id`, `org_name`, `email`, `phone`, `region`, `adress`, `first_name`, `last_name`) VALUES (1, 'ФОП Гройсман', 'gr@mail.com', '0987777777', 'Lviv', 'qwerty', 'Іван', 'Гройсман');
-INSERT INTO `register`.`customer` (`id`, `org_name`, `email`, `phone`, `region`, `adress`, `first_name`, `last_name`) VALUES (2, 'ПДА Тимошенко', 'timo@asd.com', '0981234565', 'Kyiv', 'zxcvbn', 'Галя', 'Тимошенко');
+INSERT INTO `register`.`customer` (`id`, `org_name`, `email`, `phone`, `region`, `district`, `address`, `first_name`, `last_name`, `comment`) VALUES (1, 'ФОП Гройсман', 'gr@mail.com', '0987777777', 'Lviv', NULL, 'qwerty', 'Іван', 'Гройсман', NULL);
+INSERT INTO `register`.`customer` (`id`, `org_name`, `email`, `phone`, `region`, `district`, `address`, `first_name`, `last_name`, `comment`) VALUES (2, 'ПДА Тимошенко', 'timo@asd.com', '0981234565', 'Kyiv', NULL, 'zxcvbn', 'Галя', 'Тимошенко', NULL);
 
 COMMIT;
 
@@ -44,9 +44,9 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `register`;
-INSERT INTO `register`.`contract` (`id`, `contract_identifier`, `customer_id`, `region`, `district`, `village_council`, `square`, `order_type`, `order_status`, `is_finished`, `stage`, `total_price`, `payed_amount`, `registered`, `updated`, `created_by`, `assigned_to`, `comment`) VALUES (1, 'a1', 1, 'Львів', 'Самбір', 'Задністрянська', NULL, 'Технічна документація(Паї)', 'Прийнято', false, 'Зйомка', 2500, 1000, '2019-01-01', '2019-02-02', 1, 1, NULL);
-INSERT INTO `register`.`contract` (`id`, `contract_identifier`, `customer_id`, `region`, `district`, `village_council`, `square`, `order_type`, `order_status`, `is_finished`, `stage`, `total_price`, `payed_amount`, `registered`, `updated`, `created_by`, `assigned_to`, `comment`) VALUES (2, 'a2', 2, 'Городок', 'Свиняни', 'Цюрипинська', NULL, 'Технічна документація(Паї)', 'Прийнято', true, 'Зйомка', 3000, 1500, '2019-02-02', '2019-03-03', 1, 1, NULL);
-INSERT INTO `register`.`contract` (`id`, `contract_identifier`, `customer_id`, `region`, `district`, `village_council`, `square`, `order_type`, `order_status`, `is_finished`, `stage`, `total_price`, `payed_amount`, `registered`, `updated`, `created_by`, `assigned_to`, `comment`) VALUES (3, 'a3', 1, 'Городок', 'Ставчани', 'Задупинська', NULL, 'Технічна документація(Паї)', 'Прийнято', false, 'Зйомка', 3000, 1500, '2019-03-03', '2019-04-04', 3, 3, NULL);
+INSERT INTO `register`.`contract` (`id`, `contract_identifier`, `customer_id`, `region`, `district`, `village_council`, `square`, `order_type`, `order_status`, `is_finished`, `stage`, `total_price`, `payed_amount`, `registered`, `updated`, `created_by`, `assigned_to`, `comment`, `total_costs`) VALUES (1, 'a1', 1, 'Львів', 'Самбір', 'Задністрянська', 1, 'Технічна документація(Паї)', 'Прийнято', false, 'Зйомка', 2500, 1000, '2019-01-01', '2019-02-02', 1, 1, NULL, DEFAULT);
+INSERT INTO `register`.`contract` (`id`, `contract_identifier`, `customer_id`, `region`, `district`, `village_council`, `square`, `order_type`, `order_status`, `is_finished`, `stage`, `total_price`, `payed_amount`, `registered`, `updated`, `created_by`, `assigned_to`, `comment`, `total_costs`) VALUES (2, 'a2', 2, 'Городок', 'Свиняни', 'Цюрипинська', 2, 'Технічна документація(Паї)', 'Прийнято', true, 'Зйомка', 3000, 1500, '2019-02-02', '2019-03-03', 1, 1, NULL, DEFAULT);
+INSERT INTO `register`.`contract` (`id`, `contract_identifier`, `customer_id`, `region`, `district`, `village_council`, `square`, `order_type`, `order_status`, `is_finished`, `stage`, `total_price`, `payed_amount`, `registered`, `updated`, `created_by`, `assigned_to`, `comment`, `total_costs`) VALUES (3, 'a3', 1, 'Городок', 'Ставчани', 'Задупинська', 3, 'Технічна документація(Паї)', 'Прийнято', false, 'Зйомка', 3000, 1500, '2019-03-03', '2019-04-04', 3, 3, NULL, DEFAULT);
 
 COMMIT;
 

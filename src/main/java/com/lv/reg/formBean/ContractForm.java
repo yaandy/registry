@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,6 +21,7 @@ public class ContractForm {
     private String stage;
     private double totalPrice;
     private double payedAmount;
+    private double totalCosts;
     private String comment;
     private boolean isFinished;
     private String assignedTo;
@@ -28,5 +31,5 @@ public class ContractForm {
     private String customerLastName;
     private String customerPhone;
 
-    private MultipartFile customerDocument;
+    private List<MultipartFile> customerDocument;
 }

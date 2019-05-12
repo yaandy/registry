@@ -59,9 +59,11 @@ CREATE TABLE IF NOT EXISTS `register`.`customer` (
   `email` VARCHAR(30) NULL,
   `phone` VARCHAR(10) NULL,
   `region` VARCHAR(15) NULL,
-  `adress` VARCHAR(45) NULL,
-  `first_name` VARCHAR(20) NULL,
-  `last_name` VARCHAR(20) NULL,
+  `district` VARCHAR(45) NULL,
+  `address` VARCHAR(45) NULL,
+  `first_name` VARCHAR(40) NULL,
+  `last_name` VARCHAR(40) NULL,
+  `comment` VARCHAR(150) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -90,6 +92,7 @@ CREATE TABLE IF NOT EXISTS `register`.`contract` (
   `created_by` INT NULL,
   `assigned_to` INT NULL,
   `comment` VARCHAR(300) NULL,
+  `total_costs` DOUBLE NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 

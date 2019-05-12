@@ -89,6 +89,7 @@ public class ContractService {
         toBeUpdated.setOrderStatus(contractForm.getStatus());
         toBeUpdated.setStage(contractForm.getStage());
         toBeUpdated.setPayedAmount(toBeUpdated.getPayedAmount() + contractForm.getPayedAmount());
+        toBeUpdated.setTotalCosts(toBeUpdated.getTotalCosts() + contractForm.getTotalCosts());
         toBeUpdated.setAssignedTo(((MyUserDetails) userDetailsService.loadUserByUsername(contractForm.getAssignedTo())).getUser());
 
         return contractRepository.save(toBeUpdated);
@@ -143,6 +144,12 @@ public class ContractService {
             stringBuilder.append(" , assigned to changed from ")
                     .append(contract.getAssignedTo().getUsername())
                     .append(" to ").append(form.getAssignedTo());
+        }
+        if(form.getTotalCosts() > 0.5){
+            stringBuilder.append(", costs added to total costs ").append(form.getTotalCosts());
+        }
+        if(!form.getCustomerDocument().isEmpty()){
+            stringBuilder.append(", some attachments added");
         }
         if(form.isFinished()){
             stringBuilder.append(", Finished !");

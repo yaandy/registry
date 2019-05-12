@@ -14,5 +14,7 @@ public class CustomerUserForm {
     private String email;
     private String phone;
     private String region;
-    private String adress;
+    private String district;
+    private String address;
+    private String comment;
 }

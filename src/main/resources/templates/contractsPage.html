@@ -7,7 +7,7 @@
 
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
     <link th:href="@{/css/addons/datatables.min.css}" rel="stylesheet">
-    <link th:href="@{/css/mdb.css}" rel="stylesheet">
+    <link th:href="@{/css/mdb.min.css}" rel="stylesheet">
 
     <script type="text/javascript" charset="utf8" th:src="@{/js/jquery-3.3.1.min.js}"></script>
     <script type="text/javascript" charset="utf8" th:src="@{/js/popper.min.js}"></script>
@@ -16,7 +16,6 @@
     <!-- mdb dependencies -->
     <script type="text/javascript" charset="utf8" th:src="@{/js/addons/datatables.min.js}"></script>
 
-    <script type="text/javascript" charset="utf8" th:src="@{/js/mdb.js}"></script>
     <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
 
@@ -29,24 +28,34 @@
 <div class="container-fluid">
     <h1>Таблиця Договорів</h1>
     <!--    table-->
+    <div class="row">
+        <div class="md-form input-group">
+            <div class="input-group-prepend mr-3">
+                <span class="input-group-text md-addon">Дата реєстрації від і до</span>
+            </div>
+            <input type="date" aria-label="Від" id="min" class="form-control mr-3">
+            <input type="date" aria-label="До" id="max" class="form-control mr-3">
+            <button id="initSearch" class="btn btn-sm btn-outline-success">Фільтрувати</button>
+        </div>
+    </div>
     <div class="row col-md-12 table-responsive">
         <table id="contracts" class="table table-striped" cellspacing="0" width="100%">
             <thead class="table-dark">
             <tr>
-                <th class="th-sm">Id</th>
-                <th class="th-sm">Customer Id</th>
-                <th class="th-sm">Region</th>
-                <th class="th-sm">District</th>
-                <th class="th-sm">Village Council</th>
-                <th class="th-sm">Contract Type</th>
-                <th class="th-sm">Status</th>
-                <th class="th-sm">Stage</th>
-<!--                <th class="th-sm">Total Price</th>-->
-<!--                <th class="th-sm">Payed Amount</th>-->
-                <th class="th-sm">Registered</th>
-<!--                <th class="th-sm">Last Updated</th>-->
-                <th class="th-sm">Days passed after Last Upd.</th>
-                <th class="th-sm">Edit</th>
+                <th class="th-sm">Номер Договору</th>
+                <th class="th-sm">Замовник</th>
+                <th class="th-sm">Область</th>
+                <th class="th-sm">Район</th>
+                <th class="th-sm">Село</th>
+                <th class="th-sm">Вид договору</th>
+                <th class="th-sm">Статус</th>
+                <th class="th-sm">Фаза</th>
+                <!--                <th class="th-sm">Total Price</th>-->
+                <!--                <th class="th-sm">Payed Amount</th>-->
+                <th class="th-sm">Дата реєстрації</th>
+                <!--                <th class="th-sm">Last Updated</th>-->
+                <th class="th-sm">Інше інфо</th>
+                <th class="th-sm">Редагувати</th>
             </tr>
             </thead>
             <tbody>
@@ -62,22 +71,28 @@
                 <!--        <td th:utext="${contract.getTotalPrice()}">...</td>-->
                 <!--        <td th:utext="${contract.getPayedAmount()}">...</td>-->
                 <td th:utext="${#dates.format(contract.getRegistered(), 'dd/MMM/yyyy')}">...</td>
-<!--                <td th:utext="${#dates.format(contract.getUpdated(), 'dd/MMM/yyyy')}">...</td>-->
+                <!--                <td th:utext="${#dates.format(contract.getUpdated(), 'dd/MMM/yyyy')}">...</td>-->
                 <td>
                     <span th:if="${contract.getPassedDaysAfterLastUpdated()}*-1 < 5"
-                          class="badge badge-success"
+                          class="badge badge-success mr-1"
                           th:utext="... + ${contract.getPassedDaysAfterLastUpdated()} + ...">...</span>
                     <span th:if="${contract.getPassedDaysAfterLastUpdated()}*-1 > 10"
-                          class="badge badge-danger"
+                          class="badge badge-danger mr-1"
                           th:utext="... + ${contract.getPassedDaysAfterLastUpdated()} + ...">...</span>
                     <span
                             th:if="${contract.getPassedDaysAfterLastUpdated()*-1 < 10} and ${contract.getPassedDaysAfterLastUpdated()*-1 > 5}"
-                            class="badge badge-warning"
+                            class="badge badge-warning mr-1"
                             th:utext="... + ${contract.getPassedDaysAfterLastUpdated()} + ...">...</span>
+                    <span th:if="${(contract.getTotalPrice() - contract.getPayedAmount()) < 1}"
+                          class="badge badge-success"
+                          th:utext="'$' + ${contract.getTotalPrice() - contract.getPayedAmount()} ">...</span>
+                    <span th:if="${(contract.getTotalPrice() - contract.getPayedAmount()) > 1}"
+                          class="badge badge-warning"
+                          th:utext="'$' + ${contract.getTotalPrice() - contract.getPayedAmount()} ">...</span>
                 </td>
                 <td>
                     <a class="btn btn-primary btn-sm"
-                       th:href="@{/contract/{id}/update(id=${contract.getId()})}">Edit</a>
+                       th:href="@{/contract/{id}/update(id=${contract.getId()})}">Редагувати</a>
                 </td>
             </tr>
             </tbody>
@@ -97,12 +112,29 @@
     </div>
 </div>
 </div>
-<script type="text/javascript" charset="utf8" th:src="@{/js/mdb.js}"></script>
+<script type="text/javascript" charset="utf8" th:src="@{/js/mdb.min.js}"></script>
 <script type="text/javascript" charset="utf8" th:src="@{/js/modules/mdb-autocomplete.js}"></script>
 <script type="text/javascript" charset="utf8" th:src="@{/js/modules/material-select.js}"></script>
 <script>
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+            var min = new Date($('#min').val());
+            var max = new Date($('#max').val());
+            var date = new Date(data[8]); // use data for the age column
+
+            if ((isNaN(min) && isNaN(max)) ||
+                (isNaN(min) && date <= max) ||
+                (min <= date && isNaN(max)) ||
+                (min <= date && date <= max)) {
+                return true;
+            }
+            return false;
+        }
+    );
+</script>
+<script>
     $(document).ready(function () {
-        $('#contracts').DataTable();
+        var table = $('#contracts').DataTable();
         $('#contracts_wrapper').find('label').each(function () {
             $(this).parent().append($(this).children());
         });
@@ -117,6 +149,11 @@
         $('#contracts_wrapper select').addClass('mdb-select');
         $('#contracts_wrapper .mdb-select').materialSelect();
         $('#contracts_wrapper .dataTables_filter').find('label').remove();
+
+
+        $('#initSearch').click(function () {
+            table.draw();
+        });
     });
 
 </script>

@@ -76,57 +76,91 @@
 </div>
 
 <script type="text/javascript" charset="utf8" th:src="@{/js/mdb.js}"></script>
+<!--<script th:inline="javascript">-->
+<!--    /*<![CDATA[*/-->
+<!--    var labels = /*[[${users}]]*/ '[Василь,Микола]';-->
+<!--    var contractCount = /*[[${contractsCount}]]*/ '[2,10]';-->
+<!--    /*]]>*/-->
+<!--    var ctx = document.getElementById("contractsByUser").getContext('2d');-->
+<!--    var myChart = new Chart(ctx, {-->
+<!--            type: 'bar',-->
+<!--            data:-->
+<!--                {-->
+<!--                    labels: labels,-->
+<!--                    datasets:-->
+<!--                        [{-->
+<!--                            label: 'Кількість Договорів',-->
+<!--                            data: contractCount,-->
+<!--                            backgroundColor: [-->
+<!--                                'rgba(255, 99, 132, 0.2)',-->
+<!--                                'rgba(54, 162, 235, 0.2)',-->
+<!--                                'rgba(255, 206, 86, 0.2)'-->
+<!--                                // 'rgba(255, 200, 80, 0.2)',-->
+<!--                                // 'rgba(255, 150, 70, 0.2)',-->
+<!--                                // 'rgba(255, 160, 20, 0.2)',-->
+<!--                                // 'rgba(255, 30, 20, 0.2)',-->
+<!--                                // 'rgba(255, 10, 100, 0.2)'-->
+<!--                            ],-->
+<!--                            borderColor: [-->
+<!--                                'rgba(255,99,132,1)',-->
+<!--                                'rgba(54, 162, 235, 1)',-->
+<!--                                'rgba(255, 206, 86, 1)'-->
+<!--                                // 'rgba(255, 200, 80, 1)',-->
+<!--                                // 'rgba(255, 150, 70, 1)',-->
+<!--                                // 'rgba(255, 160, 20, 1)',-->
+<!--                                // 'rgba(255, 30, 20, 1)',-->
+<!--                                // 'rgba(255, 10, 100, 1)'-->
+<!--                            ],-->
+<!--                            borderWidth: 1-->
+<!--                        }]-->
+<!--                }-->
+<!--            ,-->
+
+<!--            options: {-->
+<!--                scales: {-->
+<!--                    yAxes: [{-->
+<!--                        ticks: {-->
+<!--                            beginAtZero: true-->
+<!--                        }-->
+<!--                    }]-->
+<!--                }-->
+<!--            }-->
+<!--        })-->
+<!--    ;-->
+<!--</script>-->
 <script th:inline="javascript">
     /*<![CDATA[*/
     var labels = /*[[${users}]]*/ '[Василь,Микола]';
     var contractCount = /*[[${contractsCount}]]*/ '[2,10]';
     /*]]>*/
-    var ctx = document.getElementById("contractsByUser").getContext('2d');
-    var myChart = new Chart(ctx, {
-            type: 'bar',
-            data:
-                {
-                    labels: labels,
-                    datasets:
-                        [{
-                            label: 'Кількість Договорів',
-                            data: contractCount,
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)',
-                                'rgba(54, 162, 235, 0.2)',
-                                'rgba(255, 206, 86, 0.2)'
-                                // 'rgba(255, 200, 80, 0.2)',
-                                // 'rgba(255, 150, 70, 0.2)',
-                                // 'rgba(255, 160, 20, 0.2)',
-                                // 'rgba(255, 30, 20, 0.2)',
-                                // 'rgba(255, 10, 100, 0.2)'
-                            ],
-                            borderColor: [
-                                'rgba(255,99,132,1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(255, 206, 86, 1)'
-                                // 'rgba(255, 200, 80, 1)',
-                                // 'rgba(255, 150, 70, 1)',
-                                // 'rgba(255, 160, 20, 1)',
-                                // 'rgba(255, 30, 20, 1)',
-                                // 'rgba(255, 10, 100, 1)'
-                            ],
-                            borderWidth: 1
-                        }]
-                }
-            ,
-
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                }
+    new Chart(document.getElementById("contractsByUser"), {
+        "type": "horizontalBar",
+        "data": {
+            "labels": labels,
+            "datasets": [{
+                "label": "Кількість договорів",
+                "data": contractCount,
+                "fill": false,
+                "backgroundColor": ["rgba(255, 99, 132, 0.2)", "rgba(255, 159, 64, 0.2)",
+                    "rgba(255, 205, 86, 0.2)", "rgba(75, 192, 192, 0.2)", "rgba(54, 162, 235, 0.2)",
+                    "rgba(153, 102, 255, 0.2)", "rgba(201, 203, 207, 0.2)"
+                ],
+                "borderColor": ["rgb(255, 99, 132)", "rgb(255, 159, 64)", "rgb(255, 205, 86)",
+                    "rgb(75, 192, 192)", "rgb(54, 162, 235)", "rgb(153, 102, 255)", "rgb(201, 203, 207)"
+                ],
+                "borderWidth": 1
+            }]
+        },
+        "options": {
+            "scales": {
+                "xAxes": [{
+                    "ticks": {
+                        "beginAtZero": true
+                    }
+                }]
             }
-        })
-    ;
+        }
+    });
 
 </script>
 

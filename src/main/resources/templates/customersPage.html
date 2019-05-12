@@ -5,18 +5,18 @@
     <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 
-    <script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.3.0/css/bootstrap.min.css}"/>
-    <script th:src="@{/webjars/bootstrap/4.3.0/js/bootstrap.min.js}"></script>
-    <script th:src="@{/js/jquery-input-mask-phone-number.min.js}"></script>
-
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
-    <script type="text/javascript" charset="utf8"
-            src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+    <link th:href="@{/css/addons/datatables.min.css}" rel="stylesheet">
     <link th:href="@{/css/mdb.min.css}" rel="stylesheet">
-    <!-- Your custom styles (optional) -->
-    <link th:href="@{/css/style.css}" rel="stylesheet">
 
+    <script type="text/javascript" charset="utf8" th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script type="text/javascript" charset="utf8" th:src="@{/js/popper.min.js}"></script>
+    <script type="text/javascript" charset="utf8" th:src="@{/js/bootstrap.min.js}"></script>
+
+    <!-- mdb dependencies -->
+    <script type="text/javascript" charset="utf8" th:src="@{/js/addons/datatables.min.js}"></script>
+
+    <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
 
 <body>
@@ -25,19 +25,21 @@
 <th:block th:include="menu"></th:block>
 
 <div class="container-fluid">
-    <h1>Customers Table</h1>
+    <h1>Список замовників</h1>
     <div class="row col-md-10 table-responsive">
         <table id="customers" class="table table-striped table-bordered" cellspacing="0" width="100%">
             <thead class="table-dark">
             <tr>
-                <th class="th-sm">Id</th>
-                <th class="th-sm">OrgName</th>
-                <th class="th-sm">FirstName</th>
-                <th class="th-sm">LastName</th>
-                <th class="th-sm">Email</th>
-                <th class="th-sm">Phone</th>
-                <th class="th-sm">Region</th>
-                <th class="th-sm">Address</th>
+                <th class="th-sm">Ід</th>
+                <th class="th-sm">Організація</th>
+                <th class="th-sm">Ім'я</th>
+                <th class="th-sm">Прізвище</th>
+                <th class="th-sm">Імейл</th>
+                <th class="th-sm">Телефон</th>
+                <th class="th-sm">Область</th>
+                <th class="th-sm">Район</th>
+                <th class="th-sm">Адреса</th>
+                <th class="th-sm">#Договори</th>
             </tr>
             </thead>
             <tbody>
@@ -49,7 +51,13 @@
                 <td th:utext="${member.getEmail()}">...</td>
                 <td th:utext="${member.getPhone()}">...</td>
                 <td th:utext="${member.getRegion()}">...</td>
-                <td th:utext="${member.getAdress()}">...</td>
+                <td th:utext="${member.getDistrict()}">...</td>
+                <td th:utext="${member.getAddress()}">...</td>
+                <td>
+                    <span
+                            class="badge badge-warning mr-1"
+                            th:utext="${member.getContracts().size()}">...</span>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -69,87 +77,31 @@
             <button type="button" class="close col-2" data-dismiss="alert">x</button>
         </div>
     </div>
-    <div class="row col-md-4">
-        <div class="myForm">
-            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#registerModal"
-                    data-whatever="@mdo">Register
-            </button>
-
-            <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Create New Customer</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form th:action="@{/customer/register}" th:object="${appUserForm}" method="POST">
-
-                                <div class="form-group">
-                                    <label for="orgName" class="col-form-label">Org Name:</label>
-                                    <input id="orgName" type="text" th:field="*{orgName}"/>
-                                    <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{orgName}"
-                                          class="ui-state-error-text">..</span>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="fName" class="col-form-label">First Name:</label>
-                                    <input id="fName" type="text" th:field="*{firstName}"/>
-                                    <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{orgName}"
-                                          class="ui-state-error-text">..</span>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="lName" class="col-form-label">Last Name:</label>
-                                    <input id="lName" type="text" th:field="*{lastName}"/>
-                                    <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{orgName}"
-                                          class="ui-state-error-text">..</span>
-                                </div>
+    <a type="button" class="btn btn-success" th:href="@{/customer/register}">Зареєструвати</a>
 
 
-                                <div class="form-group">
-                                    <label for="email" class="col-form-label">Email</label>
-                                    <input id="email" type="text" th:field="*{email}" placeholder="blabla@email.com"/>
-                                    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
-                                          class="ui-state-error-text">..</span>
-                                </div>
-                                <div class="form-group">
-                                    <label for="phone">Phone</label>
-                                    <input id="phone" type="text" th:field="*{phone}" placeholder="0981234567"/>
-                                    <span th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"
-                                          class="ui-state-error-text">..</span>
-                                </div>
-                                <div class="form-group">
-                                    <label for="region">Region</label>
-
-                                    <select id="region" th:field="*{region}">
-                                        <option value=""> --</option>
-                                        <option value="0">Lviv</option>
-                                    </select>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <input class="btn btn-primary" type="submit">
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
+<script type="text/javascript" charset="utf8" th:src="@{/js/mdb.min.js}"></script>
+<!--<script type="text/javascript" charset="utf8" th:src="@{/js/modules/mdb-autocomplete.min.js}"></script>-->
+<script type="text/javascript" charset="utf8" th:src="@{/js/modules/material-select.min.js}"></script>
 <script>
+
     $(document).ready(function () {
         $('#customers').DataTable();
-    });
-    $(function () {
-        $('#phone').usPhoneFormat({
-            format: '(xxx) xxx-xxxx'
+        $('#customers_wrapper').find('label').each(function () {
+            $(this).parent().append($(this).children());
         });
+        $('#customers_wrapper .dataTables_filter').find('input').each(function () {
+            $('input').attr("placeholder", "Search");
+            $('input').removeClass('form-control-sm');
+        });
+        $('#customers_wrapper .dataTables_length').addClass('d-flex flex-row');
+        $('#customers_wrapper .dataTables_filter').addClass('md-form');
+        $('#customers_wrapper select').removeClass(
+            'custom-select custom-select-sm form-control form-control-sm');
+        $('#customers_wrapper select').addClass('mdb-select');
+        $('#customers_wrapper .mdb-select').materialSelect();
+        $('#customers_wrapper .dataTables_filter').find('label').remove();
     });
 </script>
 </body>

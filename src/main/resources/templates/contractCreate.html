@@ -128,7 +128,7 @@
                   <label for="square" class="col-form-label">Площа ділянки:</label>
                   <input id="square" th:field="*{square}"
                          class="form-control" type="number"
-                         placeholder="Площа ділянки(ГА)" required min="0,0002" max="100" step="0,01"/>
+                         placeholder="Площа ділянки(ГА)" required min="0,0002" max="100" step="any"/>
                   <div class="valid-feedback">
                     ОК!
                   </div>
@@ -217,7 +217,7 @@
                 <div class="file-field col-md-6">
                   <div class="btn btn-primary btn-sm float-left">
                     <span>Виберіть файли</span>
-                    <input type="file" th:field="*{customerDocument}">
+                    <input type="file" th:field="*{customerDocument}" multiple>
                   </div>
                   <div class="file-path-wrapper">
                     <input class="file-path validate" type="text"
@@ -304,8 +304,6 @@
     $('#district').mdb_autocomplete({
         data: district
     });
-
-
 </script>
 <script>
     new WOW().init();

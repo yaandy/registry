@@ -33,6 +33,7 @@ public class Contract implements Serializable {
     private String stage;
     private double totalPrice;
     private double payedAmount;
+    private double totalCosts;
     private Date registered;
     private Date updated;
     @OneToOne()

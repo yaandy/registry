@@ -1,0 +1,166 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:utext="${title}"></title>
+    <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/mdb.min.css}">
+
+    <script type="text/javascript" charset="utf8" th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script type="text/javascript" charset="utf8" th:src="@{/js/popper.min.js}"></script>
+    <script type="text/javascript" charset="utf8" th:src="@{/js/bootstrap.min.js}"></script>
+
+    <!-- Your custom styles (optional) -->
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+
+</head>
+
+<body>
+
+<!-- Include menu.html -->
+<th:block th:include="menu"></th:block>
+
+<div class="container">
+
+    <div class="row col-lg-6">
+        <div th:if="${errorMessage != null}"
+             th:utext="${errorMessage}" class="alert alert-danger" role="alert">...
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="myForm">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-header-title" id="exampleModalLabel">Створити нового користувача</h5>
+                </div>
+                <div class="card-body">
+                    <form class="needs-validation md-form" th:action="@{/customer/register}" th:object="${customerForm}" method="POST" novalidate>
+
+                        <div class="md-form mt-3">
+                            <label for="orgName" class="col-form-label">Назва організаці:</label>
+                            <input class="form-control" id="orgName" type="text" th:field="*{orgName}"/>
+                            <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{orgName}"
+                                  class="invalid-feedback">..</span>
+                        </div>
+
+                        <div class="md-form mt-3">
+                            <label for="fName" class="col-form-label">Ім'я:</label>
+                            <input class="form-control" id="fName" type="text" th:field="*{firstName}" maxlength="40" required/>
+                            <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{orgName}"
+                                  class="invalid-feedback">..</span>
+                            <div class="valid-feedback">
+                                ОК!
+                            </div>
+                        </div>
+
+                        <div class="md-form mt-3">
+                            <label for="lName" class="col-form-label">Прізвище: </label>
+                            <input class="form-control" id="lName" type="text" th:field="*{lastName}" required maxlength="40"/>
+                            <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{orgName}"
+                                 class="invalid-feedback">..</div>
+                            <div class="valid-feedback">
+                                Пасує!
+                            </div>
+                        </div>
+
+                        <div class="md-form mt-3">
+                            <label for="email" class="col-form-label">Імейл: </label>
+                            <input class="form-control" id="email" type="text" th:field="*{email}"
+                                   maxlength="30" th:classappend="${#fields.hasErrors('email')} ? is-invalid" required/>
+                            <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
+                                 class="invalid-feedback">..</div>
+                            <div class="valid-feedback">
+                                Можна не заповняти)
+                            </div>
+                        </div>
+                        <div class="md-form mt-3">
+                            <label for="phone" class="col-form-label">Телефон: </label>
+                            <input class="form-control" id="phone" type="text" th:field="*{phone}"
+                                   placeholder="0981234567" maxlength="10" th:classappend="${#fields.hasErrors('phone')} ? is-invalid" required/>
+                            <div th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"
+                                  class="invalid-feedback">..</div>
+                            <div class="valid-feedback">
+                                ок!
+                            </div>
+                            <div class="invalid-feedback">
+                                Без телефона ніяк!
+                            </div>
+                        </div>
+                        <div class="md-form mt-3">
+                            <input class="form-control mdb-autocomplete" id="region" th:field="*{region}" type="search" required/>
+                            <label class="col-form-label" for="region">Область: </label>
+                        </div>
+                        <div class="md-form mt-3">
+                            <input class="form-control mdb-autocomplete" id="district" th:field="*{district}" type="search" required/>
+                            <label class="col-form-label" for="district">Район: </label>
+                        </div>
+                        <div class="md-form mt-3">
+                            <input class="form-control mdb-autocomplete" id="address" th:field="*{address}" type="search"/>
+                            <label class="col-form-label" for="district">Адреса(село, вулиця ...): </label>
+                        </div>
+                        <div class="md-form mt-3">
+                            <input class="form-control mdb-autocomplete" id="comment" th:field="*{comment}" type="text"/>
+                            <label for="district">Коментар: </label>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="reset" class="btn btn-secondary" data-dismiss="modal">Reset</button>
+                            <input class="btn btn-primary" type="submit">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script type="text/javascript" charset="utf8" th:src="@{/js/mdb.js}"></script>
+<script type="text/javascript" charset="utf8" th:src="@{/js/modules/mdb-autocomplete.js}"></script>
+<script>
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+// Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+// Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+
+</script>
+<script>
+    $('.mdb-select').materialSelect();
+</script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var region = /*[[${ac_region}]]*/ '[Львів,Київ]';
+    var district = /*[[${ac_district}]]*/ '[Мостиський,Оброшинський]';
+    var village = /*[[${ac_village}]]*/ '[Задупинськ,Вощанці]';
+    /*]]>*/
+
+    $('#region').mdb_autocomplete({
+        data: region
+    });
+
+    $('#address').mdb_autocomplete({
+        data: village
+    });
+
+    $('#district').mdb_autocomplete({
+        data: district
+    });
+</script>
+
+</body>
+</html>

@@ -13,7 +13,7 @@ public class CustomerService {
 
     public Customer quickCustomerCreation(String fName, String lName, String phone){
         Customer customer = Customer.builder()
-                .adress("N/A")
+                .address("N/A")
                 .email("N/A")
                 .region("N/A")
                 .firstName(fName)

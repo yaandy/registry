@@ -7,10 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Data
@@ -27,15 +25,20 @@ public class Customer {
     private String email;
     private String phone;
     private String region;
-    private String adress;
+    private String district;
+    private String address;
+    private String comment;
+    @OneToMany(mappedBy = "customer")
+    private Collection<Contract> contracts;
 
     public Customer(CustomerUserForm customerUserForm) {
         this.orgName = resolveOrgName(customerUserForm);
         this.firstName = customerUserForm.getFirstName();
         this.lastName = customerUserForm.getLastName();
         this.email = customerUserForm.getEmail();
-        this.adress = customerUserForm.getAdress();
+        this.address = customerUserForm.getAddress();
         this.region = customerUserForm.getRegion();
+        this.district = customerUserForm.getDistrict();
         this.phone = customerUserForm.getPhone();
     }
 
