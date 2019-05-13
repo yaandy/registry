@@ -102,25 +102,33 @@ public class ContractService {
         contractRepository.save(toBeUpdated);
     }
 
+    public void deleteContract(long id){
+        Optional<Contract> contract = contractRepository.findById(id);
+        if(contract.isPresent()){
+            contractLogRepository.deleteAll(contract.get().getLog());
+            contractRepository.delete(contract.get());
+        }
+    }
+
     public Iterable<Contract> findAll() {
         return contractRepository.findAll();
     }
 
-    public Iterable<Contract> findAllAvailableForUser(Principal principal) {
+    public Iterable<Contract> findAllAvailableForUser(Principal principal, boolean showActive, boolean showArchived) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
         List<String> currentUserAuthorities = userDetails.getAuthorities().stream()
                 .map(el -> ((GrantedAuthority) el).getAuthority())
                 .collect(Collectors.toList());
 
         if (currentUserAuthorities.contains(ROLE_ADMIN.name())) {
-            return setAfterLastUpdatedPeriod(contractRepository.findAll());
+            return setAfterLastUpdatedPeriod(contractRepository.findContractsByFinishedStatus(showActive, showArchived));
         } else if (currentUserAuthorities.contains(ROLE_GEODEZ.name())) {
             Stage geodezAvailableStage = StreamSupport.stream(stageRepository.findAll().spliterator(), false)
                     .filter(stage -> stage.getLabel().equalsIgnoreCase("Зйомка"))
                     .findAny().orElse(new Stage(111, "xxx", "xxx"));
             return setAfterLastUpdatedPeriod(contractRepository.findContractsByStage(geodezAvailableStage.getLabel()));
         } else {
-            return setAfterLastUpdatedPeriod(contractRepository.findContractByAssignedTo(((MyUserDetails) userDetails).getUser()));
+            return setAfterLastUpdatedPeriod(contractRepository.findContractsByAssignedToAndFinishedStatus(((MyUserDetails) userDetails).getUser(), showActive, showArchived));
         }
     }
 

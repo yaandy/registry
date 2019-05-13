@@ -29,13 +29,20 @@
     <h1>Таблиця Договорів</h1>
     <!--    table-->
     <div class="row">
-        <div class="md-form input-group">
+        <div class="md-form input-group col-md-4">
             <div class="input-group-prepend mr-3">
                 <span class="input-group-text md-addon">Дата реєстрації від і до</span>
             </div>
             <input type="date" aria-label="Від" id="min" class="form-control mr-3">
             <input type="date" aria-label="До" id="max" class="form-control mr-3">
             <button id="initSearch" class="btn btn-sm btn-outline-success">Фільтрувати</button>
+        </div>
+        <div class="col-md-5"></div>
+        <div class="md-form input-group col-md-3">
+            <div class="input-group-prepend mr-3">
+                <span class="input-group-text md-addon">Показати заархівовані</span>
+            </div>
+            <a id="showArchived" th:href="@{/contract/all(finished=true, active=false)}" role="button" class="btn btn-sm btn-outline-warning btn-rounded waves-effect">Фільтрувати</a>
         </div>
     </div>
     <div class="row col-md-12 table-responsive">
@@ -91,8 +98,10 @@
                           th:utext="'$' + ${contract.getTotalPrice() - contract.getPayedAmount()} ">...</span>
                 </td>
                 <td>
-                    <a class="btn btn-primary btn-sm"
+                    <a class="btn btn-primary btn-sm btn-rounded"
                        th:href="@{/contract/{id}/update(id=${contract.getId()})}">Редагувати</a>
+                    <button class="btn btn-warning btn-rounded btn-sm archiveBtn" th:id="${'a'+contract.getId()}" th:name="@{/ajax/contract/{id}/close(id=${contract.getId()})}">Архів</button>
+                    <button class="btn btn-danger btn-rounded btn-sm deleteBtn" th:id="${'r'+contract.getId()}" th:name="@{/ajax/contract/{id}/delete(id=${contract.getId()})}">Видалити</button>
                 </td>
             </tr>
             </tbody>
@@ -156,6 +165,51 @@
         });
     });
 
+</script>
+<script th:inline="javascript">
+    $(document).ready(function(){
+        $('table#contracts button.deleteBtn').click(function()
+        {
+            if (confirm("Ви впевнені що хочете ВИДАЛИТИ цей договір ?"))
+            {
+                var id = $(this).attr('id');
+                var cUrl = $(this).attr('name');
+                $.ajax(
+                    {
+                        type: "DELETE",
+                        url: cUrl,
+                        cache: false,
+                        success: function()
+                        {
+                            $('#'+id).attr('disabled', 'disabled');
+                        }
+                    });
+            }
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function(){
+        $('table#contracts button.archiveBtn').click(function()
+        {
+            if (confirm("Ви впевнені що хочете ЗААРХІВУВАТИ цей договір ?"))
+            {
+                var id = $(this).attr('id');
+                var cUrl = $(this).attr('name');
+                $.ajax(
+                    {
+                        type: "PUT",
+                        url: cUrl,
+                        cache: false,
+                        success: function()
+                        {
+                            $('#'+id).attr('disabled', 'disabled');
+                        }
+                    });
+            }
+        });
+    });
 </script>
 
 </body>

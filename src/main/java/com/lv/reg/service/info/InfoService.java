@@ -41,7 +41,7 @@ public class InfoService {
 
 
     private Stream<Contract> findAllAvailableForUser(Principal principal){
-        return StreamSupport.stream(contractService.findAllAvailableForUser(principal).spliterator(), false);
+        return StreamSupport.stream(contractService.findAllAvailableForUser(principal, true, false).spliterator(), false);
     }
 
 }

@@ -44,9 +44,9 @@ public class ContractController {
     private ContractTypeRepository contractTypeRepository;
 
     @GetMapping(path = "/all")
-    public String getAllCustomers(Model model, Principal principal) {
+    public String getAllCustomers(@RequestParam(defaultValue = "false", required = false) boolean finished, @RequestParam(required = false, defaultValue = "true") boolean active, Model model, Principal principal) {
 
-        Iterable<Contract> contracts = contractService.findAllAvailableForUser(principal);
+        Iterable<Contract> contracts = contractService.findAllAvailableForUser(principal, active, finished);
         model.addAttribute("contracts", contracts);
         model.addAttribute("stagesOptions", stageRepository.findAll());
         return "contractsPage";
@@ -107,16 +107,6 @@ public class ContractController {
         redirectAttributes.addAttribute("contracts", contractService.findAll());
         return "redirect:/contract/all";
     }
-
-    @GetMapping("{id}/files/{filename:.+}")
-    @ResponseBody
-    public ResponseEntity<Resource> serveFile(@PathVariable long id, @PathVariable String filename) {
-
-        Resource file = filesStoringService.loadAsResource(contractService.findById(id), filename);
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-            "attachment; filename=\"" + file.getFilename() + "\"").body(file);
-    }
-
 
     @RequestMapping(path = "/{id}/close", method = RequestMethod.GET)
     public String closeContract(@PathVariable("id") long id, final RedirectAttributes redirectAttributes) {
