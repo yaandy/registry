@@ -61,6 +61,7 @@ public class ContractService {
                 .totalPrice(contractForm.getTotalPrice())
                 .createdBy(user)
                 .assignedTo(user)
+                .comment(contractForm.getComment())
                 .build();
 
         Contract saved = contractRepository.save(contract);
@@ -91,7 +92,7 @@ public class ContractService {
         toBeUpdated.setPayedAmount(toBeUpdated.getPayedAmount() + contractForm.getPayedAmount());
         toBeUpdated.setTotalCosts(toBeUpdated.getTotalCosts() + contractForm.getTotalCosts());
         toBeUpdated.setAssignedTo(((MyUserDetails) userDetailsService.loadUserByUsername(contractForm.getAssignedTo())).getUser());
-
+        toBeUpdated.setComment(contractForm.getComment());
         return contractRepository.save(toBeUpdated);
     }
 

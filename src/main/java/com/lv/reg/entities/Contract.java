@@ -36,6 +36,7 @@ public class Contract implements Serializable {
     private double totalCosts;
     private Date registered;
     private Date updated;
+    private String comment;
     @OneToOne()
     @JoinColumn(name = "createdBy", referencedColumnName = "id")
     private User createdBy;

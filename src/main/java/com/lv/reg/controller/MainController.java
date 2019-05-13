@@ -1,4 +1,5 @@
 package com.lv.reg.controller;
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -54,13 +55,15 @@ public class MainController {
     }
 
     @RequestMapping("/")
-    public String viewHome(Model model) {
-        Map<User, ContractByUser> userContractStat = infoService.getUserContractStat();
+    public String viewHome(Model model, Principal principal) {
+        Map<User, ContractByUser> userContractStat = infoService.getUserContractStat(principal);
         model.addAttribute("users", userContractStat.keySet().stream()
                 .map(el -> el.getUsername()).collect(Collectors.toList()));
         model.addAttribute("contractsCount", userContractStat.values().stream()
                 .map(el -> el.getNumberOfContractsAssigned()).collect(Collectors.toList()));
         model.addAttribute("userContractStatMap", userContractStat);
+        model.addAttribute("contractStatusStat", infoService.getContractsByStatus(principal));
+        model.addAttribute("contractStageStat", infoService.getContractsByStage(principal));
 
         return "welcomePage";
     }
