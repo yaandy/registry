@@ -14,6 +14,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -74,7 +75,8 @@ public class FilesStoringService {
     }
 
     private Path defineParentDirectory(Contract contract) {
-        Path customerRootDir = Paths.get(basePath, contract.getCustomer().getOrgName().replaceAll("\\s+", "_"));
+        int years = LocalDate.now().getYear() % 1000;
+        Path customerRootDir = Paths.get(basePath, contract.getCustomer().getOrgName().replaceAll("\\s+", "_")+"_y" + years);
         if (Files.notExists(customerRootDir)) {
             try {
                 Files.createDirectories(customerRootDir);

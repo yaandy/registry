@@ -91,7 +91,7 @@ public class ContractController {
 
         model.addAttribute("files", filesStoringService.loadAll(contract).collect(Collectors.toMap(
             path -> MvcUriComponentsBuilder
-                .fromMethodName(ContractController.class, "serveFile", contract.getId(), path.getFileName().toString())
+                .fromMethodName(ContractRestController.class, "serveFile", contract.getId(), path.getFileName().toString())
                 .build().toString(),
             path -> path.getFileName().toString())));
 

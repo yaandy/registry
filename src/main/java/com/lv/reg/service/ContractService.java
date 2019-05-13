@@ -186,8 +186,7 @@ public class ContractService {
         LocalDate registered = contract.getRegistered().toLocalDate();
         int month = registered.getMonth().getValue();
         int day = registered.getDayOfMonth();
-        return String.format(String.format("@%s_#%d_m%d_d%d", registeredBy, id.intValue(), month, day));
-
+        return String.format(String.format("%s_#%d_m%d_d%d", registeredBy, id.intValue(), month, day));
     }
 
 
