@@ -142,7 +142,7 @@
         function (settings, data, dataIndex) {
             var min = new Date($('#min').val());
             var max = new Date($('#max').val());
-            var date = new Date(data[8]); // use data for the age column
+            var date = new Date(data[9]); // use data for the age column
 
             if ((isNaN(min) && isNaN(max)) ||
                 (isNaN(min) && date <= max) ||
