@@ -8,6 +8,7 @@
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
     <link th:href="@{/css/addons/datatables.min.css}" rel="stylesheet">
     <link th:href="@{/css/mdb.min.css}" rel="stylesheet">
+    <link href="https://cdn.datatables.net/buttons/1.5.6/css/buttons.dataTables.min.css" rel="stylesheet">
 
     <script type="text/javascript" charset="utf8" th:src="@{/js/jquery-3.3.1.min.js}"></script>
     <script type="text/javascript" charset="utf8" th:src="@{/js/popper.min.js}"></script>
@@ -29,27 +30,30 @@
     <h1>Таблиця Договорів</h1>
     <!--    table-->
     <div class="row">
-        <div class="md-form input-group col-md-4">
+        <div class="md-form input-group col-md-6">
             <div class="input-group-prepend mr-3">
                 <span class="input-group-text md-addon">Дата реєстрації від і до</span>
             </div>
             <input type="date" aria-label="Від" id="min" class="form-control mr-3">
             <input type="date" aria-label="До" id="max" class="form-control mr-3">
-            <button id="initSearch" class="btn btn-sm btn-outline-success">Фільтрувати</button>
+            <button id="initSearch" class="btn btn-sm btn-rounded btn-outline-success">Фільтрувати</button>
         </div>
-        <div class="col-md-5"></div>
+        <div class="col-md-3"></div>
         <div class="md-form input-group col-md-3">
             <div class="input-group-prepend mr-3">
                 <span class="input-group-text md-addon">Показати заархівовані</span>
             </div>
-            <a id="showArchived" th:href="@{/contract/all(finished=true, active=false)}" role="button" class="btn btn-sm btn-outline-warning btn-rounded waves-effect">Фільтрувати</a>
+            <a id="showArchived" th:href="@{/contract/all(finished=true, active=false)}" role="button"
+               class="btn btn-sm btn-outline-warning btn-rounded waves-effect">Фільтрувати</a>
         </div>
+
     </div>
     <div class="row col-md-12 table-responsive">
         <table id="contracts" class="table table-striped" cellspacing="0" width="100%">
             <thead class="table-dark">
             <tr>
                 <th class="th-sm">Номер Договору</th>
+                <th class="th-sm">Виконавець</th>
                 <th class="th-sm">Замовник</th>
                 <th class="th-sm">Область</th>
                 <th class="th-sm">Район</th>
@@ -62,12 +66,14 @@
                 <th class="th-sm">Дата реєстрації</th>
                 <!--                <th class="th-sm">Last Updated</th>-->
                 <th class="th-sm">Інше інфо</th>
-                <th class="th-sm">Редагувати</th>
+                <th class="th-sm mwidth">Комент</th>
+                <th class="th-sm mwidth">Редагувати</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="contract : ${contracts}">
                 <td class="th-sm" th:utext="${contract.getContractIdentifier()}">...</td>
+                <td class="th-sm" th:utext="${contract.getAssignedTo().lastName + ' ' + contract.getAssignedTo().getFirstName()}">...</td>
                 <td th:utext="${contract.getCustomer().getOrgName()}"></td>
                 <td th:utext="${contract.getRegion()}">...</td>
                 <td th:utext="${contract.getDistrict()}">...</td>
@@ -97,11 +103,16 @@
                           class="badge badge-warning"
                           th:utext="'$' + ${contract.getTotalPrice() - contract.getPayedAmount()} ">...</span>
                 </td>
-                <td>
+                <td style="max-width: 10%" th:utext="${contract.getComment()}">...</td>
+                <td style="max-width: 10%">
                     <a class="btn btn-primary btn-sm btn-rounded"
                        th:href="@{/contract/{id}/update(id=${contract.getId()})}">Редагувати</a>
-                    <button class="btn btn-warning btn-rounded btn-sm archiveBtn" th:id="${'a'+contract.getId()}" th:name="@{/ajax/contract/{id}/close(id=${contract.getId()})}">Архів</button>
-                    <button class="btn btn-danger btn-rounded btn-sm deleteBtn" th:id="${'r'+contract.getId()}" th:name="@{/ajax/contract/{id}/delete(id=${contract.getId()})}">Видалити</button>
+                    <button class="btn btn-warning btn-rounded btn-sm archiveBtn" th:id="${'a'+contract.getId()}"
+                            th:name="@{/ajax/contract/{id}/close(id=${contract.getId()})}">Архів
+                    </button>
+                    <button class="btn btn-danger btn-rounded btn-sm deleteBtn" th:id="${'r'+contract.getId()}"
+                            th:name="@{/ajax/contract/{id}/delete(id=${contract.getId()})}">Видалити
+                    </button>
                 </td>
             </tr>
             </tbody>
@@ -124,6 +135,8 @@
 <script type="text/javascript" charset="utf8" th:src="@{/js/mdb.min.js}"></script>
 <script type="text/javascript" charset="utf8" th:src="@{/js/modules/mdb-autocomplete.js}"></script>
 <script type="text/javascript" charset="utf8" th:src="@{/js/modules/material-select.js}"></script>
+
+
 <script>
     $.fn.dataTable.ext.search.push(
         function (settings, data, dataIndex) {
@@ -141,9 +154,54 @@
         }
     );
 </script>
+
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.colVis.min.js"></script>
+
 <script>
     $(document).ready(function () {
-        var table = $('#contracts').DataTable();
+        var table = $('#contracts').DataTable({
+
+            columnDefs: [
+                { width: '10%', targets: 'mwidth' }
+            ],
+            stateSave: true,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'pdf',
+                    text: 'Зберегти',
+                    exportOptions: {
+                        modifier: {
+                            page: 'all',
+                            search: 'applied'
+                        },
+                        columns: ':visible'
+                    },
+                    orientation: 'landscape'
+                }, {
+                    extend: 'print',
+                    text: 'Друк'
+                },
+                {
+                    extend: 'colvis',
+                    text: 'Видимість колонок',
+                    exportOptions: {
+                        modifier: {
+                            page: 'all',
+                            search: 'applied'
+                        },
+                        columns: ':visible'
+                    }
+                }
+
+            ]
+        });
         $('#contracts_wrapper').find('label').each(function () {
             $(this).parent().append($(this).children());
         });
@@ -159,6 +217,14 @@
         $('#contracts_wrapper .mdb-select').materialSelect();
         $('#contracts_wrapper .dataTables_filter').find('label').remove();
 
+        $('#contracts_wrapper #contracts_filter').addClass('mt-1 mb-2')
+        $('div.dt-buttons').addClass('md-form');
+
+        //change bnt style
+        $('button.buttons-pdf').addClass('btn btn-sm btn-outline-info btn-rounded waves-effect');
+        $('button.buttons-print').addClass('btn btn-sm btn-outline-info btn-rounded waves-effect');
+        $('button.buttons-colvis').addClass('btn btn-sm btn-outline-info btn-rounded waves-effect');
+
 
         $('#initSearch').click(function () {
             table.draw();
@@ -166,12 +232,11 @@
     });
 
 </script>
+
 <script th:inline="javascript">
-    $(document).ready(function(){
-        $('table#contracts button.deleteBtn').click(function()
-        {
-            if (confirm("Ви впевнені що хочете ВИДАЛИТИ цей договір ?"))
-            {
+    $(document).ready(function () {
+        $('table#contracts button.deleteBtn').click(function () {
+            if (confirm("Ви впевнені що хочете ВИДАЛИТИ цей договір ?")) {
                 var id = $(this).attr('id');
                 var cUrl = $(this).attr('name');
                 $.ajax(
@@ -179,9 +244,8 @@
                         type: "DELETE",
                         url: cUrl,
                         cache: false,
-                        success: function()
-                        {
-                            $('#'+id).attr('disabled', 'disabled');
+                        success: function () {
+                            $('#' + id).attr('disabled', 'disabled');
                         }
                     });
             }
@@ -190,11 +254,9 @@
 </script>
 
 <script>
-    $(document).ready(function(){
-        $('table#contracts button.archiveBtn').click(function()
-        {
-            if (confirm("Ви впевнені що хочете ЗААРХІВУВАТИ цей договір ?"))
-            {
+    $(document).ready(function () {
+        $('table#contracts button.archiveBtn').click(function () {
+            if (confirm("Ви впевнені що хочете ЗААРХІВУВАТИ цей договір ?")) {
                 var id = $(this).attr('id');
                 var cUrl = $(this).attr('name');
                 $.ajax(
@@ -202,9 +264,8 @@
                         type: "PUT",
                         url: cUrl,
                         cache: false,
-                        success: function()
-                        {
-                            $('#'+id).attr('disabled', 'disabled');
+                        success: function () {
+                            $('#' + id).attr('disabled', 'disabled');
                         }
                     });
             }

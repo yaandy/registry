@@ -4,6 +4,7 @@ import com.lv.reg.entities.User;
 import com.lv.reg.service.IUserService;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -16,6 +17,7 @@ public class UserValidator implements Validator {
     private EmailValidator emailValidator = EmailValidator.getInstance();
 
     @Autowired
+    @Qualifier("userDetailsService")
     private IUserService userDetailsService;
 
     // The classes are supported by this validator.
