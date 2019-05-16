@@ -40,6 +40,7 @@
                 <th class="th-sm">Район</th>
                 <th class="th-sm">Адреса</th>
                 <th class="th-sm">#Договори</th>
+                <th class="th-sm">Дії</th>
             </tr>
             </thead>
             <tbody>
@@ -57,6 +58,11 @@
                     <span
                             class="badge badge-warning mr-1"
                             th:utext="${member.getContracts().size()}">...</span>
+                </td>
+                <td>
+                    <button class="btn btn-danger btn-rounded btn-sm deleteBtn" th:id="${'r'+member.getId()}"
+                            th:name="@{/ajax/customer/{id}/delete(id=${member.getId()})}">Видалити
+                    </button>
                 </td>
             </tr>
             </tbody>
@@ -102,6 +108,28 @@
         $('#customers_wrapper select').addClass('mdb-select');
         $('#customers_wrapper .mdb-select').materialSelect();
         $('#customers_wrapper .dataTables_filter').find('label').remove();
+    });
+</script>
+<script th:inline="javascript">
+    $(document).ready(function () {
+        $('table#customers button.deleteBtn').click(function () {
+            if (confirm("Ви впевнені що хочете ВИДАЛИТИ цього користувача ?")) {
+                var id = $(this).attr('id');
+                var cUrl = $(this).attr('name');
+                $.ajax(
+                    {
+                        type: "DELETE",
+                        url: cUrl,
+                        cache: false,
+                        success: function () {
+                            $('#' + id).attr('disabled', 'disabled');
+                        },
+                        error: function () {
+                            alert("Виникла помилка при видаленні, швидше за все в системі існують договори офрмлені на даного замовника, замовник може бути видалений при умові що немає договрів")
+                        }
+                    });
+            }
+        });
     });
 </script>
 </body>
