@@ -91,11 +91,11 @@
                     <span th:if="${contract.getPassedDaysAfterLastUpdated()}*-1 < 5"
                           class="badge badge-success mr-1"
                           th:utext="... + ${contract.getPassedDaysAfterLastUpdated()} + ...">...</span>
-                    <span th:if="${contract.getPassedDaysAfterLastUpdated()}*-1 > 10"
+                    <span th:if="${contract.getPassedDaysAfterLastUpdated()}*-1 >= 10"
                           class="badge badge-danger mr-1"
                           th:utext="... + ${contract.getPassedDaysAfterLastUpdated()} + ...">...</span>
                     <span
-                            th:if="${contract.getPassedDaysAfterLastUpdated()*-1 < 10} and ${contract.getPassedDaysAfterLastUpdated()*-1 > 5}"
+                            th:if="${contract.getPassedDaysAfterLastUpdated()*-1 < 10} and ${contract.getPassedDaysAfterLastUpdated()*-1 >= 5}"
                             class="badge badge-warning mr-1"
                             th:utext="... + ${contract.getPassedDaysAfterLastUpdated()} + ...">...</span>
                     <span th:if="${(contract.getTotalPrice() - contract.getPayedAmount()) < 1}"
@@ -107,14 +107,24 @@
                 </td>
                 <td style="max-width: 10%" th:utext="${contract.getComment()}">...</td>
                 <td style="max-width: 10%">
-                    <a class="btn btn-primary btn-sm btn-rounded"
-                       th:href="@{/contract/{id}/update(id=${contract.getId()})}">Редагувати</a>
-                    <button class="btn btn-warning btn-rounded btn-sm archiveBtn" th:id="${'a'+contract.getId()}"
-                            th:name="@{/ajax/contract/{id}/close(id=${contract.getId()})}">Архів
-                    </button>
-                    <button class="btn btn-danger btn-rounded btn-sm deleteBtn" th:id="${'r'+contract.getId()}"
-                            th:name="@{/ajax/contract/{id}/delete(id=${contract.getId()})}">Видалити
-                    </button>
+                    <div class="btn-group" role="group">
+                        <button id="btnGroupVerticalDrop1" type="button" class="btn btn-rounded btn-outline-blue dropdown-toggle btn-sm" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                            Вибрати...
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop1">
+                            <a class="dropdown-item active"
+                               th:href="@{/contract/{id}/update(id=${contract.getId()})}">Редагувати</a>
+                            <button class="dropdown-item  archiveBtn" th:id="${'a'+contract.getId()}"
+                                    th:name="@{/ajax/contract/{id}/close(id=${contract.getId()})}">Архів
+                            </button>
+                            <button class="dropdown-item deleteBtn" th:id="${'r'+contract.getId()}"
+                                    th:name="@{/ajax/contract/{id}/delete(id=${contract.getId()})}">Видалити
+                            </button>
+                        </div>
+                    </div>
+
+
                 </td>
             </tr>
             </tbody>
