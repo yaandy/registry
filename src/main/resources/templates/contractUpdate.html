@@ -1,15 +1,15 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title th:utext="${title}"></title>
-  <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
-  <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <title th:utext="${title}"></title>
+    <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 
-  <link th:href="@{/css/bootstrap.css}" rel="stylesheet">
-  <link th:href="@{/css/mdb.css}" rel="stylesheet">
-  <script type="text/javascript" charset="utf8" th:src="@{/js/jquery-3.3.1.min.js}"></script>
-  <script type="text/javascript" charset="utf8" th:src="@{/js/popper.min.js}"></script>
-  <script type="text/javascript" charset="utf8" th:src="@{/js/bootstrap.js}"></script>
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet">
+    <link th:href="@{/css/mdb.css}" rel="stylesheet">
+    <script type="text/javascript" charset="utf8" th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script type="text/javascript" charset="utf8" th:src="@{/js/popper.min.js}"></script>
+    <script type="text/javascript" charset="utf8" th:src="@{/js/bootstrap.js}"></script>
 </head>
 
 <body class="blue-gradient">
@@ -20,232 +20,285 @@
 
 <div class="container-fluid">
 
-  <div class="row mt-3">
-    <div class="col-md-8">
-      <div class="elegant-color-dark text-white">
-        <h1>Обновлення даних по договору</h1>
-      </div>
-      <div class="container blue-grey lighten-5">
-        <form class="md-form needs-validation"
-              th:action="@{/contract/{id}/update(id=${contract.getId()})}"
-              th:object="${updatedContractForm}"
-              method="POST" enctype="multipart/form-data" novalidate>
-          <div class="container">
-            <h1>Замовник</h1>
-            <div class="form-row">
-              <div class="md-form mr-3">
-                <input type="text" class="form-control" id="customerName"
-                       th:value="${contract.getCustomer().getOrgName()}" disabled/>
-                <label for="customerName">Замовник:</label>
-              </div>
-              <div class="md-form mr-3">
-                <input type="tel" class="form-control" id="customerPhone"
-                       th:value="${contract.getCustomer().getPhone()}" disabled/>
-                <label for="customerPhone">Тел. Замовника:</label>
-              </div>
+    <div class="row mt-3">
+        <div class="col-md-8">
+            <div class="elegant-color-dark text-white">
+                <h1>Обновлення даних по договору</h1>
             </div>
-          </div>
-          <div class="container">
-            <h1>Ділянка</h1>
-            <div class="form-row">
-              <div class="md-form mr-3">
-                <input type="text" class="form-control" id="region"
-                       th:value="${contract.getDistrict()}" disabled/>
-                <label for="region">Район: </label>
-              </div>
-              <div class="md-form mr-3">
-                <input type="text" class="form-control" id="village"
-                       th:value="${contract.getVillageCouncil()}" disabled/>
-                <label for="village">Село: </label>
-              </div>
-              <div class="md-form mr-3">
-                <input type="text" class="form-control" id="square"
-                       th:value="${contract.getSquare()}" disabled/>
-                <label for="square">Площа ділянки: </label>
-              </div>
-            </div>
-          </div>
-          <div class="container">
-            <h1>Хід роботи</h1>
-            <div class="md-form input-group m-1">
-              <div class="input-group-prepend">
-                <span class="input-group-text md-addon mr-2">Тип договору: </span>
-              </div>
-              <div class="md-form ">
-                <select class="mdb-select" id="type" th:name="type"
-                        searchable="Пошук..." required disabled>
-                  <option class="text-warning" value="">......</option>
-                  <option th:each="t : ${typeOptions}" th:value="${t.getLabel()}"
-                          th:text="${t.getLabel()}"
-                          th:selected="${#strings.equals(t.getLabel(), contract.getOrderType())}">
-                </select>
-                <div class="invalid-feedback">Виберіть тип!</div>
-              </div>
-            </div>
+            <div class="container blue-grey lighten-5">
+                <form class="md-form needs-validation"
+                      th:action="@{/contract/{id}/update(id=${contract.getId()})}"
+                      th:object="${updatedContractForm}"
+                      method="POST" enctype="multipart/form-data" novalidate>
+                    <div class="container">
+                        <h1>Замовник</h1>
+                        <div class="form-row">
+                            <div class="md-form mr-3">
+                                <input type="text" class="form-control" id="customerName"
+                                       th:value="${contract.getCustomer().getOrgName()}" disabled/>
+                                <label for="customerName">Замовник:</label>
+                            </div>
+                            <div class="md-form mr-3">
+                                <input type="tel" class="form-control" id="customerPhone"
+                                       th:value="${contract.getCustomer().getPhone()}" disabled/>
+                                <label for="customerPhone">Тел. Замовника:</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <h1>Ділянка</h1>
+                        <div class="form-row">
+                            <div class="md-form mr-3">
+                                <input type="text" class="form-control" id="region"
+                                       th:value="${contract.getDistrict()}" disabled/>
+                                <label for="region">Район: </label>
+                            </div>
+                            <div class="md-form mr-3">
+                                <input type="text" class="form-control" id="village"
+                                       th:value="${contract.getVillageCouncil()}" disabled/>
+                                <label for="village">Село: </label>
+                            </div>
+                            <div class="md-form mr-3">
+                                <input type="text" class="form-control" id="square"
+                                       th:value="${contract.getSquare()}" disabled/>
+                                <label for="square">Площа ділянки: </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <h1>Хід роботи</h1>
+                        <div class="form-row">
+                            <div class="col">
+                                <div class="md-form input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text md-addon mr-2">Тип договору: </span>
+                                    </div>
+                                    <div class="md-form ">
+                                        <select class="mdb-select" id="type" th:name="type"
+                                                searchable="Пошук..." required disabled>
+                                            <option class="text-warning" value="">......</option>
+                                            <option th:each="t : ${typeOptions}" th:value="${t.getLabel()}"
+                                                    th:text="${t.getLabel()}"
+                                                    th:selected="${#strings.equals(t.getLabel(), contract.getOrderType())}">
+                                        </select>
+                                        <div class="invalid-feedback">Виберіть тип!</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="md-form input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text md-addon mr-2">Статус: </span>
+                                    </div>
+                                    <div class="md-form">
+                                        <select class="mdb-select"
+                                                id="status" th:name="status" searchable="Пошук..">
+                                            <option th:each="s : ${statusOptions}" th:value="${s.getLabel()}"
+                                                    th:text="${s.getLabel()}"
+                                                    th:selected="${#strings.equals(s.getLabel(), contract.getOrderStatus())}">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="md-form input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text md-addon mr-2">Фаза виконання: </span>
+                                </div>
+                                <select class="mdb-select" id="stage" th:name="stage" searchable="Пошук..">
+                                    <option th:each="s : ${stagesOptions}" th:value="${s.getLabel()}"
+                                            th:text="${s.getLabel()}"
+                                            th:selected="${#strings.equals(s.getLabel(), contract.getStage())}">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="md-form input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text md-addon mr-2">Зйомка: </span>
+                                </div>
+                                <select class="mdb-select" id="isMeasurementDone" th:name="isMeasurementDone">
+                                    <option value="false">НЕ проводилась</option>
+                                    <option value="true"
+                                            th:selected="${contract.getPostContractInfo().isMeasurementDone()}">
+                                        Проведена
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
 
-            <div class="md-form input-group m-1">
-              <div class="input-group-prepend">
-                <span class="input-group-text md-addon mr-2">Статус: </span>
-              </div>
-              <div class="select-outline">
-                <select class="mdb-select"
-                        id="status" th:name="status" searchable="Пошук..">
-                  <option th:each="s : ${statusOptions}" th:value="${s.getLabel()}"
-                          th:text="${s.getLabel()}"
-                          th:selected="${#strings.equals(s.getLabel(), contract.getOrderStatus())}">
-                </select>
-                <label>Status:</label>
-              </div>
-            </div>
 
-            <div class="md-form input-group m-1">
-              <div class="input-group-prepend">
-                <span class="input-group-text md-addon mr-2">Фаза виконання: </span>
-              </div>
-              <select class="mdb-select" id="stage" th:name="stage" searchable="Пошук..">
-                <option th:each="s : ${stagesOptions}" th:value="${s.getLabel()}"
-                        th:text="${s.getLabel()}"
-                        th:selected="${#strings.equals(s.getLabel(), contract.getStage())}">
-              </select>
-            </div>
-          </div>
-          <div class="container">
-            <h1>Оплата</h1>
-            <div class="row">
-              <div class="md-form col">
-                <label for="price" class="col-form-label">Витрати: </label>
-                <input type="number" class="form-control" id="costs"
-                       th:value="${contract.getTotalCosts()}"
-                       disabled>
-              </div>
-              <div class="md-form col">
-                <label for="payedAmount" class="col-form-label">Додати витрати:</label>
-                <input type="number" class="form-control" id="addToCosts" th:field="*{totalCosts}">
-              </div>
-            </div>
-            <div class="row">
-              <div class="md-form col">
-                <label for="price" class="col-form-label">Ціна: </label>
-                <input type="number" class="form-control" id="price"
-                       th:value="${contract.getTotalPrice()}"
-                       disabled>
-              </div>
-              <div class="md-form col">
-                <label for="debt" class="col-form-label">Борг: </label>
-                <input type="number" class="form-control" id="debt"
-                       th:value="${contract.payedAmount} - ${contract.getTotalPrice()}" disabled
-                       th:classappend="(${contract.payedAmount} - ${contract.getTotalPrice()}) < 0 ? bg-warning : bg-success">
-              </div>
-              <div class="md-form col">
-                <label for="payedAmount" class="col-form-label">Додати оплату:</label>
-                <input type="number" class="form-control" id="payedAmount"
-                       th:field="*{payedAmount}">
-              </div>
-            </div>
-          </div>
+                    <div class="container">
+                        <h1>Стан розрахунку</h1>
+                        <div class="row">
+                            <div class="md-form col">
+                                <label for="price" class="col-form-label">Витрати: </label>
+                                <input type="number" class="form-control" id="costs"
+                                       th:value="${contract.getTotalCosts()}"
+                                       disabled>
+                            </div>
+                            <div class="md-form col">
+                                <label for="payedAmount" class="col-form-label">Додати витрати:</label>
+                                <input type="number" class="form-control" id="addToCosts" th:field="*{totalCosts}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="md-form col">
+                                <label for="price" class="col-form-label">Ціна: </label>
+                                <input type="number" class="form-control" id="price"
+                                       th:value="${contract.getTotalPrice()}"
+                                       disabled>
+                            </div>
+                            <div class="md-form col">
+                                <label for="debt" class="col-form-label">Борг: </label>
+                                <input type="number" class="form-control" id="debt"
+                                       th:value="${contract.payedAmount} - ${contract.getTotalPrice()}" disabled
+                                       th:classappend="(${contract.payedAmount} - ${contract.getTotalPrice()}) < 0 ? bg-warning : bg-success">
+                            </div>
+                            <div class="md-form col">
+                                <label for="payedAmount" class="col-form-label">Додати оплату:</label>
+                                <input type="number" class="form-control" id="payedAmount"
+                                       th:field="*{payedAmount}">
+                            </div>
+                        </div>
+                    </div>
 
-          <div class="container">
-            <h1>Додаткове інфо</h1>
-            <div class="form-row">
-              <div class="col">
-                <div class="md-form input-group mr-3">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text md-addon mr-2">Дата реєстрації: </span>
-                  </div>
-                  <input id="registered" type="date" th:value="${contract.getRegistered()}">
-                </div>
-              </div>
-              <div class="col">
-                <div class="md-form input-group mr-3">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text md-addon mr-2">Зареєстрував: </span>
-                  </div>
-                  <input id="registeredBy" type="text"
-                         th:value="${contract.createdBy.getUsername()}">
-                </div>
-              </div>
-              <div class="col">
-                <div class="md-form input-group mr-3">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text md-addon mr-2">Виконавець: </span>
-                  </div>
-                  <select id="responsible" th:name="assignedTo" class="mdb-select">
-                    <option th:each="u : ${employee}" th:value="${u.getUsername()}"
-                            th:text="${u.getUsername()}"
-                            th:selected="${#strings.equals(u.getUsername(), contract.getAssignedTo().getUsername())}">
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group col-md-8">
+                    <div class="container">
+                        <h1>Додаткове інфо</h1>
+                        <div class="form-row">
+                            <div class="col">
+                                <div class="md-form input-group mr-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text md-addon mr-2">Дата реєстрації: </span>
+                                    </div>
+                                    <input id="registered" type="date" th:value="${contract.getRegistered()}">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="md-form input-group mr-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text md-addon mr-2">Зареєстрував: </span>
+                                    </div>
+                                    <input id="registeredBy" type="text"
+                                           th:value="${contract.createdBy.getUsername()}">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="md-form input-group mr-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text md-addon mr-2">Виконавець: </span>
+                                    </div>
+                                    <select id="responsible" th:name="assignedTo" class="mdb-select">
+                                        <option th:each="u : ${employee}" th:value="${u.getUsername()}"
+                                                th:text="${u.getUsername()}"
+                                                th:selected="${#strings.equals(u.getUsername(), contract.getAssignedTo().getUsername())}">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-8">
                 <textarea th:name="comment"
-                          id="comment" class="md-textarea form-control font-weight-light font-italic" rows="2" maxlength="299"
+                          id="comment" class="md-textarea form-control font-weight-light font-italic" rows="2"
+                          maxlength="299"
                           th:text="${contract.getComment()}"></textarea>
-                <label for="comment">Коментар</label>
-              </div>
-            </div>
+                                <label for="comment">Коментар</label>
+                            </div>
+                        </div>
+                        <div class="file-field col-md-6">
+                            <div class="btn btn-primary btn-sm float-left">
+                                <span>Виберіть файли</span>
+                                <input type="file" th:field="*{customerDocument}">
+                            </div>
+                            <div class="file-path-wrapper">
+                                <input class="file-path validate" type="text"
+                                       placeholder="Дані про ділянку">
+                            </div>
+                        </div>
+                    </div>
 
-            <div class="file-field col-md-6">
-              <div class="btn btn-primary btn-sm float-left">
-                <span>Виберіть файли</span>
-                <input type="file" th:field="*{customerDocument}">
-              </div>
-              <div class="file-path-wrapper">
-                <input class="file-path validate" type="text"
-                       placeholder="Дані про ділянку">
-              </div>
-            </div>
-          </div>
+                    <div class="container mt-1">
+                        <h1>Пост договірні розрахунки</h1>
 
-          <div class="md-form">
-            <label for="isFinished" class="col-form-label checkbox-inline">Is Contract finished:
-              <input class="checkbox" type="checkbox" id="isFinished" disabled
-                     th:checked="${contract.isFinished()}"/>
-            </label>
-          </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <div class="md-form input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text md-addon mr-2">Оплачено геодезисту ? </span>
+                                    </div>
+                                    <select class="mdb-select" th:name="isPaidToGeodez">
+                                        <option th:value="false">Не Оплачено</option>
+                                        <option th:value="true"
+                                                th:selected="${contract.getPostContractInfo().isPaidToGeodez()}">
+                                            Оплачено
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="md-form input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text md-addon mr-2">Оплачено виконавцю ? </span>
+                                    </div>
+                                    <select class="mdb-select" th:name="isPaidToPerformer">
+                                        <option th:value="false">Не Оплачено</option>
+                                        <option th:value="true"
+                                                th:selected="${contract.getPostContractInfo().isPaidToPerformer()}">
+                                            Оплачено
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-          <div class=" row">
-            <div class="col-md-4">
-              <a th:href="@{/contract/{id}/close(id=${contract.getId()})}" class="btn btn-danger"
-                 name="close">Close&Archive</a>
-            </div>
-            <div class="col-md-3"></div>
-            <div class="col-md-4">
-              <button type="submit" class="btn btn-primary">Submit</button>
-            </div>
 
-          </div>
-        </form>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div>
-        <h1 class="elegant-color-dark text-white">Історія змін</h1>
-        <button data-toggle="collapse" data-target="#log" class="btn btn-info btn-block">Show Log
-        </button>
-      </div>
-      <div class="blue-grey lighten-5">
-        <div class="list-group collapse" id="log" th:each="log: ${contract.getLog()}">
+                    <div class="container mt-4">
+                        <div class=" row">
+                            <div class="col-md-4">
+                                <a th:href="@{/contract/{id}/close(id=${contract.getId()})}" class="btn btn-danger"
+                                   name="close">Close&Archive</a>
+                            </div>
+                            <div class="col-md-3"></div>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div>
+                <h1 class="elegant-color-dark text-white">Історія змін</h1>
+                <button data-toggle="collapse" data-target="#log" class="btn btn-info btn-block">Show Log
+                </button>
+            </div>
+            <div class="blue-grey lighten-5">
+                <div class="list-group collapse" id="log" th:each="log: ${contract.getLog()}">
                 <span class="list-group-item list-group-item-info disabled"
                       th:utext="${log.getMessage()}">Message</span>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-  <div class="row mt-3">
-    <div class="col-md-8">
-      <div class="elegant-color-dark text-white">
-        <h2>Список прикріплених файлів</h2>
-      </div>
-      <div class="container blue-grey lighten-5">
-        <div class="list-group" th:each="file : ${files}">
-          <a class="list-group-item list-group-item-action" th:href="${file.getKey()}"
-             th:text="${file.getValue()}"/>
+    <div class="row mt-3">
+        <div class="col-md-8">
+            <div class="elegant-color-dark text-white">
+                <h2>Список прикріплених файлів</h2>
+            </div>
+            <div class="container blue-grey lighten-5">
+                <div class="list-group" th:each="file : ${files}">
+                    <a class="list-group-item list-group-item-action" th:href="${file.getKey()}"
+                       th:text="${file.getValue()}"/>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 
 </div>
 
@@ -261,9 +314,13 @@
     $(document).ready(function () {
         $('.mdb-select').materialSelect();
     });
-
-
-
+</script>
+<script>
+    new WOW().init();
+</script>
+<script>
+    // this is dirty googled hack that fixes incompatibility of material checkbox input and timeleaf
+    // $('input[type=hidden]').remove();
 </script>
 </body>
 </html>

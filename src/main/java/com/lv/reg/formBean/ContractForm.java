@@ -19,6 +19,7 @@ public class ContractForm {
     private String type;
     private String status;
     private String stage;
+    private Boolean isMeasurementDone = false;
     private double totalPrice;
     private double payedAmount;
     private double totalCosts;
@@ -31,5 +32,10 @@ public class ContractForm {
     private String customerLastName;
     private String customerPhone;
 
+    private Boolean isPaidToGeodez = false;
+    private Boolean isPaidToPerformer = false;
+
     private List<MultipartFile> customerDocument;
+
+
 }

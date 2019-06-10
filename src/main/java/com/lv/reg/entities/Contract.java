@@ -47,5 +47,8 @@ public class Contract implements Serializable {
     private Collection<ContractLog> log;
     private transient int passedDaysAfterLastUpdated;
 
+    @OneToOne(mappedBy = "contract", cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER, optional = false)
+    private PostContractInfo postContractInfo;
 
 }

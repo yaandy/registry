@@ -96,6 +96,25 @@ CREATE TABLE IF NOT EXISTS `register`.`contract` (
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
+-- -----------------------------------------------------
+-- Table `register`.`post_contract_info`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `register`.`post_contract_info` ;
+
+CREATE TABLE IF NOT EXISTS `register`.`post_contract_info` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `contract_id` INT(11) NOT NULL,
+  `is_paid_to_performer` TINYINT(4) NULL DEFAULT '0',
+  `is_paid_to_geodez` TINYINT(4) NULL DEFAULT '0',
+  `is_measurement_done` TINYINT(4) NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  INDEX `contract_idx` (`contract_id` ASC))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+
+
 
 -- -----------------------------------------------------
 -- Table `register`.`stage`

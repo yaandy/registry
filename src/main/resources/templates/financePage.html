@@ -1,0 +1,218 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:utext="${title}"></title>
+    <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+
+    <script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.3.0/css/bootstrap.min.css}"/>
+    <script th:src="@{/webjars/bootstrap/4.3.0/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/mdb.css}">
+
+    <script type="text/javascript" charset="utf8" th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script type="text/javascript" charset="utf8" th:src="@{/js/popper.min.js}"></script>
+    <script type="text/javascript" charset="utf8" th:src="@{/js/bootstrap.js}"></script>
+
+
+</head>
+
+<body>
+
+<!-- Include menu.html -->
+<th:block th:include="menu"></th:block>
+
+<h2>Розрахунки!</h2>
+
+<div class="container">
+    <div class="row wow fadeIn">
+        <!--Grid column-->
+        <div class="col mb-4">
+            <!--Card-->
+            <div class="card">
+                <!-- Card header -->
+                <div class="card-header">Стат. виконавці</div>
+                <!--Card content-->
+                <div class="card-body">
+                    <canvas id="contractsByUser" style="max-width: 500px;"></canvas>
+                </div>
+            </div>
+            <!--/.Card-->
+        </div>
+        <div class="col mb-4">
+            <!--Card-->
+            <div class="card">
+                <!-- Card header -->
+                <div class="card-header">Стат. статус</div>
+                <!--Card content-->
+                <div class="card-body">
+                    <canvas id="contractsByStatus" style="max-width: 500px;"></canvas>
+                </div>
+            </div>
+            <!--/.Card-->
+        </div>
+        <div class="col mb-4">
+            <!--Card-->
+            <div class="card">
+                <!-- Card header -->
+                <div class="card-header">Стат. фази</div>
+                <!--Card content-->
+                <div class="card-body">
+                    <canvas id="contractsByStage" style="max-width: 500px;"></canvas>
+                </div>
+            </div>
+            <!--/.Card-->
+        </div>
+
+    </div>
+    <div class="card-deck" th:each="entry: ${userContractStatMap}">
+                <div class="card mb-4">
+                    <!-- Card header -->
+                    <div class="card-header" th:text="${'Виконавець: ' + entry.getKey().lastName + ' ' + entry.getKey().getFirstName()}"></div>
+                    <!--Card content-->
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Відкритих договорів:
+                                <span class="badge badge-primary badge-pill" th:text="${entry.getValue().getNumberOfContractsAssigned()}"></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Закритих договорів:
+                                <span class="badge badge-primary badge-pill" th:text="${entry.getValue().getNumberOfContractsFinished()}"></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Сума по полю 'Ціна' (Не закриті договори):
+                                <span class="badge badge-primary badge-pill" th:text="${entry.getValue().getTotaPrice()}">1</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Сума по полю 'Оплачено' (Не закриті договори):
+                                <span class="badge badge-primary badge-pill" th:text="${entry.getValue().getPayedAmount()}">1</span>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+    </div>
+
+</div>
+
+<script type="text/javascript" charset="utf8" th:src="@{/js/mdb.js}"></script>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var labels = /*[[${users}]]*/ '[Василь,Микола]';
+    var contractCount = /*[[${contractsCount}]]*/ '[2,10]';
+    /*]]>*/
+    new Chart(document.getElementById("contractsByUser"), {
+        "type": "horizontalBar",
+        "data": {
+            "labels": labels,
+            "datasets": [{
+                "label": "Кількість договорів",
+                "data": contractCount,
+                "fill": false,
+                "backgroundColor": ["rgba(255, 99, 132, 0.2)", "rgba(255, 159, 64, 0.2)",
+                    "rgba(255, 205, 86, 0.2)", "rgba(75, 192, 192, 0.2)", "rgba(54, 162, 235, 0.2)",
+                    "rgba(153, 102, 255, 0.2)", "rgba(201, 203, 207, 0.2)"
+                ],
+                "borderColor": ["rgb(255, 99, 132)", "rgb(255, 159, 64)", "rgb(255, 205, 86)",
+                    "rgb(75, 192, 192)", "rgb(54, 162, 235)", "rgb(153, 102, 255)", "rgb(201, 203, 207)"
+                ],
+                "borderWidth": 1
+            }]
+        },
+        "options": {
+            "scales": {
+                "xAxes": [{
+                    "ticks": {
+                        "beginAtZero": true
+                    }
+                }]
+            }
+        }
+    });
+</script>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var labels = /*[[${contractStatusStat.keySet()}]]*/ '[Василь,Микола]';
+    var contractCount = /*[[${contractStatusStat.values()}]]*/ '[2,10]';
+    /*]]>*/
+    new Chart(document.getElementById("contractsByStatus"), {
+        "type": "horizontalBar",
+        "data": {
+            "labels": labels,
+            "datasets": [{
+                "label": "Кількість договорів",
+                "data": contractCount,
+                "fill": false,
+                "backgroundColor": ["rgba(255, 99, 132, 0.2)", "rgba(255, 159, 64, 0.2)",
+                    "rgba(255, 205, 86, 0.2)", "rgba(75, 192, 192, 0.2)", "rgba(54, 162, 235, 0.2)",
+                    "rgba(153, 102, 255, 0.2)", "rgba(201, 203, 207, 0.2)"
+                ],
+                "borderColor": ["rgb(255, 99, 132)", "rgb(255, 159, 64)", "rgb(255, 205, 86)",
+                    "rgb(75, 192, 192)", "rgb(54, 162, 235)", "rgb(153, 102, 255)", "rgb(201, 203, 207)"
+                ],
+                "borderWidth": 1
+            }]
+        },
+        "options": {
+            "scales": {
+                "xAxes": [{
+                    "ticks": {
+                        "beginAtZero": true
+                    }
+                }]
+            }
+        }
+    });
+</script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var labels = /*[[${contractStageStat.keySet()}]]*/ '[Василь,Микола]';
+    var contractCount = /*[[${contractStageStat.values()}]]*/ '[2,10]';
+    /*]]>*/
+    new Chart(document.getElementById("contractsByStage"), {
+        "type": "horizontalBar",
+        "data": {
+            "labels": labels,
+            "datasets": [{
+                "label": "Кількість договорів",
+                "data": contractCount,
+                "fill": false,
+                "backgroundColor": ["rgba(255, 99, 132, 0.2)", "rgba(255, 159, 64, 0.2)",
+                    "rgba(255, 205, 86, 0.2)", "rgba(75, 192, 192, 0.2)", "rgba(54, 162, 235, 0.2)",
+                    "rgba(153, 102, 255, 0.2)", "rgba(201, 203, 207, 0.2)"
+                ],
+                "borderColor": ["rgb(255, 99, 132)", "rgb(255, 159, 64)", "rgb(255, 205, 86)",
+                    "rgb(75, 192, 192)", "rgb(54, 162, 235)", "rgb(153, 102, 255)", "rgb(201, 203, 207)"
+                ],
+                "borderWidth": 1
+            }]
+        },
+        "options": {
+            "scales": {
+                "xAxes": [{
+                    "ticks": {
+                        "beginAtZero": true
+                    }
+                }]
+            }
+        }
+    });
+</script>
+
+
+<script>
+    $(function () {
+        $('.min-chart#chart-sales').easyPieChart({
+            barColor: "#4caf50",
+            onStep: function (from, to, percent) {
+                $(this.el).find('.percent').text(Math.round(percent));
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

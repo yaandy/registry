@@ -1,13 +1,7 @@
 package com.lv.reg.service;
 
-import com.lv.reg.dao.ContractLogRepository;
-import com.lv.reg.dao.ContractRepository;
-import com.lv.reg.dao.CustomerRepository;
-import com.lv.reg.dao.StageRepository;
-import com.lv.reg.entities.Contract;
-import com.lv.reg.entities.ContractLog;
-import com.lv.reg.entities.Stage;
-import com.lv.reg.entities.User;
+import com.lv.reg.dao.*;
+import com.lv.reg.entities.*;
 import com.lv.reg.formBean.ContractForm;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +38,8 @@ public class ContractService {
     @Autowired
     @Qualifier("userDetailsService")
     private UserDetailsService userDetailsService;
+    @Autowired
+    private PostContractInfoRepository postContractInfoRepository;
 
     public Contract saveContract(ContractForm contractForm, Principal principal) {
         User user = ((MyUserDetails) userDetailsService.loadUserByUsername(principal.getName())).getUser();
@@ -65,8 +61,14 @@ public class ContractService {
                 .build();
 
         Contract saved = contractRepository.save(contract);
+
+        PostContractInfo postContractInfo = PostContractInfo.builder().contract(saved).build();
+        postContractInfoRepository.save(postContractInfo);
+
         saved.setContractIdentifier(generateContractIdentifier(saved));
+        saved.setPostContractInfo(postContractInfo);
         Contract withIdentifier = contractRepository.save(saved);
+
         ContractLog contractLog = ContractLog.builder().contract(saved)
                 .message(String.format("Contract created by %s on %s", user.getUsername(), LocalDate.now().toString()))
                 .build();
@@ -86,19 +88,25 @@ public class ContractService {
             toBeUpdated.setUpdated(Date.valueOf(LocalDate.now()));
         }
 
-        toBeUpdated.setFinished(contractForm.isFinished());
         toBeUpdated.setOrderStatus(contractForm.getStatus());
         toBeUpdated.setStage(contractForm.getStage());
         toBeUpdated.setPayedAmount(toBeUpdated.getPayedAmount() + contractForm.getPayedAmount());
         toBeUpdated.setTotalCosts(toBeUpdated.getTotalCosts() + contractForm.getTotalCosts());
         toBeUpdated.setAssignedTo(((MyUserDetails) userDetailsService.loadUserByUsername(contractForm.getAssignedTo())).getUser());
         toBeUpdated.setComment(contractForm.getComment());
+
+        PostContractInfo postContractInfo = toBeUpdated.getPostContractInfo();
+        postContractInfo.setMeasurementDone(contractForm.getIsMeasurementDone());
+        postContractInfo.setPaidToGeodez(contractForm.getIsPaidToGeodez());
+        postContractInfo.setPaidToPerformer(contractForm.getIsPaidToPerformer());
+
         return contractRepository.save(toBeUpdated);
     }
 
     public void closeContract(long id) {
         Contract toBeUpdated = contractRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
-        toBeUpdated.setFinished(true);
+        //TODO:
+        //toBeUpdated.setFinished(true);
         contractRepository.save(toBeUpdated);
     }
 
@@ -163,6 +171,16 @@ public class ContractService {
         if(form.isFinished()){
             stringBuilder.append(", Finished !");
         }
+        if(form.getIsMeasurementDone() != contract.getPostContractInfo().isMeasurementDone()){
+            stringBuilder.append(", Measurements is done");
+        }
+        if(form.getIsPaidToGeodez() != contract.getPostContractInfo().isPaidToGeodez()){
+            stringBuilder.append(", Payed to geodez = " + form.getIsPaidToGeodez());
+        }
+        if(form.getIsPaidToPerformer() != contract.getPostContractInfo().isPaidToPerformer()){
+            stringBuilder.append(", Payed to performer = " + form.getIsPaidToPerformer());
+        }
+
         return stringBuilder.toString();
     }
 
